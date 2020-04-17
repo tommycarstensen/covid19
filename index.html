@@ -1,0 +1,738 @@
+<html>
+    <head>
+        <title>COVID-19 / 2019-nCoV</title>
+        <meta charset="UTF-8">
+        <meta name="twitter:card" content="https://www.tommycarstensen.com/covid19/COVID19_sigmoid_cases_EU.png">
+        <meta name="twitter:site" content="@tommycarstensen">
+        <meta name="twitter:creator" content="@tommycarstensen">
+        <meta name="twitter:title" content="COVID19 logistic function fitting">
+        <meta name="twitter:description" content="COVID19 logistic function fitting.">
+        <meta name="twitter:image" content="https://www.tommycarstensen.com/covid19/COVID19_sigmoid_cases_EU.png">
+        <link rel="shortcut icon" type="image/png" href="https://www.tommycarstensen.com/covid19/COVID19_sigmoid_cases_EU.png"/>
+        <meta name="thumbnail" content="https://www.tommycarstensen.com/covid19/COVID19_sigmoid_cases_EU.png"/>
+
+<!--https://www.w3schools.com/howto/howto_js_sort_table.asp-->
+<script src="sortable.js"></script>
+
+<style>
+table {
+  border-spacing: 0;
+  width: 100%;
+  border: 0px solid #ddd;
+}
+
+th, td {
+  text-align: left;
+  padding: 16px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2
+}
+</style>
+
+</head>
+    <body>
+
+
+
+
+        <h1>CoViD19 choropleth maps</h1>
+
+        <h3>Cumulated sum up to today</h3>
+        <img src="covid19_casescumulated_OrRd_logTrue.png?dummy=xxxDATExxx">
+        <img src="covid19_deathscumulated_OrRd_logTrue.png?dummy=xxxDATExxx">
+
+        <h3>Sum of current week</h3>
+        <img src="covid19_casesperweek_PuRd_logTrue.png?dummy=xxxDATExxx">
+        <img src="covid19_deathsperweek_PuRd_logTrue.png?dummy=xxxDATExxx">
+
+<!--         <h3>Cumulated sum up to February 21st</h3>
+        https://www.reuters.com/article/us-china-health-italy/coronavirus-outbreak-grows-in-northern-italy-16-cases-reported-in-one-day-idUSKBN20F0UI
+        <img src="covid19_Cases_OrRd_logTrue_2020-02-21.png">
+        <img src="covid19_Deaths_OrRd_logTrue_2020-02-21.png">
+ -->
+        <h3>Animated cumulated</h3>
+        <img src="covid19_casescumulated_OrRd_logTrue.gif">
+        <img src="covid19_deathscumulated_OrRd_logTrue.gif">
+
+        <h3>Animated weekly</h3>
+        <img src="covid19_casesperweek_PuRd_logTrue.gif">
+        <img src="covid19_deathsperweek_PuRd_logTrue.gif">
+
+
+
+
+        <h1>Aligned time series</h1>
+
+        <img src="days100_cases_en_perCapitaFalse_World.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_World.png?dummy=xxxDATExxx">
+        <br>
+<!--         <img src="days100_cases_en_perCapitaTrue_World.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaTrue_World.png?dummy=xxxDATExxx">
+        <br>
+ -->
+        <h1>CoViD19 logistic function fitting</h1>
+
+        The figures below with the sigmoid curves show the cumulated confirmed COVID19 cases in various geographic segments fitted to a <a href="https://en.wikipedia.org/wiki/Logistic_function">logistic function</a> in order to determine 1) midpoint (day with peak number of new cases), 2) future maximum number of cumulated cases and 3) steepness of the curve. When a larger percentage of the population is tested, then the data points and hence the data fitting becomes more reliable. The quality of the fitted models is highly dependent on the quality of the input data. If the data cannot be fitted, then it could among other things be a sign of 1) incorrect data due to insufficient testing, 2) too few cases, 3) government intervention/quarantines preventing the natural propagation of the virus, 1) deliberately falsified data. The code to generate the colorblind optimized plots below is available on <a href="https://gist.github.com/tommycarstensen/fa5be3c3ba94e1c53dfe12cb67bdfe01">GitHub</a>. The data was downloaded from the European Center for Disease Prevention and Control (ECDC) <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">here</a>. Figures for China are not included, as the validity of the data has been questioned.
+        
+        <br><br>
+        Here are other good pages (please send additional suggestions to <a href="mailto:covid19@tommycarstensen.com">covid19@tommycarstensen.com</a>):
+        <br><a href="https://covid19info.live/">covid19info.live</a>
+        <br><a href="https://www.bloomberg.com/graphics/2020-wuhan-novel-coronavirus-outbreak/">Bloomberg</a>
+        <br><a href="https://ourworldindata.org/coronavirus-data">Our World in Data</a>
+        <br><a href="https://www.bing.com/covid">Bing</a>
+        <br><a href="https://www.worldometers.info/coronavirus/">Worldometer</a>
+        <br><a href="https://multimedia.scmp.com/infographics/news/china/article/3047038/wuhan-virus/index.html">South China Morning Post</a>
+        <br><a href="https://who.maps.arcgis.com/apps/opsdashboard/index.html">WHO / OMS</a>
+        <br><a href="https://www.arcgis.com/apps/opsdashboard/index.html#/bda7594740fd40299423467b48e9ecf6">Johns Hopkins</a>
+        <br><a href="https://www.theguardian.com/world/ng-interactive/2020/mar/16/coronavirus-map-how-covid-19-is-spreading-across-the-world">The Guardian</a>
+        <br><a href="https://www.nytimes.com/news-event/coronavirus">New York Times</a>
+        <br><a href="https://www.washingtonpost.com/world/2020/03/16/coronavirus-latest-news/">Washington Post</a>
+        <br><a href="https://www.ft.com/coronavirus">Financial Times</a>
+        <br><a href="https://blog.datawrapper.de/coronaviruscharts/">Datawrapper</a>
+
+        <br><br>
+        Click a column header to sort by that column header.
+        <br>
+        <table id="myTable2">
+            <tr>
+                <th onclick="sortTable(0)">Country</th>
+                <th onclick="sortTable(1)">Population size (millions)</th>
+                <th onclick="sortTable(2)">Steepness</th>
+                <th onclick="sortTable(3)">Cumulated cases (n)</th>
+                <th onclick="sortTable(4)">Cumulated fatalities (n)</th>
+                <th onclick="sortTable(5)">Case Fatality Rate (%)</th>
+                <th onclick="sortTable(6)">Cases today (n)</th>
+                <th onclick="sortTable(7)">Fatalities today (n)</th>
+                <th onclick="sortTable(8)">Cases per million</th>
+                <th onclick="sortTable(9)">Fatalities per million</th>
+            </tr>
+
+xxxTABLEROWSxxx
+
+        </table>
+        <br>
+        
+        <!--<br><a href="Asia.htm">Asia</a>-->
+        <!--<br><a href="Europe.htm">Europe</a>-->
+        <!--<br><a href="AmericaNorth.htm">North America</a>-->
+        <!--<br><a href="AmericaSouth.htm">South America</a>-->
+        <!--<br><a href="Oceania.htm">Oceania</a>-->
+        <!--<br><a href="Africa.htm">Africa</a>-->
+
+<!--         <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flag_of_the_People%27s_Republic_of_China.svg/45px-Flag_of_the_People%27s_Republic_of_China.svg.png" border="1"> China / 中国</h3>
+        <img src="COVID19_sigmoid_cases_China.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_China.png?dummy=xxxDATExxx">
+        <br> -->
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/46px-Flag_of_the_United_States.svg.png" border="1"> United States of America (USA) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/COVID-19_outbreak_USA_per_capita_cases_map.svg/440px-COVID-19_outbreak_USA_per_capita_cases_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_United_States_of_America.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_United_States_of_America.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/45px-Flag_of_Europe.svg.png" border="1"> European Union (EU) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Red_COVID-19_Outbreak_Cases_per_capita_in_Europe.svg/440px-Red_COVID-19_Outbreak_Cases_per_capita_in_Europe.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_EU.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_EU.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_EU.png?dummy=xxxDATExxx">
+        <br>
+        <img src="scatter_EU_cases.png?dummy=xxxDATExxx">
+        <img src="scatter_EU_deaths.png?dummy=xxxDATExxx">
+        <br>
+
+<hr>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Flag_of_Australia_%28converted%29.svg/46px-Flag_of_Australia_%28converted%29.svg.png" border="1"> Australia <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/COVID-19_outbreak_Australia_per_capita_cases_map.svg/440px-COVID-19_outbreak_Australia_per_capita_cases_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Australia.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Australia.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_Austria.svg/45px-Flag_of_Austria.svg.png" border="1"> Austria <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Covid-19_-_Austria_Cases_per_100k_-_1403.svg/440px-Covid-19_-_Austria_Cases_per_100k_-_1403.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Austria.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Austria.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flag_of_Belgium_%28civil%29.svg/45px-Flag_of_Belgium_%28civil%29.svg.png" border="1"> Belgium / Belgique <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Spread_of_COVID19_in_Belgium.png/440px-Spread_of_COVID19_in_Belgium.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Belgium.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Belgium.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Flag_of_Brazil.svg/43px-Flag_of_Brazil.svg.png" border="1"> Brazil / Brasil <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/COVID-19_Outbreak_Cases_in_Brazil.svg/440px-COVID-19_Outbreak_Cases_in_Brazil.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Brazil.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Brazil.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Canada_%28Pantone%29.svg/46px-Flag_of_Canada_%28Pantone%29.svg.png" border="1"> Canada / Canada <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/COVID-19_outbreak_Canada_per_capita_cases_map.svg/712px-COVID-19_outbreak_Canada_per_capita_cases_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Canada.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Canada.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Flag_of_Denmark.svg/40px-Flag_of_Denmark.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Denmark">Denmark</a> / <a href="">Danmark</a> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/COVID-19_Outbreak_Cases_in_Denmark.svg/440px-COVID-19_Outbreak_Cases_in_Denmark.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Denmark.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Denmark.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Flag_of_France.svg/45px-Flag_of_France.svg.png" border="1"> France / La France <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/COVID-19_outbreak_France_per_capita_cases_map.svg/440px-COVID-19_outbreak_France_per_capita_cases_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_France.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_France.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Flag_of_Germany.svg/46px-Flag_of_Germany.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Germany">Germany</a> / <a href="https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland">Deutschland</a> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/COVID-19_outbreak_Germany_per_capita_cases_map.svg/440px-COVID-19_outbreak_Germany_per_capita_cases_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Germany.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Germany.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/45px-Flag_of_India.svg.png" border="1"> India / भारत <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/COVID-19_Outbreak_Cases_in_India.svg/440px-COVID-19_Outbreak_Cases_in_India.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_India.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_India.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Flag_of_Indonesia.svg/45px-Flag_of_Indonesia.svg.png" border="1"> Indonesia / Republik Indonesia <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/COVID-19_Outbreak_Cases_in_Indonesia_%28Density%29.svg/440px-COVID-19_Outbreak_Cases_in_Indonesia_%28Density%29.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Indonesia.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Indonesia.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Flag_of_Iran.svg/46px-Flag_of_Iran.svg.png"> Iran / ایران <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/COVID-19_Outbreak_Cases_in_Iran_%28Density%29.svg/440px-COVID-19_Outbreak_Cases_in_Iran_%28Density%29.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Iran.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Iran.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Flag_of_Italy.svg/45px-Flag_of_Italy.svg.png" border="1"> Italy / Italia <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/COVID-19_Outbreak_Cases_in_Italy_%28Density%29.svg/440px-COVID-19_Outbreak_Cases_in_Italy_%28Density%29.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Italy.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Italy.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Flag_of_Japan.svg/45px-Flag_of_Japan.svg.png" border="1"> Japan / 日本 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/COVID-19_outbreak_Japan_per_capita_cases_map.svg/740px-COVID-19_outbreak_Japan_per_capita_cases_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Japan.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Japan.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Flag_of_Mexico.svg/46px-Flag_of_Mexico.svg.png" border="1"> Mexico / México<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/COVID-19_Outbreak_Cases_in_Mexico.svg/440px-COVID-19_Outbreak_Cases_in_Mexico.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Mexico.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Mexico.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flag_of_the_Netherlands.svg/45px-Flag_of_the_Netherlands.svg.png" border="1"> Netherlands / Nederland <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/COVID-19_outbreak_the_Netherlands_per_capita_cases_map.svg/440px-COVID-19_outbreak_the_Netherlands_per_capita_cases_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Netherlands.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Netherlands.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Flag_of_New_Zealand.svg/46px-Flag_of_New_Zealand.svg.png" border="1"> New Zealand / New Zealand <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/COVID-19_Outbreak_Cases_in_New_Zealand_%28DHB_Totals%29.svg/440px-COVID-19_Outbreak_Cases_in_New_Zealand_%28DHB_Totals%29.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_New_Zealand.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_New_Zealand.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/41px-Flag_of_Norway.svg.png" border="1"> Norway / <a href="https://no.wikipedia.org/wiki/Norge_under_koronaviruspandemien_i_2020">Norge</a> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/COVID-19_Outbreak_Cases_in_Norway_by_municipalities.png/440px-COVID-19_Outbreak_Cases_in_Norway_by_municipalities.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Norway.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Norway.png?dummy=xxxDATExxx">
+        <br>
+
+        <!--<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Flag_of_Peru.svg/45px-Flag_of_Peru.svg.png" border="1"> Peru / Perú</h3>-->
+        <!--<img src="COVID19_sigmoid_Peru.png?dummy=xxxDATExxx">-->
+        <!--<br>-->
+
+        <!--<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Flag_of_Poland.svg/46px-Flag_of_Poland.svg.png" border="1"> Poland / Polska</h3>-->
+        <!--<img src="COVID19_sigmoid_Poland.png?dummy=xxxDATExxx">-->
+        <!--<br>-->
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Flag_of_Singapore.svg/45px-Flag_of_Singapore.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Singapore">Singapore</a> / Singapura <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/COVID-19_Cases_in_Singapore_by_Planning_Areas.svg/440px-COVID-19_Cases_in_Singapore_by_Planning_Areas.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Singapore.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Singapore.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/45px-Flag_of_South_Korea.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_South_Korea">South Korea</a> / 한국/韓國 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/COVID-19_outbreak_South_Korea_per_capita_cases_map.svg/440px-COVID-19_outbreak_South_Korea_per_capita_cases_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_South_Korea.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_South_Korea.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/45px-Flag_of_Spain.svg.png" border="1"> Spain / España <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/COVID-19_outbreak_Spain_per_capita_map.svg/600px-COVID-19_outbreak_Spain_per_capita_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Spain.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Spain.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Flag_of_Sweden.svg/46px-Flag_of_Sweden.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Sweden">Sweden</a> / Sverige <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/COVID-19_Outbreak_Cases_in_Sweden_by_Number_with_Legend.svg/440px-COVID-19_Outbreak_Cases_in_Sweden_by_Number_with_Legend.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Sweden.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Sweden.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Switzerland.svg/32px-Flag_of_Switzerland.svg.png" border="1"> Switzerland / Schweiz <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/COVID-19_Outbreak_Cases_in_Switzerland_by_Canton.svg/440px-COVID-19_Outbreak_Cases_in_Switzerland_by_Canton.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Switzerland.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Switzerland.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Flag_of_the_Republic_of_China.svg/45px-Flag_of_the_Republic_of_China.svg.png" border="1"> Taiwan / 台湾 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/COVID-19_outbreak_Taiwan_per_capita_cases_map.svg/440px-COVID-19_outbreak_Taiwan_per_capita_cases_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_Taiwan.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Taiwan.png?dummy=xxxDATExxx">
+        <br>
+
+<!--         <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Flag_of_Turkey.svg/45px-Flag_of_Turkey.svg.png" border="1"> Turkey / Türkiye</h3>
+        <img src="COVID19_sigmoid_cases_Turkey.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_Turkey.png?dummy=xxxDATExxx">
+        <br>
+ -->
+        <h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/46px-Flag_of_the_United_Kingdom.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_Kingdom">United Kingdom</a> (Great Britain; <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_England">England</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Scotland">Scotland</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Wales">Wales</a>, Northern Ireland) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/COVID-19_outbreak_UK_case_counts.svg/440px-COVID-19_outbreak_UK_case_counts.svg.png" height="75"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/COVID-19_outbreak_England_per_capita_cases_map.svg/440px-COVID-19_outbreak_England_per_capita_cases_map.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_United_Kingdom.png?dummy=xxxDATExxx">
+        <img src="COVID19_sigmoid_deaths_United_Kingdom.png?dummy=xxxDATExxx">
+        <br>
+
+
+
+
+
+        <hr>
+
+
+
+
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/East_Asia_%28orthographic_projection%29.svg/160px-East_Asia_%28orthographic_projection%29.svg.png" border="1" width="45"> East Asia excluding China <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/COVID-19_Outbreak_Cases_in_Asia.svg/440px-COVID-19_Outbreak_Cases_in_Asia.svg.png" height="75"></h3>
+        <img src="COVID19_sigmoid_cases_AsiaEastExChina.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_AsiaEastExChina.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_AsiaEastExChina.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Western_Asia_%28orthographic_projection%29.svg/440px-Western_Asia_%28orthographic_projection%29.svg.png" border="1" width="45"> Western Asia excluding Iran</h3>
+        <img src="COVID19_sigmoid_cases_AsiaWesternExIran.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_AsiaWesternExIran.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_AsiaWesternExIran.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Southeast_Asia_%28orthographic_projection%29.svg/440px-Southeast_Asia_%28orthographic_projection%29.svg.png" border="1" width="45"> South East Asia</h3>
+        <img src="COVID19_sigmoid_cases_AsiaSouthEast.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_AsiaSouthEast.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_AsiaSouthEast.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0f/South_America_%28orthographic_projection%29.svg/440px-South_America_%28orthographic_projection%29.svg.png" border="1" width="45"> South America ex Venezuela</h3>
+        <img src="COVID19_sigmoid_cases_AmericaSouthExVenezuela.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_AmericaSouthExVenezuela.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_AmericaSouthExVenezuela.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Africa_%28orthographic_projection%29.svg/440px-Africa_%28orthographic_projection%29.svg.png" border="1" width="45"> Africa</h3>
+        <img src="COVID19_sigmoid_cases_Africa.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_Africa.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_Africa.png?dummy=xxxDATExxx">
+        <br>
+
+<!--         <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Asia_%28orthographic_projection%29.svg/440px-Asia_%28orthographic_projection%29.svg.png" border="1" width="45"> Asia</h3>
+        <img src="COVID19_sigmoid_Asia.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaTrue_Asia.png?dummy=xxxDATExxx">
+        <br>
+ -->
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Asia_%28orthographic_projection%29.svg/440px-Asia_%28orthographic_projection%29.svg.png" border="1" width="45"> Asia ex China</h3>
+        <img src="COVID19_sigmoid_cases_AsiaExChina.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_AsiaExChina.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_AsiaExChina.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Location_North_America.svg/440px-Location_North_America.svg.png" border="1" width="45"> North America</h3>
+        <img src="COVID19_sigmoid_cases_AmericaNorth.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_AmericaNorth.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_AmericaNorth.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Oceania_%28orthographic_projection%29.svg/400px-Oceania_%28orthographic_projection%29.svg.png" border="1" width="45"> Oceania</h3>
+        <img src="COVID19_sigmoid_cases_Oceania.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_Oceania.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_Oceania.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Nordic_countries_orthographic.svg/440px-Nordic_countries_orthographic.svg.png" border="1" width="45">Northern Europe (Nordic countries)</h3>
+        <img src="COVID19_sigmoid_cases_Nordic.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_Nordic.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_Nordic.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Mediterranean_Sea_16.61811E_38.99124N.jpg/560px-Mediterranean_Sea_16.61811E_38.99124N.jpg" border="1" width="45">Southern/Mediterranean Europe</h3>
+        <img src="COVID19_sigmoid_cases_EuropeMediterranean.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_EuropeMediterranean.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_EuropeMediterranean.png?dummy=xxxDATExxx">
+        <br>
+
+        <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Latin_America_%28orthographic_projection%29.svg/440px-Latin_America_%28orthographic_projection%29.svg.png" border="1" width="45"> Latin America ex Venezuela</h3>
+        <img src="COVID19_sigmoid_LatinAmericaExVenezuela.png?dummy=xxxDATExxx">
+        <img src="days100_cases_en_perCapitaFalse_LatinAmericaExVenezuela.png?dummy=xxxDATExxx">
+        <img src="days100_deaths_en_perCapitaFalse_LatinAmericaExVenezuela.png?dummy=xxxDATExxx">
+        <br>
+
+        
+
+    <hr>
+
+
+
+
+
+
+    <h1>Infographics and other news clips</h1>
+
+    Below are a few interesting figures and articles from the press, scientific journals and elsewhere.
+
+    <br><br>
+    <iframe src="https://ourworldindata.org/grapher/full-list-cumulative-total-tests-per-million" style="width: 100%; height: 600px; border: 0px none;"></iframe>
+
+    <br><br>
+    <iframe title="COVID-19 confirmed and recovered cases" aria-label="World Symbol map" src="//datawrapper.dwcdn.net/RQJvk/5/" scrolling="no" frameborder="0" style="border: none;" width="713" height="500"></iframe>
+
+    <!--Italy and Spain's daily death tolls are plateauing, but in the UK and US every day brings more new deaths than the last-->
+    <br><br>
+    <img src="http://com.ft.imagepublish.upp-prod-us.s3.amazonaws.com/bf36c1fc-8025-11ea-82f6-150830b3b99a" width="713">
+
+    <!--Outbreaks are now underway in dozens of other countries, and few have hit their ceiling for new cases-->
+    <br><br>
+    <img src="http://com.ft.imagepublish.upp-prod-us.s3.amazonaws.com/b75b9a72-7394-11ea-95fe-fcd274e920ca" width="713">
+
+<!--
+    >!--Italy and Spain have had more deaths attributed to coronavirus than China did at the same stage--<
+    <br><br>
+    <img src="http://com.ft.imagepublish.upp-prod-us.s3.amazonaws.com/25ac84ba-6e12-11ea-89df-41bea055720b" width="713">
+-->
+
+    <!--Daily death tolls are still accelerating in most countries-->
+    <br><br>
+    <img src="http://com.ft.imagepublish.upp-prod-us.s3.amazonaws.com/918eca26-7394-11ea-95fe-fcd274e920ca" width="713">
+
+<!--
+    <br><br>
+    <img src="http://com.ft.imagepublish.upp-prod-us.s3.amazonaws.com/1f5a9c6e-6e12-11ea-89df-41bea055720b" width="713">
+
+    <br><br>
+    <img src="http://com.ft.imagepublish.upp-prod-us.s3.amazonaws.com/2c0da71c-6e12-11ea-89df-41bea055720b" width="713">
+
+    <br><br>
+    <img src="http://com.ft.imagepublish.upp-prod-us.s3.amazonaws.com/32b95be2-6e12-11ea-89df-41bea055720b" width="713">
+-->
+
+    <!--New deaths in Lombardia and Madrid are flattening off, but the death toll is climbing ever faster in New York and London-->
+    <br><br>
+    <img src="http://com.ft.imagepublish.upp-prod-us.s3.amazonaws.com/e2b7ba06-752a-11ea-95fe-fcd274e920ca" width="713">
+
+
+
+
+
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/04/16/health/WHO-Trump-coronavirus.html">2020-04-16 New York Times</a> - W.H.O., Now Trump’s Scapegoat, Warned About Coronavirus Early and Often
+
+
+    <br><br>
+    <a href="https://www.scmp.com/comment/opinion/article/3079583/beijing-tried-use-coronavirus-crisis-enhance-its-global-standing">2020-04-14 South China Morning Post</a> - Beijing tried to use the coronavirus crisis to enhance its global standing. It’s not working
+
+    <br><br>
+    <a href="https://www.washingtonpost.com/politics/2020/04/13/how-false-hope-spread-about-hydroxychloroquine-its-consequences/">2020-04-13 Washington Post</a> - How false hope spread about hydroxychloroquine to treat covid-19 — and the consequences that followed - <a href="https://twitter.com/elysesamuels">Elyse Samuels</a> and <a href="https://twitter.com/mmkelly22">Meg Kelly</a>
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/04/13/science/putin-russia-disinformation-health-coronavirus.html">2020-04-13 New York Times</a> - Putin’s Long War Against American Science
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/04/13/opinion/coronavirus-united-states-south-korea.html">2020-04-13 The New York Times</a> - Trump’s Role in the Death Toll
+
+    <br><br>
+    2020-04-12 Coronavirus: Bill Gates interview @BBC Breakfast - BBC
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ie6lRKAdvuY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <br><br>
+    <a href="https://www.theguardian.com/world/2020/apr/11/china-clamping-down-on-coronavirus-research-deleted-pages-suggest">2020-04-11 The Guardian</a> - China clamping down on coronavirus research, deleted pages suggest
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/04/11/us/politics/coronavirus-trump-response.html">2020-04-11 New York Times</a> - He Could Have Seen What Was Coming: Behind Trump’s Failure on the Virus
+    <br>
+    An examination reveals the president was warned about the potential for a pandemic but that internal divisions, lack of planning and his faith in his own instincts led to a halting response.
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/04/11/us/politics/trump-coronavirus-response-takeaways.html">2020-04-11 New York Times</a> - Five Takeaways on What Trump Knew as the Virus Spread
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/04/11/us/politics/coronavirus-red-dawn-emails-trump.html">2020-04-11 New York Times</a> - The ‘Red Dawn’ Emails: 8 Key Exchanges on the Faltering Response to the Coronavirus
+
+    <br><br>
+    Talking Coronavirus with Medical Professionals & Politicians | The Daily Social Distancing Show
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/2tawD4qXVgg" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <br><br>
+    Watch CNBC's full interview with Microsoft co-founder Bill Gates on past pandemic warnings
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/PKg40HX6oUo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <br><br>
+    <a href="https://www.theatlantic.com/ideas/archive/2020/04/americans-are-paying-the-price-for-trumps-failures/609532/">2020-04-07 The Atlantic</a> - This Is Trump’s Fault
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/04/06/us/politics/navarro-warning-trump-coronavirus.html?referringSource=articleShare">2020-04-06 New York Times</a> - Trade Adviser Warned White House in January of Risks of a Pandemic
+
+    <br><br>
+    <a href="https://www.latimes.com/science/story/2020-04-06/us-battle-against-coronavirus-front-lines-war-room">2020-04-06 Los Angeles Times</a> - Trump administration is battling coronavirus without a war room
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/04/05/us/politics/trump-hydroxychloroquine-coronavirus.html">2020-04-05 New York Times</a> - Ignoring Expert Opinion, Trump Again Promotes Use of Hydroxychloroquine
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/04/05/us/coronavirus-deaths-undercount.html">2020-04-05 New York Times</a> - Official Counts Understate the U.S. Coronavirus Death Toll
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/04/04/world/europe/germany-coronavirus-death-rate.html?searchResultPosition=1">2020-04-04 New York Times</a> - A German Exception? Why the Country’s Coronavirus Death Rate Is Low
+
+    <br><br>
+    <a href="https://www.theguardian.com/world/2020/apr/04/coronavirus-us-ventilators-new-york-trump-touts-unproven-cure-malaria-drug">2020-04-04 The Guardian</a> - Trump tells Americans to take unproven malaria drug to prevent Covid-19
+
+    <br><br>
+    2020-04-03 Covid-19: how bad will it be for the economy? | The Economist
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/wUUWoN4LKuE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <br><br>
+    <a href="https://www.theguardian.com/us-news/2020/mar/28/trump-coronavirus-misleading-claims">2020-03-28 The Guardian</a> - Seven of Donald Trump's most misleading coronavirus claims
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/03/28/us/testing-coronavirus-pandemic.html">2020-03-28 New York Times</a> - The Lost Month: How a Failure to Test Blinded the U.S. to Covid-19
+
+    <br><br>
+    <a href="https://www.theguardian.com/us-news/2020/mar/28/trump-coronavirus-politics-us-health-disaster">2020-03-28 The Guardian</a> - The missing six weeks: how Trump failed the biggest test of his life
+    
+    <br><br>
+    <a href="https://www.nytimes.com/2020/03/27/us/politics/trump-coronavirus-factcheck.html">2020-03-27 New York Times</a> - Analyzing the Patterns in Trump’s Falsehoods About Coronavirus
+
+    <br><br>
+    <a href="https://multimedia.scmp.com/infographics/news/world/article/3077057/europe-coronavirus/index.html">2020-03-26 South China Morning Post</a> - Europe’s coronavirus lockdown nightmare
+    <br>
+    <img src="https://multimedia.scmp.com/infographics/news/world/article/3077057/europe-coronavirus/img/evolution-lockdown.gif?hash=0" width="713">
+    
+    
+    <br><br>
+    2020-03-25 How we must respond to the coronavirus pandemic | Bill Gates
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/Xe8fIjxicoo" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">To slow the spread of <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a>, many countries introduced &quot;lockdown&quot; measures. But on their own, these measures will not extinguish epidemics. We call on all countries to use this time to attack the <a href="https://twitter.com/hashtag/coronavirus?src=hash&amp;ref_src=twsrc%5Etfw">#coronavirus</a>.<br>You&#39;ve created a 2nd window of opportunity. <a href="https://t.co/jupcsdYnWm">pic.twitter.com/jupcsdYnWm</a></p>&mdash; Tedros Adhanom Ghebreyesus (@DrTedros) <a href="https://twitter.com/DrTedros/status/1242904238386302977?ref_src=twsrc%5Etfw">March 25, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <a href="https://www.washingtonpost.com/health/the-coronavirus-isnt-mutating-quickly-suggesting-a-vaccine-would-offer-lasting-protection/2020/03/24/406522d6-6dfd-11ea-b148-e4ce3fbd85b5_story.html">2020-03-24 Washington Post</a> - Coronavirus mutation rate is good for vaccine development
+
+    <br><br>
+    <a href="https://www.reuters.com/article/us-health-coronavirus-who-usa/united-states-could-become-coronavirus-epicenter-who-idUSKBN21B1FT">2020-03-24 Reuters</a> - United States could become coronavirus epicenter: WHO
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/03/23/world/asia/coronavirus-south-korea-flatten-curve.html">2020-03-23 New York Times</a> - How South Korea Flattened the Curve
+
+    <br><br>
+    <a href="https://www.reuters.com/article/us-health-coronavirus-china-cdc-exclusiv/exclusive-u-s-axed-cdc-expert-job-in-china-months-before-virus-outbreak-idUSKBN21910S">2020-03-22 Reuters</a> - U.S. axed CDC expert job in China months before virus outbreak
+
+    <br><br>
+    <a href="https://www.nytimes.com/2020/03/19/us/politics/trump-coronavirus-outbreak.html">2020-03-19 New York Times</a> - Before Virus Outbreak, a Cascade of Warnings Went Unheeded
+
+    <br><br>
+    <a href="https://www.nytimes.com/interactive/2020/03/17/us/coronavirus-testing-data.html">2020-03-17 New York Times</a> - U.S. Lags in Coronavirus Testing After Slow Response to Outbreak
+
+    <br><br>
+    <a href="https://edition.cnn.com/2020/03/17/politics/fact-check-trump-always-knew-pandemic-coronavirus/index.html">2020-03-17 CNN</a> - Fact check: Trump tries to erase the memory of him downplaying the coronavirus
+
+    <br><br>
+    2020-03-17 - Fox Finally Takes Coronavirus Seriously
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/t8D_HQ0-9z4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <br><br>
+    2020-03-16 - WHO calls for more coronavirus testing: 'Test, test, test'
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/3GqhApWmFtA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">We have a simple message for all countries fighting <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a>: test, test, test.<br>The most effective way to prevent <a href="https://twitter.com/hashtag/coronavirus?src=hash&amp;ref_src=twsrc%5Etfw">#coronavirus</a> infections and save lives is breaking the chains of transmission. And to do that, you must test and isolate. <a href="https://t.co/cOOs5wMCZE">https://t.co/cOOs5wMCZE</a></p>&mdash; Tedros Adhanom Ghebreyesus (@DrTedros) <a href="https://twitter.com/DrTedros/status/1239604895247892482?ref_src=twsrc%5Etfw">March 16, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr"><a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a>: &quot;Testing is central because that leads to early detection&quot;<br><br>South Korean Foreign Minister Kang Kyung-wha explains how they’ve been tackling the <a href="https://twitter.com/hashtag/CoronavirusPandemic?src=hash&amp;ref_src=twsrc%5Etfw">#CoronavirusPandemic</a><a href="https://twitter.com/hashtag/Marr?src=hash&amp;ref_src=twsrc%5Etfw">#Marr</a> <a href="https://t.co/AJl63Em75M">https://t.co/AJl63Em75M</a> <a href="https://t.co/CbXjsASutD">pic.twitter.com/CbXjsASutD</a></p>&mdash; BBC Politics (@BBCPolitics) <a href="https://twitter.com/BBCPolitics/status/1239121399765176321?ref_src=twsrc%5Etfw">March 15, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+    <br><br>
+    <a href="https://www.washingtonpost.com/business/2020/03/16/cdc-who-coronavirus-tests/">2020-03-16 Washington Post</a> - How U.S. coronavirus testing stalled: Flawed tests, red tape and resistance to using the millions of tests produced by the WHO
+
+
+    <br><br>
+    <a href="https://www.bloomberg.com/news/articles/2020-03-15/south-korea-wants-to-share-its-tips-on-tackling-the-coronavirus">2020-03-15 Bloomberg</a> - South Korea Wants to Show the World How to Tackle the Coronavirus
+
+    <br><br>
+    <a href="https://www.vox.com/policy-and-politics/2020/3/14/21177509/coronavirus-trump-covid-19-pandemic-response">2020-03-14 Vox</a> - The Trump administration’s botched coronavirus response, explained
+
+
+    <br><br>
+    <a href="https://www.businessinsider.com/coronavirus-contagious-r-naught-average-patient-spread-2020-3">2020-03-14 Business Insider</a> - Scientists are racing to calculate a crucial measure of the coronavirus' spread. It suggests the virus may be far more contagious than the flu.
+    <br>
+    COVID-19 seems more contagious than flu, but less than SARS.  The average number of people that one person with a virus infects, based on the R0 scale
+    <br>
+    <img src="https://i.insider.com/5e6bf336e4f9fe0a976c50e7" width="713">
+
+
+    <br><br>
+    <a href="https://www.vox.com/policy-and-politics/2020/3/13/21176535/trumps-worst-statements-coronavirus">2020-03-13 Vox</a> - Trump’s 7 worst statements on the coronavirus outbreak
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Not true, <a href="https://twitter.com/realDonaldTrump?ref_src=twsrc%5Etfw">@realDonaldTrump</a>. I wrote to you more than 600 days ago demanding answers after you fired the entire White House pandemic team. <a href="https://t.co/ICbHOkyeyY">https://t.co/ICbHOkyeyY</a> <a href="https://t.co/71OF9gKA3N">pic.twitter.com/71OF9gKA3N</a></p>&mdash; Sherrod Brown (@SenSherrodBrown) <a href="https://twitter.com/SenSherrodBrown/status/1238571872779935744?ref_src=twsrc%5Etfw">March 13, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <a href="https://www.theguardian.com/world/2020/mar/13/coronavirus-testing-us">2020-03-13 The Guardian</a> - Why has coronavirus testing in the US been such a disaster?
+
+
+    <br><br>
+    <a href="https://www.vox.com/policy-and-politics/2020/3/13/21178289/confirmed-coronavirus-cases-us-countries-italy-iran-singapore-hong-kong">Vox 2020-03-13</a> - How the US stacks up to other countries in confirmed coronavirus cases
+    <br>
+    Number of confirmed coronavirus cases, by days since 100th case
+    <br>
+    <img src="https://cdn.vox-cdn.com/uploads/chorus_asset/file/19799191/VoKBM_number_of_confirmed_coronavirus_cases_by_days_since_100th_case.png" width="713">
+
+
+    <br><br>
+    <a href="https://time.com/5802293/coronavirus-covid19-singapore-hong-kong-taiwan/">2020-03-13 Time</a> - What We Can Learn From Singapore, Taiwan and Hong Kong About Handling Coronavirus
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Let&#39;s dispel the notion that &quot;novel coronavirus is just like the flu&quot;. Sharing this striking comparison of <a href="https://twitter.com/hashtag/Flu?src=hash&amp;ref_src=twsrc%5Etfw">#Flu</a>, <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a>, <a href="https://twitter.com/hashtag/SARS?src=hash&amp;ref_src=twsrc%5Etfw">#SARS</a> and <a href="https://twitter.com/hashtag/MERS?src=hash&amp;ref_src=twsrc%5Etfw">#MERS</a> made by <a href="https://twitter.com/BioRender?ref_src=twsrc%5Etfw">@BioRender</a>. <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a> is 30x more deadly and almost 2x more contagious than the flu. We have no existing immunity to COVID19. <a href="https://t.co/fdJgsSFMnB">pic.twitter.com/fdJgsSFMnB</a></p>&mdash; Prof. Akiko Iwasaki (@VirusesImmunity) <a href="https://twitter.com/VirusesImmunity/status/1238475009712160769?ref_src=twsrc%5Etfw">March 13, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <a href="https://www.businessinsider.com/coronavirus-taiwan-case-study-rapid-response-containment-2020-3">2020-03-13 Business Insider</a> - Taiwan has only 50 coronavirus cases. Its response to the crisis shows that swift action and widespread healthcare can prevent an outbreak.
+    
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">&quot;Our message to countries continues to be: you must take a comprehensive approach. <br><br>Not testing alone. Not contact tracing alone. Not quarantine alone. Not social distancing alone. Do it all&quot;-<a href="https://twitter.com/DrTedros?ref_src=twsrc%5Etfw">@DrTedros</a> <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a> <a href="https://twitter.com/hashtag/coronavirus?src=hash&amp;ref_src=twsrc%5Etfw">#coronavirus</a></p>&mdash; World Health Organization (WHO) (@WHO) <a href="https://twitter.com/WHO/status/1238494581206941696?ref_src=twsrc%5Etfw">March 13, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    
+    
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">&quot;Second, detect, protect and treat.<br><br>You can’t fight a virus if you don’t know where it is. Find, isolate, test and treat every case, to break the chains of <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a> transmission.<br><br>Every case we find and treat limits the expansion of the disease&quot;-<a href="https://twitter.com/DrTedros?ref_src=twsrc%5Etfw">@DrTedros</a> <a href="https://twitter.com/hashtag/coronavirus?src=hash&amp;ref_src=twsrc%5Etfw">#coronavirus</a></p>&mdash; World Health Organization (WHO) (@WHO) <a href="https://twitter.com/WHO/status/1238495452141629441?ref_src=twsrc%5Etfw">March 13, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">&quot;The experience of 🇨🇳, 🇰🇷, 🇸🇬 and others clearly demonstrates that aggressive testing and contact tracing, combined with social distancing measures and community mobilization, can prevent <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a> infections and save lives&quot;-<a href="https://twitter.com/DrTedros?ref_src=twsrc%5Etfw">@DrTedros</a> <a href="https://twitter.com/hashtag/coronavirus?src=hash&amp;ref_src=twsrc%5Etfw">#coronavirus</a></p>&mdash; World Health Organization (WHO) (@WHO) <a href="https://twitter.com/WHO/status/1238494741551091713?ref_src=twsrc%5Etfw">March 13, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <a href="https://www.forbes.com/sites/stephaniesarkis/2020/03/12/covid-19-its-not-about-europe-its-about-incompetence/#7ddc8004122e">2020-03-12 Forbes</a> - COVID-19: It’s Not About Europe, It’s About Incompetence
+
+    <br><br>
+    <a href="https://www.pbs.org/newshour/health/the-reason-u-s-covid-19-numbers-arent-higher-not-enough-tests">2020-03-12 PBS</a> - The reason U.S. COVID-19 numbers aren’t higher? Not enough tests
+
+    <br><br>
+    <a href="https://time.com/5801726/coronavirus-models-forecast/">2020-03-12 Time</a> - Here's How Fast the Coronavirus Could Infect Over 1 Million Americans
+
+    <br><br>
+    <a href="https://www.theguardian.com/world/2020/mar/12/coronavirus-us-testing-failures-trump-administration">2020-03-12 The Guardian</a> - Anger grows at Trump administration's coronavirus testing failures
+
+
+    <br><br>
+    <a href="https://www.vox.com/future-perfect/2020/3/12/21172040/coronavirus-covid-19-virus-charts">2020-03-12 Vox</a> - 9 charts that explain the coronavirus pandemic
+
+    <br><br>
+    <a href="https://www.businessinsider.com/five-times-the-trump-administration-downplayed-the-coronavirus-2020-3">2020-03-12 Business Insider </a> - 5 times Trump and US officials downplayed coronavirus as the administration struggled to prepare for the growing pandemic
+
+    <br><br>
+    <a href="https://www.businessinsider.com/us-coronavirus-testing-problems-timeline-2020-3">2020-03-11 Business Insider</a> - The US decided to make its own coronavirus test, but the process was plagued by errors and delay. Here's a timeline of what went wrong.
+
+
+    <br><br>
+    'This is impeachment all over again': How Fox is reacting to the coronavirus outbreak
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/anQsCxVau20" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">So last year 37,000 Americans died from the common Flu. It averages between 27,000 and 70,000 per year. Nothing is shut down, life &amp; the economy go on. At this moment there are 546 confirmed cases of CoronaVirus, with 22 deaths. Think about that!</p>&mdash; Donald J. Trump (@realDonaldTrump) <a href="https://twitter.com/realDonaldTrump/status/1237027356314869761?ref_src=twsrc%5Etfw">March 9, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+    <br><br>
+    <a href="https://www.businessinsider.com/coronavirus-testing-covid-19-tests-per-capita-chart-us-behind-2020-3">Business Insider 2020-03-09</a> - One chart shows how many coronavirus tests per capita have been completed in 8 countries. The US is woefully behind.
+    <br>
+    COVID-19 testing per capita. As of March 8th, the US had done less coronavirus testing per capita than most other countries with outbreaks.
+    <br>
+    <img src="https://i.insider.com/5e66b72584159f21ad7f0617" width="713">
+    <br>
+
+    <br><br>
+    <a href="https://www.theatlantic.com/health/archive/2020/03/how-many-americans-have-been-tested-coronavirus/607597/">2020-03-06 The Atlantic</a> - Exclusive: The Strongest Evidence Yet That America Is Botching Coronavirus Testing
+
+    <br><br>
+    <a href="https://www.theguardian.com/world/2020/mar/05/chinese-social-media-censoring-officially-sanctioned-facts-on-coronavirus">2020-03-05 The Guardian</a> - Chinese social media censoring 'officially sanctioned facts' on coronavirus
+
+
+    <br><br>
+    <a href="https://www.businessinsider.com/coronavirus-compared-to-flu-mortality-rates-2020-3">2020-03-04 Business Insider</a> - The flu and the new coronavirus have similar symptoms, but the coronavirus is far deadlier - here's how the 2 compare
+
+
+    <br><br>
+    <a href="">2020-03-05 MEDPAGETODAY</a> - Singapore: The Model for COVID-19 Response?
+
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">On 28 February, WHO raised the risk assessment for the <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a> outbreak internationally from “high” to “very high.”<a href="https://twitter.com/hashtag/coronavirus?src=hash&amp;ref_src=twsrc%5Etfw">#coronavirus</a> <a href="https://t.co/Opqi73eCdv">https://t.co/Opqi73eCdv</a></p>&mdash; World Health Organization (WHO) (@WHO) <a href="https://twitter.com/WHO/status/1233835127509258241?ref_src=twsrc%5Etfw">February 29, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+    <br><br>
+    <a href="https://www.nytimes.com/interactive/2020/world/asia/china-coronavirus-contain.html">2020-02-28 New York Times</a> - How Bad Will the Coronavirus Outbreak Get? Here Are 6 Key Factors
+
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">The Coronavirus is very much under control in the USA. We are in contact with everyone and all relevant countries. CDC &amp; World Health have been working hard and very smart. Stock Market starting to look very good to me!</p>&mdash; Donald J. Trump (@realDonaldTrump) <a href="https://twitter.com/realDonaldTrump/status/1232058127740174339?ref_src=twsrc%5Etfw">February 24, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Although the total number of <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a> cases outside <a href="https://twitter.com/hashtag/China?src=hash&amp;ref_src=twsrc%5Etfw">#China</a> remains relatively low, I stressed our concern about cases with no clear epidemiological link (travel history to 🇨🇳, contact with a confirmed case) during our media briefing today.<a href="https://t.co/2NrbSDqDa3">https://t.co/2NrbSDqDa3</a></p>&mdash; Tedros Adhanom Ghebreyesus (@DrTedros) <a href="https://twitter.com/DrTedros/status/1230893678929076225?ref_src=twsrc%5Etfw">February 21, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">At the risk of sounding like a broken record, I must say again that the 🌍 has a window of opportunity to slow the <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a> outbreak &amp; we must seize it, now. Today I told media about the massive preparedness activities <a href="https://twitter.com/WHO?ref_src=twsrc%5Etfw">@WHO</a> &amp; countries are engaged in.<a href="https://t.co/2xwryYLLTl">https://t.co/2xwryYLLTl</a></p>&mdash; Tedros Adhanom Ghebreyesus (@DrTedros) <a href="https://twitter.com/DrTedros/status/1229869109539676163?ref_src=twsrc%5Etfw">February 18, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Together, we are facing <a href="https://twitter.com/hashtag/COVID19?src=hash&amp;ref_src=twsrc%5Etfw">#COVID19</a> &amp; we must use the window of opportunity to intensify our preparedness for it. <br>And more than ever it’s time to let science &amp; evidence lead policy. If we don’t, we are headed down a dark path that leads nowhere but division and disharmony. <a href="https://twitter.com/hashtag/MSC2020?src=hash&amp;ref_src=twsrc%5Etfw">#MSC2020</a></p>&mdash; Tedros Adhanom Ghebreyesus (@DrTedros) <a href="https://twitter.com/DrTedros/status/1229137045634899973?ref_src=twsrc%5Etfw">February 16, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">In an evolving public health emergency, all countries must step up efforts to prepare for <a href="https://twitter.com/hashtag/2019nCoV?src=hash&amp;ref_src=twsrc%5Etfw">#2019nCoV</a>’s possible arrival and do their utmost to contain it should it arrive. This means lab capacity for rapid diagnosis, contact tracing and other tools in the public health arsenal.</p>&mdash; Tedros Adhanom Ghebreyesus (@DrTedros) <a href="https://twitter.com/DrTedros/status/1226629014648971264?ref_src=twsrc%5Etfw">February 9, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">There’ve been some concerning instances of onward <a href="https://twitter.com/hashtag/2019nCoV?src=hash&amp;ref_src=twsrc%5Etfw">#2019nCoV</a> spread from people with no travel history to 🇨🇳. The detection of a small number of cases may indicate more widespread transmission in other countries; in short, we may only be seeing the tip of the iceberg.</p>&mdash; Tedros Adhanom Ghebreyesus (@DrTedros) <a href="https://twitter.com/DrTedros/status/1226629008302931971?ref_src=twsrc%5Etfw">February 9, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">As I told media yesterday, <a href="https://twitter.com/hashtag/2019nCoV?src=hash&amp;ref_src=twsrc%5Etfw">#2019nCoV</a> spread outside <a href="https://twitter.com/hashtag/China?src=hash&amp;ref_src=twsrc%5Etfw">#China</a> appears to be slow now, but could accelerate. Containment remains our objective, but all countries must use the window of opportunity created by the containment strategy to prepare for the virus’s possible arrival.</p>&mdash; Tedros Adhanom Ghebreyesus (@DrTedros) <a href="https://twitter.com/DrTedros/status/1226628381141340163?ref_src=twsrc%5Etfw">February 9, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">....he will be successful, especially as the weather starts to warm &amp; the virus hopefully becomes weaker, and then gone. Great discipline is taking place in China, as President Xi strongly leads what will be a very successful operation. We are working closely with China to help!</p>&mdash; Donald J. Trump (@realDonaldTrump) <a href="https://twitter.com/realDonaldTrump/status/1225728756456808448?ref_src=twsrc%5Etfw">February 7, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">I just briefed <a href="https://twitter.com/hashtag/EB146?src=hash&amp;ref_src=twsrc%5Etfw">#EB146</a> members again on the <a href="https://twitter.com/hashtag/2019nCoV?src=hash&amp;ref_src=twsrc%5Etfw">#2019nCoV</a> outbreak. I thanked the countries:<br>- who shared <a href="https://twitter.com/hashtag/2019nCoV?src=hash&amp;ref_src=twsrc%5Etfw">#2019nCoV</a> vital data with <a href="https://twitter.com/WHO?ref_src=twsrc%5Etfw">@WHO</a> <br>- who already pledged their funds to support the outbreak<br>It is vital that we invest now. We have a window of opportunity to exploit now.</p>&mdash; Tedros Adhanom Ghebreyesus (@DrTedros) <a href="https://twitter.com/DrTedros/status/1225756766635425792?ref_src=twsrc%5Etfw">February 7, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">.<a href="https://twitter.com/WHO?ref_src=twsrc%5Etfw">@WHO</a> doesn’t recommend limiting trade &amp; movement.<br>Travel restrictions can cause more harm than good by hindering info-sharing &amp; medical supply chains &amp; harming economies. We urge countries &amp; companies to make evidence-based, consistent decisions. <a href="https://t.co/ksxOV6sbDN">https://t.co/ksxOV6sbDN</a></p>&mdash; Tedros Adhanom Ghebreyesus (@DrTedros) <a href="https://twitter.com/DrTedros/status/1223288481159503873?ref_src=twsrc%5Etfw">January 31, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">&quot;There is no reason for measures that unnecessarily interfere with intl. travel &amp; trade.<br>We call on all countries to implement decisions that are evidence-based &amp; consistent. WHO stands ready to provide advice to any country that is considering which measures to take&quot;-<a href="https://twitter.com/DrTedros?ref_src=twsrc%5Etfw">@DrTedros</a></p>&mdash; World Health Organization (WHO) (@WHO) <a href="https://twitter.com/WHO/status/1222969858574430217?ref_src=twsrc%5Etfw">January 30, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">&quot;Make no mistake. This is an emergency in <a href="https://twitter.com/hashtag/China?src=hash&amp;ref_src=twsrc%5Etfw">#China</a>, but it has not yet become a global health emergency. <br><br>WHO’s risk assessment is that the outbreak is a very high risk in China, and a high risk regionally and globally&quot;-<a href="https://twitter.com/DrTedros?ref_src=twsrc%5Etfw">@DrTedros</a> on new <a href="https://twitter.com/hashtag/coronavirus?src=hash&amp;ref_src=twsrc%5Etfw">#coronavirus</a></p>&mdash; World Health Organization (WHO) (@WHO) <a href="https://twitter.com/WHO/status/1220413117001322497?ref_src=twsrc%5Etfw">January 23, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">This is the second confirmed case of the novel <a href="https://twitter.com/hashtag/coronavirus?src=hash&amp;ref_src=twsrc%5Etfw">#coronavirus</a> (2019-nCoV) that has been detected outside of <a href="https://twitter.com/hashtag/China?src=hash&amp;ref_src=twsrc%5Etfw">#China</a>🇨🇳, following confirmation of a case in <a href="https://twitter.com/hashtag/Thailand?src=hash&amp;ref_src=twsrc%5Etfw">#Thailand</a> 🇹🇭.<br>Considering global travel patterns, additional cases in other countries are likely <a href="https://t.co/HjUq9bKBRu">https://t.co/HjUq9bKBRu</a> <a href="https://t.co/OL3NpF5KSp">pic.twitter.com/OL3NpF5KSp</a></p>&mdash; World Health Organization (WHO) (@WHO) <a href="https://twitter.com/WHO/status/1217899151071043585?ref_src=twsrc%5Etfw">January 16, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Preliminary investigations conducted by the Chinese authorities have found no clear evidence of human-to-human transmission of the novel <a href="https://twitter.com/hashtag/coronavirus?src=hash&amp;ref_src=twsrc%5Etfw">#coronavirus</a> (2019-nCoV) identified in <a href="https://twitter.com/hashtag/Wuhan?src=hash&amp;ref_src=twsrc%5Etfw">#Wuhan</a>, <a href="https://twitter.com/hashtag/China?src=hash&amp;ref_src=twsrc%5Etfw">#China</a>🇨🇳. <a href="https://t.co/Fnl5P877VG">pic.twitter.com/Fnl5P877VG</a></p>&mdash; World Health Organization (WHO) (@WHO) <a href="https://twitter.com/WHO/status/1217043229427761152?ref_src=twsrc%5Etfw">January 14, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+    <br><br>
+    <a href="https://www.washingtonpost.com/news/to-your-health/wp/2018/05/10/top-white-house-official-in-charge-of-pandemic-response-exits-abruptly/">2018-05-10 - Top White House official in charge of pandemic response exits abruptly</a>
+
+    <br><br>
+    2015-05-27 Vox - What Bill Gates is afraid of
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/9AEMKudv5p0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+    <br><br>
+    2015-04-03 TED - The next outbreak? We’re not ready | Bill Gates
+    <br>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/6Af6b_wyiwI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+
+
+
+
+    <br><br>
+    <img src="https://2oqz471sa19h3vbwa53m33yj-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/History-of-Pandemics-Deadliest-1-scaled.jpg" width="713">
+
+    </body>
+</html>
