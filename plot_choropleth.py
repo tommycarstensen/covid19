@@ -45,29 +45,21 @@ def main():
 # 11132 2020-04-09    9      4  2020      1       1                Zimbabwe     ZW    ZWE   14439018.0
 
     cmap = 'OrRd'
-    for period, cmap in zip(
-    ('per week', 'cumulated'),
-    ('PuRd', 'OrRd'),
-    ):  # cumulated or weekly
+    cmaps = {
+        'cumulated': {'cases': 'OrRd', 'deaths': 'PuRd'},
+        'per week': {'cases': 'YlGnBu', 'deaths': 'PuBuGn'},
+        }
+    for period in ('per week', 'cumulated'):  # cumulated or weekly
     # for period in ('', 'per week', ''):  # cumulated or weekly
 
         # Do groupby and sum for UK, Denmark (Denmark, Greenland, Faroe Islands) and others? I can't remember.
         if period == 'per week':  # rolling sum 7 days
-            print('a', df0)
             df2 = df0.reset_index(level='alpha3')
-            # groupby(level='alpha3').rolling(window=7).sum()
-            print('b', df2)
             df2 = df2.groupby('alpha3')
-            print('c', df2)
             df2 = df2.rolling(window=7).sum()
-            print('d', df2)
             df2 = df2.reset_index()
-            print('e', df2)
-            print(df2[df2['alpha3'] == 'EST'])
             # Fill intermittently missing data for each alpha3 group after resampling grouped dataframe.
             df2 = df2.set_index('dateRep').groupby('alpha3').resample('1D').ffill().reset_index(level='dateRep').reset_index(drop=True)
-            print('f', df2)
-            print(df2[df2['alpha3'] == 'EST'])
         else:  # cumulative
             # Cumulated sum by country (alpha3).
             df2 = df0.groupby(level='alpha3').cumsum().reset_index()
@@ -82,6 +74,7 @@ def main():
         # for boolLog in (False, True,):
         boolLog = True
         for column in ('cases', 'deaths'):
+            cmap = cmaps[period][column]
             # df = pd.merge(df1, df2[df2['dateRep'] == maxDateRep], on=['alpha3'], how='left').fillna(value={'cases': 0, 'deaths': 0})
             # zlim_max = max(10**6 * df[column] / df['pop_est'])
             valuemax = {
@@ -169,7 +162,12 @@ def main():
 
             shutil.copyfile(path, 'covid19_{}{}_{}_log{}.png'.format(
                     column, period.replace(' ',''), cmap, boolLog))
-            imageio.mimsave('covid19_{}{}_{}_log{}.gif'.format(column, period.replace(' ', ''), cmap, boolLog), images, fps=2)
+            path_gif = 'covid19_{}{}_{}_log{}.gif'.format(
+                column, period.replace(' ', ''), cmap, boolLog)
+            # Do custom frame lengths with imagemagick.
+            command = 'convert -delay 50 {} -delay 300 {} {}'.format(
+                ' '.join(paths[:-1]), paths[-1], path_gif)
+            os.system(command)
             for path in paths:
                 if '2020-02-21' in path:
                     continue
