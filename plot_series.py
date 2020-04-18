@@ -28,6 +28,7 @@ def main():
     df0 = parseURL(url)
 
     df0['dateRep'] = pd.to_datetime(df0['dateRep'], format='%d/%m/%Y')
+    df0['countriesAndTerritories'] = df0['countriesAndTerritories'].str.replace('_', ' ')
 
     # Get population sizes.
     args.d_country2continent = {'United States of America': 'North America'}
@@ -280,10 +281,10 @@ def plot_per_country(args, df, k, colors):
     # plt.yscale('log')
     path = 'COVID19_sigmoid_{}_{}_{}.png'.format(k, args.affix, args.dateToday)
     print(path)
-    plt.savefig(path)
+    plt.savefig(path, dpi=80)
     path = 'COVID19_sigmoid_{}_{}.png'.format(k, args.affix)
     print(path)
-    plt.savefig(path)
+    plt.savefig(path, dpi=80)
     print(path)
     plt.clf()
 
@@ -360,7 +361,8 @@ def doScatterPlots(args, df0):
             plt.legend(prop={'size': 6})
             plt.title(region + '\n' + k[0].upper() + k[1:])
             # plt.label()
-            plt.savefig('scatter_{}_{}.png'.format(region, k))
+            path = 'scatter_{}_{}.png'.format(region, k)
+            plt.savefig(path, dpi=80)
             plt.clf()
 
     return
@@ -437,8 +439,8 @@ def doLinePlots(args, df0):
                         x = list(range(len(y)))
                         if language == 'es':
                             country = {
-                                'United_Kingdom': 'Reino Unido',
-                                'United_States_of_America': 'EE.UU.',
+                                'United Kingdom': 'Reino Unido',
+                                'United States of America': 'EE.UU.',
                                 'China': 'China',
                                 'Italy': 'Italia',
                                 'Spain': 'España',
@@ -447,15 +449,15 @@ def doLinePlots(args, df0):
                                 'Switzerland': 'Suiza',
                                 'Japan': 'Japon',
                                 'Singapore': 'Singapur',
-                                'South_Korea': 'Corea del Sur',
+                                'South Korea': 'Corea del Sur',
                                 'Netherlands': 'Países Bajos',
                                 # 'Austria': 'Países Bajos',
                                 'Taiwan': 'Taiwán',
                                 'Belgium': 'Belgica',
                                 'Turkey': 'Turquía',
                                 }[country]
-                        country = country.replace('United_States_of_America', 'US')
-                        country = country.replace('United_Kingdom', 'UK')
+                        country = country.replace('United States of America', 'US')
+                        country = country.replace('United Kingdom', 'UK')
                         plt.semilogy(
                             x, y,
                             label='{} ({:d})'.format(
@@ -491,7 +493,8 @@ def doLinePlots(args, df0):
                     keyUpperCase = '{}{}'.format(k_loc[0].upper(), k_loc[1:])
                     plt.title('{}\n{}{} {} {} {}'.format(
                         region, keyUpperCase, textPerCapita, text, lim, textLim), fontsize='small')
-                    plt.savefig('days100_{}_{}_perCapita{}_{}.png'.format(k_loc, language, perCapita, region))
+                    path = 'days100_{}_{}_perCapita{}_{}.png'.format(k_loc, language, perCapita, region)
+                    plt.savefig(path, dpi=80)
                     plt.clf()
 
     return
@@ -890,7 +893,7 @@ def parseArgs():
     d_region2countries['LatinAmericaExVenezuela'] = set(d_region2countries['LatinAmerica']) - set(['Venezuela'])
     d_region2countries['AmericaSouthExVenezuela'] = set(d_region2countries['AmericaSouth']) - set(['Venezuela'])
     d_region2countries['Topol'] = [
-        'United_States_of_America', 'Senegal', 'Israel', 'Austria',
+        'United States of America', 'Senegal', 'Israel', 'Austria',
         'Malaysia', 'Greece', 'Estonia',
         'Taiwan',
         'New_Zealand',
@@ -921,13 +924,15 @@ def parseArgs():
         ]
 
     d_region2countries['World'] = [
-        'United_States_of_America',
+        'United States of America',
         # 'China',  # fake numbers?
         # 'Iran',  # fake numbers?
         'Italy', 'Spain', 'Germany', 'France',
         'United_Kingdom',
         'South_Korea',
-        'Japan', 'Singapore', 'Taiwan',
+        # 'Japan',
+        # 'Singapore',
+        'Taiwan',
         'New Zealand',
         'Uruguay',
         'Senegal',
@@ -939,10 +944,8 @@ def parseArgs():
         'Estonia',
         'Iceland',
         'Israel',
-        'South_Africa',
         'South Africa',
         'Senegal',
-        'New_Zealand',
         'New Zealand',
         'Norway',
         'Malaysia',
@@ -976,7 +979,7 @@ def parseArgs():
     if args.countries is not None:
         args.countries = '_'.join(args.countries).split(',')
         args.title = ','.join((_.replace('_', ' ') for _ in args.countries))
-        args.affix = ''.join(args.countries).replace(' ', '')
+        args.affix = ''.join(args.countries).replace(' ', '_')
     elif args.region is not None:
         args.countries = d_region2countries[args.region]
         args.title = args.region
