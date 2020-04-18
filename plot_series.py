@@ -413,8 +413,8 @@ def doLinePlots(args, df0, key_geo, comparison=True):
     for perCapita in (True, False,):
         for k, limSum in (('cases', 20000), ('deaths', 500)):
             print('line', key_geo, perCapita, k)
-            l = []
 
+            d = {True: [], False: []}
             # for country in df0['countriesAndTerritories'].unique():
             labels = set()
             for country in args.d_region2countries[region]:
@@ -429,15 +429,17 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                         )[0]
                     if np.isnan(value):
                         continue
-                    l.append((value, country))
                 else:
-                    l.append((
-                        df0[df0['countriesAndTerritories'].isin([country])][k].sum(),
-                        country,
-                        ))
+                    value = df0[df0['countriesAndTerritories'].isin([country])][k].sum()
+                _ = args.d_country2continent[country] == args.d_country2continent[key_geo]
+                d[_].append((value, country))
 
             if comparison is True:
-                tuples = itertools.chain(list(reversed(sorted(l))), [(None, key_geo)])
+                tuples = itertools.chain(
+                    reversed(sorted(d[False])),
+                    reversed(sorted(d[True])),
+                    [(None, key_geo)],
+                    )
             else:
                 tuples = list(reversed(sorted(l)))
             for t in tuples:
@@ -497,7 +499,10 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                         else:
                             label = continent
                             labels.add(continent)
-                        color = 'grey'
+                        if args.d_country2continent[country] == args.d_country2continent[key_geo]:
+                            color = 'darkgrey'
+                        else:
+                            color = 'lightgrey'
                         label = None
                 else:
                     color = None
@@ -924,15 +929,6 @@ def parseArgs():
     d_region2countries['LatinAmerica'] = set(d_region2countries['AmericaNorth'] + d_region2countries['AmericaSouth']) - set(['United States of America', 'Canada'])
     d_region2countries['LatinAmericaExVenezuela'] = set(d_region2countries['LatinAmerica']) - set(['Venezuela'])
     d_region2countries['AmericaSouthExVenezuela'] = set(d_region2countries['AmericaSouth']) - set(['Venezuela'])
-    d_region2countries['Topol'] = [
-        'United States of America', 'Senegal', 'Israel', 'Austria',
-        'Malaysia', 'Greece', 'Estonia',
-        'Taiwan',
-        'New_Zealand',
-        'Australia',
-        'South_Korea',
-        'Uruguay',
-        ]
     d_region2countries['EuropeNW'] = [
         'Denmark',
         'Sweden',
@@ -940,7 +936,7 @@ def parseArgs():
         'Finland',
         'Iceland',
 
-        'United_Kingdom',
+        'United Kingdom',
         'Germany',
         'Netherlands',
         'Switzerland',
@@ -963,7 +959,7 @@ def parseArgs():
         'United States of America',
         # 'China',  # fake numbers?
         # 'Iran',  # fake numbers?
-        'United Kingdom',
+        # 'United Kingdom',
         'South Korea',
         # 'Japan',
         # 'Singapore',
@@ -978,6 +974,9 @@ def parseArgs():
         'New Zealand',
         'Norway',
         'Malaysia',
+        'Sweden',
+        'Hong Kong',
+        'Macao',
         'EU',
         # 'Italy',
         # 'Spain',
