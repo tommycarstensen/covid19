@@ -30,29 +30,31 @@ def main():
     df0['dateRep'] = pd.to_datetime(df0['dateRep'], format='%d/%m/%Y')
     df0['countriesAndTerritories'] = df0['countriesAndTerritories'].str.replace('_', ' ')
 
-    # Get population sizes.
-    args.d_country2continent = {'United States of America': 'North America'}
-    for country, d in CountryInfo().all().items():
-        # print(country, d)
-        try:
-            args.d_country2pop[d['name']] = d['population'] / 10**6
-            args.d_country2continent[d['name']] = d['subregion']
-        except KeyError:
-            pass
-        if not d['ISO']['alpha3'] in df0['countryterritoryCode'].unique():
-            continue
-        country = df0[df0['countryterritoryCode'] == d['ISO']['alpha3']]['countriesAndTerritories'].unique()[0]
-        try:
-            args.d_country2pop[country] = d['population'] / 10**6
-            args.d_country2continent[d['name']] = d['subregion']
-        except KeyError:
-            continue
+    doCountry2Continent(args, df0)
+
+    df0 = sumDataFrameAcrossRegion(args, df0)
+
+    for region in ('Europe', 'AmericaNorth', 'AmericaSouth', 'Oceania', 'Asia', 'Africa',):
+        for country in args.d_region2countries[region]:
+            if country in args.d_country2continent.keys():
+                continue
+            args.d_country2continent[country] = region
 
     if not os.path.isfile('scatter_EU_cases.png'):
         doScatterPlots(args, df0)
 
     if not os.path.isfile('days100_cases_en_perCapitaFalse_EU.png'):
-        doLinePlots(args, df0)
+        for country in args.d_region2countries['WorldAll']:
+            doLinePlots(args, df0, country, comparison=True)
+        for region in args.d_region2countries.keys():
+            doLinePlots(args, df0, region, comparison=False)
+
+    doCombinedPlots(args, df0)
+
+    return
+
+
+def doCombinedPlots(args, df0):
 
     df = (
         df0[df0['countriesAndTerritories'].isin(args.countries)]
@@ -116,6 +118,40 @@ def main():
         plot_per_country(args, df, k, colors)
 
     return
+
+
+def sumDataFrameAcrossRegion(args, df0):
+
+    for region, countries in args.d_region2countries.items():
+        df = (df0[df0['countriesAndTerritories'].isin(countries)]
+            .filter(['cases', 'dateRep', 'deaths'])
+            .groupby('dateRep').sum().reset_index())
+        df['countriesAndTerritories'] = region
+        df0 = df0.append(df)
+
+    return df0
+
+
+def doCountry2Continent(args, df0):
+
+    args.d_country2continent = {'United States of America': 'North America'}
+    for country, d in CountryInfo().all().items():
+        # print(country, d)
+        try:
+            args.d_country2pop[d['name']] = d['population'] / 10**6
+            # args.d_country2continent[d['name']] = d['subregion']
+            args.d_country2continent[d['name']] = d['region']
+        except KeyError:
+            pass
+        if not d['ISO']['alpha3'] in df0['countryterritoryCode'].unique():
+            continue
+        country = df0[df0['countryterritoryCode'] == d['ISO']['alpha3']]['countriesAndTerritories'].unique()[0]
+        try:
+            args.d_country2pop[country] = d['population'] / 10**6
+            # args.d_country2continent[d['name']] = d['subregion']
+            args.d_country2continent[d['name']] = d['region']
+        except KeyError:
+            continue
 
 
 def define_colors():
@@ -369,133 +405,130 @@ def doScatterPlots(args, df0):
 
 
 
-def doLinePlots(args, df0):
+def doLinePlots(args, df0, key_geo, comparison=True):
 
-    for region in args.d_region2countries.keys():
+    if comparison == True:
+        region = 'WorldAll'
 
-        for perCapita in (True, False,):
-            # for language in ('en', 'es',):
-            for language in ('en',):
-                for k, limSum in (('cases', 20000), ('deaths', 500)):
-                    print('line', region, perCapita, language, k)
-                    k_loc = {
-                        'en': {
-                            'cases': 'cases',
-                            'deaths': 'deaths',
-                            },
-                        'es': {
-                            'cases': 'casos',
-                            'deaths': 'muertos',
-                            },
-                            }[language][k]
-                    l = []
-                    # for country in df0['countriesAndTerritories'].unique():
-                    for country in args.d_region2countries[region]:
-                        if df0[df0['countriesAndTerritories'].isin([country])][k].sum() == 0:
-                            continue
-                        if perCapita is True:
-                            value = operator.truediv(
-                                10**6 * df0[df0['countriesAndTerritories'].isin([country])][k].sum(),
-                                df0[df0['countriesAndTerritories'].isin([country])]['popData2018'].unique(),
-                                )[0]
-                            if np.isnan(value):
-                                continue
-                            l.append((value, country))
-                        else:
-                            l.append((
-                                df0[df0['countriesAndTerritories'].isin([country])][k].sum(),
-                                country,
-                                ))
-                    for t in reversed(sorted(l)):
-                        country = t[1]
-                        df = df0[df0['countriesAndTerritories'].isin([country])].sort_values(by='dateRep', ascending=True)
-                        if k == 'deaths' and 'South' in country:
-                            print(k, country, df[k].sum())
-                        if df[k].sum() < 10:
-                            continue
-                        # if df[k].sum() < limSum and country not in (
-                        #     'Japan', 'South_Korea', 'Taiwan', 'Singapore',
-                        #     'United_States_of_America', 'United_Kingdom',
-                        #     ):
-                        #     continue
-                        # if country in ('Iran',):
-                        #     continue
-                        print(country, df[k].sum())
-                        # print(country, df[k].sum())
-                        if perCapita is False:
-                            lim = {'cases': 100, 'deaths': 10}[k]
-                            y = df[k].cumsum()[df[k].cumsum() > lim].values
-                        else:
-                            lim = 1
-                            # s = 10**6 * df[k].cumsum()[df[k].cumsum() > 100].values / df['popData2018'].unique()[0]
-                            # y = s
-                            s = 10**6 * df[k].cumsum() / df['popData2018'].unique()
-                            y = s[s > lim]
-                            y = df[k].cumsum()[df[k].cumsum() > 100].values / df['popData2018'].unique()
-                        if df[k].sum() < lim:
-                            continue
-                        if len(y) == 0:
-                            continue
-                        x = list(range(len(y)))
-                        if language == 'es':
-                            country = {
-                                'United Kingdom': 'Reino Unido',
-                                'United States of America': 'EE.UU.',
-                                'China': 'China',
-                                'Italy': 'Italia',
-                                'Spain': 'España',
-                                'Germany': 'Alemania',
-                                'France': 'Francia',
-                                'Switzerland': 'Suiza',
-                                'Japan': 'Japon',
-                                'Singapore': 'Singapur',
-                                'South Korea': 'Corea del Sur',
-                                'Netherlands': 'Países Bajos',
-                                # 'Austria': 'Países Bajos',
-                                'Taiwan': 'Taiwán',
-                                'Belgium': 'Belgica',
-                                'Turkey': 'Turquía',
-                                }[country]
-                        country = country.replace('United States of America', 'US')
-                        country = country.replace('United Kingdom', 'UK')
-                        plt.semilogy(
-                            x, y,
-                            label='{} ({:d})'.format(
-                                country.replace('_', ' '),
-                                int(max(y)),
-                                ),
-                            linewidth=2,
+    for perCapita in (True, False,):
+        for k, limSum in (('cases', 20000), ('deaths', 500)):
+            print('line', key_geo, perCapita, k)
+            l = []
+
+            # for country in df0['countriesAndTerritories'].unique():
+            labels = set()
+            for country in args.d_region2countries[region]:
+                if comparison is True and country == key_geo:
+                    continue
+                if df0[df0['countriesAndTerritories'].isin([country])][k].sum() == 0:
+                    continue
+                if perCapita is True:
+                    value = operator.truediv(
+                        10**6 * df0[df0['countriesAndTerritories'].isin([country])][k].sum(),
+                        df0[df0['countriesAndTerritories'].isin([country])]['popData2018'].unique(),
+                        )[0]
+                    if np.isnan(value):
+                        continue
+                    l.append((value, country))
+                else:
+                    l.append((
+                        df0[df0['countriesAndTerritories'].isin([country])][k].sum(),
+                        country,
+                        ))
+
+            if comparison is True:
+                tuples = itertools.chain(list(reversed(sorted(l))), [(None, key_geo)])
+            else:
+                tuples = list(reversed(sorted(l)))
+            for t in tuples:
+                country = t[1]
+                df = df0[df0['countriesAndTerritories'].isin([country])].sort_values(by='dateRep', ascending=True)
+                if k == 'deaths' and 'South' in country:
+                    print(k, country, df[k].sum())
+                if df[k].sum() < 10:
+                    continue
+                # if df[k].sum() < limSum and country not in (
+                #     'Japan', 'South_Korea', 'Taiwan', 'Singapore',
+                #     'United_States_of_America', 'United_Kingdom',
+                #     ):
+                #     continue
+                # if country in ('Iran',):
+                #     continue
+                print(country, df[k].sum())
+                # print(country, df[k].sum())
+                if perCapita is False:
+                    lim = {'cases': 100, 'deaths': 10}[k]
+                    y = df[k].cumsum()[df[k].cumsum() > lim].values
+                else:
+                    lim = 1
+                    # s = 10**6 * df[k].cumsum()[df[k].cumsum() > 100].values / df['popData2018'].unique()[0]
+                    # y = s
+                    s = 10**6 * df[k].cumsum() / df['popData2018'].unique()
+                    y = s[s > lim]
+                    y = df[k].cumsum()[df[k].cumsum() > 100].values / df['popData2018'].unique()
+                if df[k].sum() < lim:
+                    continue
+                if len(y) == 0:
+                    continue
+                x = list(range(len(y)))
+                if comparison is True:
+                    if country == key_geo:
+                        # country = country.replace('United States of America', 'US')
+                        # country = country.replace('United Kingdom', 'UK')
+                        color = '#e41a1c'  # red
+                        label = '{} ({:d})'.format(
+                            country.replace('_', ' '),
+                            int(max(y)),
                             )
-                    plt.legend(prop={'size': 6})
-                    if perCapita is True:
-                        textPerCapita = ' {} 1 million capita'.format({
-                            'en': 'per', 'es': 'por'}[language])
                     else:
-                        textPerCapita = ''
-                    if lim == 1:
-                        kSingPlur = k_loc.lower()[:-1]
-                    else:
-                        kSingPlur = k_loc.lower()
-                    if language == 'en':
-                        plt.xlabel('Days since {} confirmed {}{}'.format(lim, kSingPlur, textPerCapita))
-                        plt.ylabel('Cumulated confirmed {}{}'.format(k_loc.lower(), textPerCapita))
-                    else:
-                        plt.xlabel('Dias desde {} {} confirmados {}'.format(lim, kSingPlur, textPerCapita))
-                        plt.ylabel('{} confirmados acumulados{}'.format(k_loc[0].upper(), k_loc[1:]), textPerCapita)
-                    text = {
-                        'en': 'after first day with more than ',
-                        'es': 'desde el primer dia con ',
-                        }[language]
-                    if lim == 1:
-                        textLim = '{}{}'.format(k_loc.lower()[:-1], textPerCapita)
-                    else:
-                        textLim = '{}{}'.format(k_loc.lower(), textPerCapita)
-                    keyUpperCase = '{}{}'.format(k_loc[0].upper(), k_loc[1:])
-                    plt.title('{}\n{}{} {} {} {}'.format(
-                        region, keyUpperCase, textPerCapita, text, lim, textLim), fontsize='small')
-                    path = 'days100_{}_{}_perCapita{}_{}.png'.format(k_loc, language, perCapita, region)
-                    plt.savefig(path, dpi=80)
-                    plt.clf()
+                        continent = args.d_country2continent[country]
+                        if continent == 'North America':
+                            continent = 'Americas'
+                        color = {
+                            # 'North America': '#8dd3c7',
+                            'Americas': '#8dd3c7',
+                            'Africa': '#ffffb3',
+                            'Europe': '#bebada',
+                            'Asia': '#fb8072',
+                            'Oceania': '#80b1d3',
+                            }[continent]
+                        if continent in labels:
+                            label = None
+                        else:
+                            label = continent
+                            labels.add(continent)
+                        color = 'grey'
+                        label = None
+                else:
+                    color = None
+                plt.semilogy(
+                    x, y,
+                    label=label,
+                    color = color,
+                    linewidth=2,
+                    )
+            plt.legend(prop={'size': 6})
+
+            if perCapita is True:
+                textPerCapita = ' per 1 million capita'
+            else:
+                textPerCapita = ''
+            if lim == 1:
+                kSingPlur = k.lower()[:-1]
+            else:
+                kSingPlur = k.lower()
+            plt.xlabel('Days since {} confirmed {}{}'.format(lim, kSingPlur, textPerCapita))
+            plt.ylabel('Cumulated confirmed {}{}'.format(k.lower(), textPerCapita))
+            if lim == 1:
+                textLim = '{}{}'.format(k.lower()[:-1], textPerCapita)
+            else:
+                textLim = '{}{}'.format(k.lower(), textPerCapita)
+            keyUpperCase = '{}{}'.format(k[0].upper(), k[1:])
+            plt.title('{}\n{}{} after first day with more than {} {}'.format(
+                key_geo, keyUpperCase, textPerCapita, lim, textLim), fontsize='small')
+            path = 'days100_{}_perCapita{}_{}.png'.format(k, perCapita, key_geo.replace(' ', '_'))
+            plt.savefig(path, dpi=80)
+            plt.clf()
 
     return
 
@@ -881,9 +914,8 @@ def parseArgs():
         'Faroe Islands',
         'Guernsey',
         'Isle of Man',
+        'Montenegro',
         ])
-    x = ['Andorra', 'Armenia', 'Australia', 'Azerbaijan', 'Bahrain', 'Belarus', 'Bosnia and Herzegovina', 'Brunei Darussalam', 'Burkina Faso', 'Cambodia', 'Cameroon', 'Cases on an international conveyance Japan', 'Chile', 'Colombia', 'Costa Rica', 'Cote dIvoire', 'Cuba', 'Democratic Republic of the Congo', 'Dominican Republic', 'Ecuador', 'Egypt', 'Ethiopia', 'Gabon', 'Georgia', 'Ghana', 'Guinea', 'Guyana', 'Holy See', 'Honduras', 'Iceland', 'Iran', 'Iraq', 'Israel', 'Jordan', 'Kenya', 'Kuwait', 'Lebanon', 'Liechtenstein', 'Malaysia', 'Maldives', 'Mexico', 'Moldova', 'Monaco', 'Mongolia', 'Morocco', 'Nepal', 'New Zealand', 'Nigeria',
-    'North Macedonia', 'Oman', 'Pakistan', 'Palestine', 'Panama', 'Paraguay', 'Philippines', 'Qatar', 'Russia', 'Saint Vincent and the Grenadines', 'San Marino', 'Saudi Arabia', 'Senegal', 'Serbia', 'South Africa', 'Sri Lanka', 'Sudan', 'Switzerland', 'Taiwan', 'Thailand', 'Togo', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Ukraine', 'United Arab Emirates', 'United Kingdom', 'United kingdom', 'Vietnam', 'switzerland']
     d_region2countries['Americas'] = d_region2countries['AmericaSouth'] + d_region2countries['AmericaNorth']
     d_region2countries['Asia'] = d_region2countries['AsiaSouthEast'] + d_region2countries['AsiaCentral'] + d_region2countries['AsiaEast'] + d_region2countries['AsiaSouth'] + d_region2countries['AsiaWestern']
     d_region2countries['AsiaExChina'] = set(d_region2countries['Asia']) - set(['China'])
@@ -923,37 +955,39 @@ def parseArgs():
         # 'Spain',
         ]
 
-    d_region2countries['World'] = [
+    d_region2countries['WorldAll'] = set()
+    for region in d_region2countries.keys():
+        d_region2countries['WorldAll'] |= set(d_region2countries[region])
+
+    d_region2countries['World'] = set([
         'United States of America',
         # 'China',  # fake numbers?
         # 'Iran',  # fake numbers?
-        'Italy', 'Spain', 'Germany', 'France',
-        'United_Kingdom',
-        'South_Korea',
+        'United Kingdom',
+        'South Korea',
         # 'Japan',
         # 'Singapore',
         'Taiwan',
-        'New Zealand',
         'Uruguay',
-        'Senegal',
         'Vietnam',
-        'Greece',
-        'Australia',
-        'Denmark',
-        'Austria',
-        'Estonia',
         'Iceland',
+        'Australia',
         'Israel',
         'South Africa',
         'Senegal',
         'New Zealand',
         'Norway',
         'Malaysia',
-        ]
-
-    d_region2countries['WorldAll'] = set()
-    for region in d_region2countries.keys():
-        d_region2countries['WorldAll'] |= set(d_region2countries[region])
+        'EU',
+        # 'Italy',
+        # 'Spain',
+        # 'Germany',
+        # 'France',
+        # 'Greece',
+        # 'Denmark',
+        # 'Austria',
+        # 'Estonia',
+        ])
 
     print(args)
 
