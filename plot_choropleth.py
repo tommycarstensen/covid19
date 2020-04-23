@@ -12,16 +12,19 @@ import imageio
 import shutil
 import requests
 import os
+import time
 
 
 def main():
 
     args = parse_args()
 
-    df1, df2 = parse_data(args)
+    df1, df2, df_owid = parse_data(args)
 
     df2['dateRep'] = pd.to_datetime(df2['dateRep'], format='%d/%m/%Y')
     df0 = df2[['alpha3', 'dateRep', 'cases', 'deaths']].groupby(['alpha3', 'dateRep']).sum()
+
+    df1.rename(columns={'iso_a3': 'alpha3'}, inplace=True)
 
     # print(df2[df2['alpha3'] == 'ABW'])
     # ABW 16 cases
@@ -43,6 +46,8 @@ def main():
 # 11130 2020-04-11   11      4  2020      0       0                Zimbabwe     ZW    ZWE   14439018.0
 # 11131 2020-04-10   10      4  2020      0       1                Zimbabwe     ZW    ZWE   14439018.0
 # 11132 2020-04-09    9      4  2020      1       1                Zimbabwe     ZW    ZWE   14439018.0
+
+    plot_owid(df_owid, df1)
 
     cmap = 'OrRd'
     cmaps = {
@@ -66,7 +71,6 @@ def main():
             # Fill intermittently missing data for each alpha3 group after resampling grouped dataframe.
             df2 = df2.set_index('dateRep').groupby('alpha3').resample('1D').ffill().reset_index(level='dateRep').reset_index(drop=True)
 
-        df1.rename(columns={'iso_a3': 'alpha3'}, inplace=True)
         # df = pd.merge(df1, df2, on=['alpha3'], how='left').fillna(value={'cases': 0, 'deaths': 0})
 
         # https://matplotlib.org/examples/color/colormaps_reference.html
@@ -176,16 +180,168 @@ def main():
     return
 
 
+def plot_owid(df, df_geo):
+
+    print(df[['tests_units', 'location']].drop_duplicates().dropna().to_string())
+    print(df['tests_units'].unique())
+
+    # Rename column to allow merger.
+    df = df.rename(columns={'iso_code': 'alpha3'})
+
+    # Filter only columns of interest.
+    df = df[[
+        'total_tests_per_thousand',
+        'new_tests_per_thousand',
+        'alpha3', 'date',
+        ]]
+
+    # Get latest date for which various countries all have data.
+    dateMax = min((
+        max(df[(df['alpha3'] == alpha3) & (df['total_tests_per_thousand'] > 0)]['date'].unique()) for alpha3 in (
+            'USA', 'DEU', 'KOR', 'JPN', 'ISL',)))
+    dateMax = datetime.strptime(dateMax, '%Y-%m-%d')
+
+    # Convert date string to datetime object for doing resampling.
+    df['date'] = pd.to_datetime(df['date'])
+
+    # Fill missing dates for each alpha3 group by resampling and interpolation.
+    # Fill missing data *before* converting cumulative sums to daily values.
+    # Resample and interpolate.
+    # resample: For example Qater missing entirely 3rd of March.
+    # interpolate: For example Australia value missing 2nd of March, but not 1st and 3rd.
+    df = df.set_index('date').groupby('alpha3').resample('1D').ffill()
+    df = df.reset_index(level='alpha3', drop=True)
+    # https://stackoverflow.com/a/48027252/778533
+    df['total_tests_per_thousand'] = df[['total_tests_per_thousand', 'alpha3']].groupby('alpha3').apply(pd.DataFrame.interpolate)
+
+    # Convert cumulative sum to daily values *after* filling missing values.
+    # For example Australia blank on 2nd of March.
+    # cat owid.csv | cut -d"," -f1,3,14,15 | grep AUS
+    # AUS,2020-03-01,0.115,
+    # AUS,2020-03-02,,
+    # AUS,2020-03-03,0.12,
+    # https://stackoverflow.com/a/36452075/778533
+    df['daily_tests_per_thousand'] = df['total_tests_per_thousand'].diff().fillna(df['new_tests_per_thousand'])
+
+    # Calculate weekly values from calculated daily values.
+    # Do a 7 day rolling average.
+    df['weekly_tests_per_thousand'] = df['daily_tests_per_thousand'].rolling(window=7).sum()
+
+    # Reset the index prior to plotting.
+    # df_owid = df.reset_index(level='alpha3', drop=True).reset_index()
+    df_owid = df.reset_index()
+
+    d_paths = {
+        'weekly_tests_per_thousand': [],
+        'total_tests_per_thousand': [],
+        }
+    for date in sorted(df_owid['date'].unique()):
+        if dateMax.weekday() != pd.to_datetime(date).weekday():
+            continue
+        dateString = pd.to_datetime(date).strftime('%Y-%m-%d')
+
+        for column, cmap, vmin, vmax in (
+            # vmin -3 because only three significant digits in csv file
+            # vmax weekly: ISL,2020-04-05,7.243
+            # vmax total: ISL,2020-04-20,127.58
+            ('weekly_tests_per_thousand', 'Blues', -3, 1),
+            ('total_tests_per_thousand', 'Greens', -3, 3),
+            ):
+            df_merged = pd.merge(
+                df_geo,
+                df_owid[df_owid['date'] == date],
+                # df_owid,
+                on=['alpha3'],
+                how='left',
+                ).fillna(
+                value={
+                'total_tests_per_thousand': 0,
+                'weekly_tests_per_thousand': 0,
+                })
+
+            # df = df_merged[df_merged['date'] == date]
+            df = df_merged
+
+            df['column'] = np.log10(df[column])
+            df.loc[df['column'] == -math.inf, 'column'] = None
+            fig, ax = plt.subplots(1, 1)
+            ax.axis('off')
+            ax.set_title(
+                'CoViD19 {}\n{}'.format(
+                    column.replace('_', ' '), dateString),
+                fontsize='large',
+                )
+            label = 'log10 of {}'.format(column.replace('_', ' '))
+            df.plot(
+                column='column',
+                cmap=cmap,
+                linewidth=0.1,
+                ax=ax,
+                edgecolor='black',
+                legend=True,
+                legend_kwds = {
+                    'label': label,
+                    'orientation': "horizontal",
+                    'norm': Normalize(vmin=0, vmax=vmax),
+                    # 'properties': {'size': 'xx-small'},
+                    },
+                missing_kwds={'color': 'grey'},
+                vmin = vmin,
+                # vmax = vmax,
+                vmax = vmax,
+                )
+            path = 'covid19_{}_{}.png'.format(
+                column, dateString,
+                )
+            plt.savefig(path, dpi=100)
+            d_paths[column].append(path)
+            plt.close()
+
+    for column, paths in d_paths.items():
+        path_gif = 'covid19_{}.gif'.format(column)
+        # Do custom frame lengths with imagemagick.
+        command = 'convert -delay 50 {} -delay 300 {} {}'.format(
+            ' '.join(paths[:-1]), paths[-1], path_gif)
+        os.system(command)
+        for path in paths:
+            os.remove(path)
+
+    return
+
+
+def download_and_read(url, path, func):
+
+    # df_owid = pd.read_html(url)
+
+    if os.path.isfile(path) and time.time() - os.path.getmtime(path) < 2 * 3600:
+        pass
+    else:
+        r = requests.get(url)
+        with open(path, 'w') as f:
+            f.write(r.text)
+
+    df = func(path)
+
+    return df
+
+
 def parse_data(args):
 
+    url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv'
+    path = 'owid.csv'
+    df_owid = download_and_read(url, path, pd.read_csv)
+
+    url = 'https://ocgptweb.azurewebsites.net/CSVDownload'
+    path = 'bsg.csv'
+    df_bsg = download_and_read(url, path, pd.read_csv)
+
     url = 'https://opendata.ecdc.europa.eu/covid19/casedistribution/csv'
-    r = requests.get(url)
-    with open('csv', 'w') as f:
-        f.write(r.text)
+    path = 'ecdc.csv'
+    # url = 'https://opendata.ecdc.europa.eu/covid19/casedistribution/json'
+    # path = 'ecdc.json'
+    df_ecdc = download_and_read(url, path, pd.read_csv)
 
-    df_covid19 = pd.read_csv('csv')
-
-    df_covid19.rename(columns={
+    df_ecdc.rename(columns={
         'geoId': 'alpha2',
         'countryterritoryCode': 'alpha3',
         }, inplace=True)
@@ -211,20 +367,18 @@ def parse_data(args):
     # print(set(df_covid19['alpha2'].values) - set(df_iso3166['alpha2'].values))
     # df_covid19.loc[df_covid19['alpha2'] == 'UK', 'alpha2'] = 'GB'
 
-    print(set(df_covid19['alpha3'].values) - set(df1['iso_a3'].values))
-    print(set(df1['iso_a3'].values) - set(df_covid19['alpha3'].values))
-    for x in set(df_covid19['alpha3'].values) - set(df1['iso_a3'].values):
-        print(df_covid19[df_covid19['alpha3'] == x]['countriesAndTerritories'].unique())
+    print(set(df_ecdc['alpha3'].values) - set(df1['iso_a3'].values))
+    print(set(df1['iso_a3'].values) - set(df_ecdc['alpha3'].values))
+    for x in set(df_ecdc['alpha3'].values) - set(df1['iso_a3'].values):
+        print(df_ecdc[df_ecdc['alpha3'] == x]['countriesAndTerritories'].unique())
 
     # # Merge covid19 data with alpha3 codes on alpha2 codes.
     # df2 = pd.merge(df_covid19, df_iso3166, on=['alpha2'])
 
-    df2 = df_covid19
-
     # # Merge geo data with covid19 data on alpha2 codes.
     # df = pd.merge(df, df_covid19.rename(columns={'GeoId': 'alpha2'}), on=['alpha2'])[['admin', 'alpha3', 'cases', 'deaths', 'dateRep']]
 
-    return df1, df2
+    return df1, df_ecdc, df_owid
 
 
 def parse_args():
