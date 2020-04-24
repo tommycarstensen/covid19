@@ -32,29 +32,29 @@ def main():
 
     doCountry2Continent(args, df0)
 
-    df0 = sumDataFrameAcrossRegion(args, df0)
-
     for region in ('Europe', 'AmericaNorth', 'AmericaSouth', 'Oceania', 'Asia', 'Africa',):
         for country in args.d_region2countries[region]:
             if country in args.d_country2continent.keys():
                 continue
             args.d_country2continent[country] = region
 
-    if not os.path.isfile('scatter_EU_cases.png'):
-        doScatterPlots(args, df0)
+    df0 = sumDataFrameAcrossRegion(args, df0)
 
-    if not os.path.isfile('days100_cases_en_perCapitaFalse_EU.png'):
-        for country in args.d_region2countries['WorldAll']:
+    # if not os.path.isfile('scatter_EU_cases.png'):
+    #     doScatterPlots(args, df0)
+
+    if not os.path.isfile('days100_cases_perCapitaFalse_EU.png'):
+        for country in args.d_region2countries['website']:
             doLinePlots(args, df0, country, comparison=True)
         for region in args.d_region2countries.keys():
             doLinePlots(args, df0, region, comparison=False)
 
-    doCombinedPlots(args, df0)
+    doFitPlots(args, df0)
 
     return
 
 
-def doCombinedPlots(args, df0):
+def doFitPlots(args, df0):
 
     df = (
         df0[df0['countriesAndTerritories'].isin(args.countries)]
@@ -127,6 +127,9 @@ def sumDataFrameAcrossRegion(args, df0):
             .filter(['cases', 'dateRep', 'deaths'])
             .groupby('dateRep').sum().reset_index())
         df['countriesAndTerritories'] = region
+        # Assume no two countries have the same population size...
+        popSum = df0[df0['countriesAndTerritories'].isin(countries)]['popData2018'].unique().sum()
+        df['popData2018'] = popSum
         df0 = df0.append(df)
 
     return df0
@@ -134,7 +137,9 @@ def sumDataFrameAcrossRegion(args, df0):
 
 def doCountry2Continent(args, df0):
 
-    args.d_country2continent = {'United States of America': 'North America'}
+    args.d_country2continent = {}
+    args.d_country2continent['United States of America'] = 'North America'
+    args.d_country2continent['EU'] = 'Europe'
     for country, d in CountryInfo().all().items():
         # print(country, d)
         try:
@@ -152,6 +157,10 @@ def doCountry2Continent(args, df0):
             args.d_country2continent[d['name']] = d['region']
         except KeyError:
             continue
+
+    args.d_country2continent['Bahamas'] = 'Americas'
+
+    return
 
 
 def define_colors():
@@ -176,9 +185,9 @@ def plot_per_country(args, df, k, colors):
     colorNewCases = colors[1]
     colorErr = colors[2]
 
-    yConfCasesCumYesterday = np.delete(df['cases'].values.cumsum(), -1)
-    xConfCasesCumYesterday = list(range(len(yConfCasesCumYesterday)))
-    dayFirstCase = yConfCasesCumYesterday.tolist().count(0)
+    yCumYesterday = np.delete(df['cases'].values.cumsum(), -1)
+    xCumYesterday = list(range(len(yCumYesterday)))
+    dayFirstCase = yCumYesterday.tolist().count(0)
 
     booleans = (
         any((
@@ -198,12 +207,12 @@ def plot_per_country(args, df, k, colors):
 
         # At least a number of days since the first case must have passed.
         operator.sub(
-            len(yConfCasesCumYesterday),
-            list(yConfCasesCumYesterday).count(0),
+            len(yCumYesterday),
+            list(yCumYesterday).count(0),
             ) > 50,
 
         # At least a number of cases must have been confirmed.
-        max(yConfCasesCumYesterday) > 1000,
+        max(yCumYesterday) > 1000,
         )
     if all(booleans) or len(set((
         'United States of America',
@@ -220,12 +229,12 @@ def plot_per_country(args, df, k, colors):
         tFit = fit(args, df, xFit, yFit)
     else:
         tFit = None
-        print(yConfCasesCumYesterday)
-        print(list(yConfCasesCumYesterday).count(0))
-        print(len(yConfCasesCumYesterday))
+        print(yCumYesterday)
+        print(list(yCumYesterday).count(0))
+        print(len(yCumYesterday))
         print(operator.sub(
-            len(yConfCasesCumYesterday),
-            list(yConfCasesCumYesterday).count(0),
+            len(yCumYesterday),
+            list(yCumYesterday).count(0),
             ))
         print(booleans)
         print(df[k].values[-1] / max(df[k].values))
@@ -233,18 +242,21 @@ def plot_per_country(args, df, k, colors):
         print(max(df[k].values))
         # exit()
 
-    tFit = None
+    # tFit = None
 
     if tFit is not None:
         popt, perr = tFit
         # popt[0] = max(popt[0], df['cases'].values.sum())
-        fitConfCasesMax, fitSteep, fitMid = popt
+        fitMax, fitSteep, fitMid = popt
+        # Do not add fit to plot, if calculated maximum is greater than actual maximum.
+        if fitMax > 1.05 * max(yCumYesterday):
+            tFit = None
 
     plt.xlabel('Days')
     plt.ylabel(k[0].upper() + k[1:])
 
     if tFit is not None:
-        xFit = list(range(2 * len(yConfCasesCumYesterday)))
+        xFit = list(range(2 * len(yCumYesterday)))
         plt.plot(
             xFit,
             logistic(xFit, *popt),
@@ -262,11 +274,11 @@ def plot_per_country(args, df, k, colors):
                 continue
             assert a > 0
             # Calculated cases plus 10 percent should be greated than actual cases.
-            assert 1.1 * a >= max(yConfCasesCumYesterday)
+            assert 1.1 * a >= max(yCumYesterday)
             assert b > 0
             assert b < 2, (b, popt[1])
             assert c > 0
-            assert c < 2 * len(yConfCasesCumYesterday)
+            assert c < 2 * len(yCumYesterday)
             yFit = [logistic(_, a, b, c) for _ in xFit]
             plt.plot(xFit, yFit, colorErr, alpha=.05, zorder=1)
 
@@ -326,7 +338,10 @@ def plot_per_country(args, df, k, colors):
 
     if k == 'cases':
 
-        popSize = args.d_country2pop[args.title]
+        try:
+            popSize = args.d_country2pop[args.title]
+        except KeyError:
+            return
         s = '<tr>'
         s += '<td>{}</td>'.format(args.title)
         s += '<td>{:.1f}</td>'.format(popSize)
@@ -409,10 +424,18 @@ def doLinePlots(args, df0, key_geo, comparison=True):
 
     if comparison == True:
         region = 'WorldAll'
+        if key_geo == 'EU':
+            return
+    else:
+        region = key_geo
 
     for perCapita in (True, False,):
         for k, limSum in (('cases', 20000), ('deaths', 500)):
             print('line', key_geo, perCapita, k)
+
+            path = 'days100_{}_perCapita{}_{}.png'.format(k, perCapita, key_geo.replace(' ', '_'))
+            if os.path.isfile(path):
+                continue
 
             d = {True: [], False: []}
             # for country in df0['countriesAndTerritories'].unique():
@@ -431,7 +454,10 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                         continue
                 else:
                     value = df0[df0['countriesAndTerritories'].isin([country])][k].sum()
-                _ = args.d_country2continent[country] == args.d_country2continent[key_geo]
+                if comparison is True:
+                    _ = args.d_country2continent[country] == args.d_country2continent[key_geo]
+                else:
+                    _ = True
                 d[_].append((value, country))
 
             if comparison is True:
@@ -441,7 +467,11 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                     [(None, key_geo)],
                     )
             else:
-                tuples = list(reversed(sorted(l)))
+                tuples = itertools.chain(
+                    reversed(sorted(d[False])),
+                    reversed(sorted(d[True])),
+                    )
+
             for t in tuples:
                 country = t[1]
                 df = df0[df0['countriesAndTerritories'].isin([country])].sort_values(by='dateRep', ascending=True)
@@ -456,7 +486,7 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                 #     continue
                 # if country in ('Iran',):
                 #     continue
-                print(country, df[k].sum())
+                # print(country, df[k].sum())
                 # print(country, df[k].sum())
                 if perCapita is False:
                     lim = {'cases': 100, 'deaths': 10}[k]
@@ -473,7 +503,13 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                 if len(y) == 0:
                     continue
                 x = list(range(len(y)))
-                if comparison is True:
+                if comparison is False:
+                    color = None
+                    label = '{} ({:d})'.format(
+                        country.replace('_', ' '),
+                        int(max(y)),
+                        )
+                else:
                     if country == key_geo:
                         # country = country.replace('United States of America', 'US')
                         # country = country.replace('United Kingdom', 'UK')
@@ -494,18 +530,19 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                             'Asia': '#fb8072',
                             'Oceania': '#80b1d3',
                             }[continent]
-                        if continent in labels:
-                            label = None
-                        else:
-                            label = continent
-                            labels.add(continent)
-                        if args.d_country2continent[country] == args.d_country2continent[key_geo]:
+
+                        if continent == args.d_country2continent[key_geo]:
                             color = 'darkgrey'
+                            label = continent
                         else:
                             color = 'lightgrey'
-                        label = None
-                else:
-                    color = None
+                            label = 'Rest of World'
+
+                        if label in labels:
+                            label = None
+                        else:
+                            labels.add(label)
+
                 plt.semilogy(
                     x, y,
                     label=label,
@@ -531,25 +568,24 @@ def doLinePlots(args, df0, key_geo, comparison=True):
             keyUpperCase = '{}{}'.format(k[0].upper(), k[1:])
             plt.title('{}\n{}{} after first day with more than {} {}'.format(
                 key_geo, keyUpperCase, textPerCapita, lim, textLim), fontsize='small')
-            path = 'days100_{}_perCapita{}_{}.png'.format(k, perCapita, key_geo.replace(' ', '_'))
             plt.savefig(path, dpi=80)
             plt.clf()
 
     return
 
 
-def fit(args, df, xConfCasesCumYesterday, yConfCasesCumYesterday):
+def fit(args, df, xCumYesterday, yCumYesterday):
 
     # Seed values for regression. Heuristic approach.
-    if 0 in yConfCasesCumYesterday:
-        guessMidpoint = min(60, 40 + list(yConfCasesCumYesterday[::-1]).index(0))
+    if 0 in yCumYesterday:
+        guessMidpoint = min(60, 40 + list(yCumYesterday[::-1]).index(0))
     else:
         guessMidpoint = 40
     # Cases less than 5 percent of ConfCasesCum
-    if df['cases'].values[-2] / yConfCasesCumYesterday[-1] < 0.05:
-        guessCasesMax = 1.5 * max(yConfCasesCumYesterday)
+    if df['cases'].values[-2] / yCumYesterday[-1] < 0.05:
+        guessCasesMax = 1.5 * max(yCumYesterday)
     else:
-        guessCasesMax = 10 * max(yConfCasesCumYesterday)
+        guessCasesMax = 10 * max(yCumYesterday)
     print('guessMidpoint', guessMidpoint)
     print('guessCasesMax', guessCasesMax)
     # guessCasesMax = 100000
@@ -559,8 +595,8 @@ def fit(args, df, xConfCasesCumYesterday, yConfCasesCumYesterday):
     try:
         popt, pcov = curve_fit(
             logistic,
-            xConfCasesCumYesterday,
-            yConfCasesCumYesterday,
+            xCumYesterday,
+            yCumYesterday,
             p0=p0,
             )
         perr = np.sqrt(np.diag(pcov))
@@ -570,14 +606,14 @@ def fit(args, df, xConfCasesCumYesterday, yConfCasesCumYesterday):
     except RuntimeError:
         print('Fitting failed')
         print('\n'.join('{}\t{}\t{}'.format(*t) for t in zip(
-            xConfCasesCumYesterday, yConfCasesCumYesterday,
+            xCumYesterday, yCumYesterday,
             map(int, df['deaths'].values.cumsum()),
             )))
         return
     except:
         print('Exception')
         print('\n'.join('{}\t{}\t{}'.format(*t) for t in zip(
-            xConfCasesCumYesterday, yConfCasesCumYesterday,
+            xCumYesterday, yCumYesterday,
             df['deaths'].values.cumsum(),
             )))
         return
@@ -731,10 +767,11 @@ def parseArgs():
             'Myanmar',
             ),
         'AsiaCentral': (
-            'Afghanistan',
+            'Afghanistan',  # AsiaSouth
             'Kazakhstan',
             'Uzbekistan',
             'Kyrgyzstan',
+            'Turkmenistan',
             ),
         'AsiaEast': (
             'China',
@@ -746,13 +783,13 @@ def parseArgs():
             ),
         'AsiaSouth': (
             'India',
-            'Bangladesh',
-            'Afghanistan',
-            'Maldives',
-            'Nepal',
-            'Bhutan',
-            'Sri Lanka',
             'Pakistan',
+            'Afghanistan',  # AsiaCentral
+            'Bangladesh',
+            'Nepal',
+            'Sri Lanka',
+            'Bhutan',
+            'Maldives',
             ),
         'AsiaWestern': (
             'Armenia',
@@ -786,142 +823,179 @@ def parseArgs():
             'Uruguay',
             'Guyana',
             'Suriname',
-            'El Salvador',
             ),
         'AmericaNorth': (
             'United States of America',
             'Mexico',
             'Canada',
-            'Guatemala',
-            'Honduras',
-            'Trinidad and Tobago',
-            'Costa Rica',
-            'Dominican Republic',
-            'Panama',
-            'Saint Vincent and the Grenadines',
-            'Antigua and Barbuda',
-            'Saint Lucia',
-            'Jamaica',
-            'Cuba',
-            'Bahamas',
-            'Barbados',
             'Bermuda',
-            'Cayman Islands',
-            'Netherlands Antilles',
-            'Haiti',
+            ),
+        'AmericaCentral': (
+            'Belize',
+            'Costa Rica',
+            'El Salvador',
+            'Honduras',
+            'Guatemala',
+            'Panama',
             'Nicaragua',
             ),
-        'Africa': (
+        'Carribean': (
+            'Bahamas',
+            'Cayman Islands',
+            'Cuba',
+            'Haiti',
+            'Dominican Republic',
+            'Jamaica',
+            'Puerto Rico',
+            'Antigua and Barbuda',
+            'Trinidad and Tobago',
+            'Saint Vincent and the Grenadines',
+            'Barbados',
+            'Saint Lucia',
+            'Netherlands Antilles',
+            ),
+        'AfricaNorth': (
             'Algeria',
-            'Burkina Faso',
-            'Democratic Republic of the Congo',
-            'Cote dIvoir',
-            'Cameroon',
             'Egypt',
-            'Gabon',
-            'Ethiopia',
-            'South Africa',
-            'Senegal',
-            'Ghana',
-            'Nigeria',
-            'Cote dIvoire',
-            'Guinea',
-            'Kenya',
-            'Togo',
             'Morocco',
-            'Sudan',
+            'Libya',
             'Tunisia',
-            'Namibia',
-            'Swaziland',
-            'Equatorial Guinea',
-            'Mauritania',
-            'Seychelles',
-            'Rwanda',
-            'Central African Republic',
-            'Congo',
-            'United Republic of Tanzania',
-            'Somalia',
-            'Benin',
-            'Eswatini',
-            'Liberia',
-            'Gambia',
+            ),
+        'AfricaEast': (
             'Djibouti',
-            'Zambia',
-            'Chad',
-            'Mauritius',
-            'Zimbabwe',
-            'Niger',
+            'Eritrea',
+            'Ethiopia',
+            'Somalia',
+            'Sudan',
+            'South Sudan',
             'Madagascar',
+            'Mauritius',
+            'Comoros',
+            'Seychelles',
+            'Uganda',
+            'Rwanda',
+            'Burundi',
+            'Kenya',
+            'United Republic of Tanzania',
+            'Mozambique',
+            'Malawi',
+            'Zambia',
+            'Zimbabwe',
+            ),
+        'AfricaCentral': (
+            'Angola',
+            'Cameroon',
+            'Central African Republic',
+            'Chad',
+            'Democratic Republic of the Congo',
+            'Congo',  # Republic of the Congo
+            'Equatorial Guinea',
+            'Gabon',
+            'São Tomé and Príncipe',
+            ),
+        'AfricaSouth': (
+            'Botswana',
+            'Swaziland',  # Eswatini
+            'Eswatini',  # Swaziland
+            'Lesotho',
+            'Namibia',
+            'South Africa',
+            ),
+        'AfricaWest': (
+            'Benin',
+            'Burkina Faso',
+            'Cape Verde',
+            'Cote dIvoire',
+            'Cote dIvoir',
+            'Gambia',
+            'Ghana',
+            'Guinea',
+            'Guinea-Bissau',
+            'Liberia',
+            'Mali',
+            'Mauritania',
+            'Niger',
+            'Nigeria',
+            'Senegal',
+            'Sierra Leone',
+            'Togo',
             ),
         'Oceania': (
             'Australia',
-            # 'Papua New Guinea',
+            'Papua New Guinea',
             'New Zealand',
-            # 'Fiji',
+            'Fiji',
             'French Polynesia',
             'Guam',
-            'Fiji',
             'Papua New Guinea',
+            'Solomon Islands',
             ),
         'Scandinavia': ('Denmark', 'Sweden', 'Norway'),
-        'Nordic': ('Denmark', 'Sweden', 'Norway', 'Iceland', 'Finland', 'Greenland', 'Faroe Islands'),
-        'EuropeMediterranean': (
-            'Greece', 'Spain', 'France', 'Monaco', 'Italy', 'Malta',
-            'Slovenia', 'Croatia', 'Bosnia and Herzegovina',
-            'Montenegro', 'Albania', 'Turkey',
-            ),
-        }
-    d_region2countries['EuropeWest'] = [
-        'Austria',
-        'Belgium',
-        'Czech Republic',
-        'France',
-        'Germany',
-        'Ireland',
-        'Liechtenstein',
-        'Luxembourg',
-        'Monaco',
-        'Netherlands',
-        'Switzerland',
-        'United Kingdom',
-        ]
-    d_region2countries['EuropeEast'] = [
-        'Estonia',
-        'Latvia',
-        'Lithuania',
-        'Armenia',
-        'Azerbaijan',
-        'Georgia',
-        ]
-    d_region2countries['Europe'] = list(d_region2countries['EU'])
-    d_region2countries['Europe'].extend([
-        'Albania',
-        'Bosnia and Herzegovina',
-        'Belarus',
-        'Moldova',
-        'Russia',
-        'Norway',
-        'Switzerland',
-        'Ukraine',
-        'United Kingdom',
-        'Monaco',
-        'Iceland',
-        'Andorra',
-        'Serbia',
-        'Holy See',
-        'North Macedonia',
-        'San Marino',
-        'Liechtenstein',
-        'Kosovo',
-        'Gibraltar',
-        'Greenland',
-        'Jersey',
-        'Faroe Islands',
-        'Guernsey',
-        'Isle of Man',
-        'Montenegro',
-        ])
-    d_region2countries['Americas'] = d_region2countries['AmericaSouth'] + d_region2countries['AmericaNorth']
+        # https://en.wikipedia.org/wiki/Eurovoc#Northern_Europe
+        'EuropeNorth': [
+            'Denmark', 'Sweden', 'Norway',
+            'Iceland', 'Finland',
+            'Greenland', 'Faroe Islands',
+            'Estonia', 'Latvia', 'Lithuania',
+            ],
+        # https://en.wikipedia.org/wiki/Eurovoc#Southern_Europe
+        'EuropeSouth': [
+            'Greece',
+            'Italy',
+            'Malta',
+            'Portugal',
+            'Spain',
+            'France',
+            'Monaco',
+            'Holy See',
+            'San Marino',
+            'Gibraltar',  # UK
+            ],
+        'EuropeWest': [
+            'Austria',
+            'Belgium',
+            'Czech Republic',
+            'France',
+            'Germany',
+            'Ireland',
+            'Liechtenstein',
+            'Luxembourg',
+            'Monaco',
+            'Netherlands',
+            'Switzerland',
+            'United Kingdom',
+            'Andorra',
+            'Liechtenstein',
+            'Jersey',  # UK
+            'Guernsey',
+            'Isle of Man',
+            ],
+        # https://en.wikipedia.org/wiki/Eurovoc#Central_and_Eastern_Europe
+        'EuropeEastCentral': [
+            'Croatia',
+            'Albania',
+            'Armenia',
+            'Azerbaijan',
+            'Belarus',
+            'Bosnia and Herzegovina',
+            'Latvia',
+            'Lithuania',
+            'Georgia',
+            # 'Estonia', 'Latvia', 'Lithuania',
+            'Moldova',
+            'Russia',
+            'Ukraine',
+            'Serbia',
+            'Kosovo',
+            'Montenegro',
+            'Montenegro',
+            'North Macedonia',
+            'Slovenia',
+            ],
+    }
+    d_region2countries['Europe'] = list(d_region2countries['EU']) + d_region2countries['EuropeEastCentral'] + d_region2countries['EuropeNorth'] + d_region2countries['EuropeSouth'] + d_region2countries['EuropeWest']
+    d_region2countries['Americas'] = d_region2countries['AmericaSouth'] + d_region2countries['AmericaNorth'] + d_region2countries['AmericaCentral'] + d_region2countries['Carribean']
+    d_region2countries['Africa'] = d_region2countries['AfricaNorth'] + d_region2countries['AfricaEast'] + d_region2countries['AfricaSouth'] + d_region2countries['AfricaWest'] + d_region2countries['AfricaCentral']
     d_region2countries['Asia'] = d_region2countries['AsiaSouthEast'] + d_region2countries['AsiaCentral'] + d_region2countries['AsiaEast'] + d_region2countries['AsiaSouth'] + d_region2countries['AsiaWestern']
     d_region2countries['AsiaExChina'] = set(d_region2countries['Asia']) - set(['China'])
     d_region2countries['AsiaEastExChina'] = set(d_region2countries['AsiaEast']) - set(['China'])
@@ -929,27 +1003,6 @@ def parseArgs():
     d_region2countries['LatinAmerica'] = set(d_region2countries['AmericaNorth'] + d_region2countries['AmericaSouth']) - set(['United States of America', 'Canada'])
     d_region2countries['LatinAmericaExVenezuela'] = set(d_region2countries['LatinAmerica']) - set(['Venezuela'])
     d_region2countries['AmericaSouthExVenezuela'] = set(d_region2countries['AmericaSouth']) - set(['Venezuela'])
-    d_region2countries['EuropeNW'] = [
-        'Denmark',
-        'Sweden',
-        'Norway',
-        'Finland',
-        'Iceland',
-
-        'United Kingdom',
-        'Germany',
-        'Netherlands',
-        'Switzerland',
-        'Poland',
-        'Belgium',
-        'Austria',
-        'Ireland',
-
-        # 'France',
-
-        # 'Italy',
-        # 'Spain',
-        ]
 
     d_region2countries['WorldAll'] = set()
     for region in d_region2countries.keys():
@@ -976,7 +1029,7 @@ def parseArgs():
         'Malaysia',
         'Sweden',
         'Hong Kong',
-        'Macao',
+        # 'Macao',
         'EU',
         # 'Italy',
         # 'Spain',
@@ -986,6 +1039,40 @@ def parseArgs():
         # 'Denmark',
         # 'Austria',
         # 'Estonia',
+        ])
+
+    d_region2countries['website'] = set([
+        'United States of America',
+        # 'China',  # fake numbers?
+        # 'Iran',  # fake numbers?
+        'United Kingdom',
+        'South Korea',
+        'Japan',
+        'Singapore',
+        'Taiwan',
+        'Iceland',
+        'Australia',
+        'South Africa',
+        'Senegal',
+        'New Zealand',
+        'Norway',
+        'Malaysia',
+        'Sweden',
+        'Hong Kong',
+        # 'Macao',
+        'EU',
+        'Italy',
+        'Spain',
+        'Germany',
+        'France',
+        'Denmark',
+        'Austria',
+        'Estonia',
+        'Belgium',
+        'Uruguay',
+        'Vietnam',
+        'Israel',
+        'Greece',
         ])
 
     print(args)
@@ -1010,7 +1097,7 @@ def parseArgs():
     # # assert len(l) == 1
 
     if args.countries is not None:
-        args.countries = '_'.join(args.countries).split(',')
+        args.countries = ' '.join(args.countries).split(',')
         args.title = ','.join((_.replace('_', ' ') for _ in args.countries))
         args.affix = ''.join(args.countries).replace(' ', '_')
     elif args.region is not None:
