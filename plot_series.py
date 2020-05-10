@@ -336,7 +336,7 @@ def plot_per_country(args, df, k, colors):
     print(path)
     plt.clf()
 
-    if k == 'cases':
+    if k == 'cases':  # just do table once for cases
 
         try:
             popSize = args.d_country2pop[args.title]
@@ -345,15 +345,11 @@ def plot_per_country(args, df, k, colors):
         s = '<tr>'
         s += '<td>{}</td>'.format(args.title)
         s += '<td>{:.1f}</td>'.format(popSize)
-        try:
-            s += '<td>{:.2f}</td>'.format(fitSteep)
-            print(s)
-        except UnboundLocalError:
-            s += '<td>N/A</td>'
-            print(s)
-            pass
+        s += '<td>{}</td>'.format(args.d_country2continent.get(args.title))
         s += '<td>{}</td>'.format(df['cases'].values.sum())
+        s += '<td><img src="days100_cases_perCapitaFalse_{}.png" height="45"></td>'.format(args.affix)
         s += '<td>{}</td>'.format(int(df['deaths'].values.sum()))
+        s += '<td><img src="days100_deaths_perCapitaFalse_{}.png" height="45"></td>'.format(args.affix)
         s += '<td>{:.1f}</td>'.format(100 * df['deaths'].values.sum() / df['cases'].values.sum())
         s += '<td>{}</td>'.format(df['cases'].values[-1])
         s += '<td>{}</td>'.format(df['deaths'].values[-1])
@@ -362,6 +358,34 @@ def plot_per_country(args, df, k, colors):
             s += '<td>{:.1f}</td>'.format(df['deaths'].values.sum() / popSize)
         except UnboundLocalError:
             pass
+
+        url = 'https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv'
+        df_owid = pd.read_csv('owid.csv')
+        if args.title == 'United States of America':
+            location = 'United States'
+            v = df_owid[df_owid['location'] == location]['total_tests_per_thousand'].max()
+        elif args.title == 'EU':
+            # Calculate weighted average.
+            nominator = 0
+            denominator = 0
+            for location in args.d_region2countries['EU']:
+                v1 = df_owid[df_owid['location'] == location]['total_tests_per_thousand'].max()
+                v2 = df_owid[df_owid['location'] == location]['total_tests'].max()
+                if np.isnan(v1):
+                    continue
+                denominator += v2 / v1
+                nominator += v2
+            v = nominator / denominator
+        else:
+            location = args.title
+            v = df_owid[df_owid['location'] == location]['total_tests_per_thousand'].max()
+        try:
+            if np.isnan(v):
+                return
+            s += '<td>{:.1f}</td>'.format(v)
+        except:
+            pass
+
         s += '</tr>'
         with open('table{}.txt'.format(args.affix), 'w') as f:
             print(s, file=f)
@@ -506,9 +530,10 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                 if comparison is False:
                     color = None
                     label = '{} ({:d})'.format(
-                        country.replace('_', ' '),
+                        country.replace('_', ' ').replace('United States of America', 'US').replace('United Kingdom', 'UK'),
                         int(max(y)),
                         )
+                    linewidth = 2
                 else:
                     if country == key_geo:
                         # country = country.replace('United States of America', 'US')
@@ -518,6 +543,7 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                             country.replace('_', ' '),
                             int(max(y)),
                             )
+                        linewidth = 4
                     else:
                         continent = args.d_country2continent[country]
                         if continent == 'North America':
@@ -543,11 +569,13 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                         else:
                             labels.add(label)
 
+                        linewidth = 2
+
                 plt.semilogy(
                     x, y,
                     label=label,
                     color = color,
-                    linewidth=2,
+                    linewidth=linewidth,
                     )
             plt.legend(prop={'size': 6})
 
@@ -1008,38 +1036,64 @@ def parseArgs():
     for region in d_region2countries.keys():
         d_region2countries['WorldAll'] |= set(d_region2countries[region])
 
-    d_region2countries['World'] = set([
+    d_region2countries['World1'] = set([
         'United States of America',
         # 'China',  # fake numbers?
         # 'Iran',  # fake numbers?
-        # 'United Kingdom',
+        'India',
+        # 'Singapore',
+        'Israel',
+        'Japan',
+        'Hong Kong',
+        # 'Macao',
+
+        'EU',
+        'Italy',
+        'Spain',
+        'Germany',
+        'France',
+        'Austria',
+        'Belgium',
+        'Sweden',
+        # 'Estonia',
+
+        # Non-EU Europe
+        'United Kingdom',
+
+        'Brazil',
+        'Mexico',
+        'Russia',
+
+        ])
+
+    d_region2countries['World2'] = set([
+        # 'China',  # fake numbers?
+        # 'Iran',  # fake numbers?
         'South Korea',
-        # 'Japan',
         # 'Singapore',
         'Taiwan',
         'Uruguay',
         'Vietnam',
-        'Iceland',
         'Australia',
         'Israel',
-        'South Africa',
-        'Senegal',
         'New Zealand',
-        'Norway',
         'Malaysia',
-        'Sweden',
+        'Japan',
         'Hong Kong',
         # 'Macao',
-        'EU',
-        # 'Italy',
-        # 'Spain',
-        # 'Germany',
-        # 'France',
-        # 'Greece',
-        # 'Denmark',
-        # 'Austria',
+
+        'Greece',
+        'Denmark',
+        'Austria',
         # 'Estonia',
+
+        # Non-EU Europe
+        'Iceland',
+        'Norway',
+        'United Kingdom',
+
         ])
+
 
     d_region2countries['website'] = set([
         'United States of America',

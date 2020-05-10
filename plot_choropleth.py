@@ -81,9 +81,10 @@ def main():
             cmap = cmaps[period][column]
             # df = pd.merge(df1, df2[df2['dateRep'] == maxDateRep], on=['alpha3'], how='left').fillna(value={'cases': 0, 'deaths': 0})
             # zlim_max = max(10**6 * df[column] / df['pop_est'])
+            # 
             valuemax = {
             'cases': 10000,  # cum Iceland 5262.5; week Luxembourg 3.219995
-            'deaths': 1000,  # Spain 399.5; week Belgium 2.282052
+            'deaths': 1000,  # Spain 539.7; week Belgium 2.282052
             }[column]
                 # ax.clim(0, 100)
             # for cmap in ('OrRd', 'YlGn'):
@@ -158,7 +159,7 @@ def main():
                     column, period.replace(' ',''), cmap, boolLog, dateString,
                     )
                 # fig.colorbar()
-                plt.savefig(path, dpi=100)
+                plt.savefig(path, dpi=80)
                 images.append(imageio.imread(path))
                 paths.append(path)
                 plt.close()
@@ -169,7 +170,7 @@ def main():
             path_gif = 'covid19_{}{}_{}_log{}.gif'.format(
                 column, period.replace(' ', ''), cmap, boolLog)
             # Do custom frame lengths with imagemagick.
-            command = 'convert -delay 50 {} -delay 300 {} {}'.format(
+            command = 'convert -delay 50 {} -delay 400 {} {}'.format(
                 ' '.join(paths[:-1]), paths[-1], path_gif)
             os.system(command)
             for path in paths:
@@ -293,14 +294,14 @@ def plot_owid(df, df_geo):
             path = 'covid19_{}_{}.png'.format(
                 column, dateString,
                 )
-            plt.savefig(path, dpi=100)
+            plt.savefig(path, dpi=80)
             d_paths[column].append(path)
             plt.close()
 
     for column, paths in d_paths.items():
         path_gif = 'covid19_{}.gif'.format(column)
         # Do custom frame lengths with imagemagick.
-        command = 'convert -delay 50 {} -delay 300 {} {}'.format(
+        command = 'convert -delay 50 {} -delay 400 {} {}'.format(
             ' '.join(paths[:-1]), paths[-1], path_gif)
         os.system(command)
         for path in paths:
