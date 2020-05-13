@@ -62,7 +62,7 @@ def doHeatMaps(args, df0):
         for k in ('cases', 'deaths'):
             lol = []
             countries = []
-            for country in args.d_region2countries[region]:
+            for country in sorted(args.d_region2countries[region]):
                 # print(region, k, country)
                 l = df0[df0['countriesAndTerritories'].isin([country])][k].rolling(window=7, min_periods=1).mean().to_list()
                 if len(l) == 0:
