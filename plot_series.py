@@ -40,6 +40,8 @@ def main():
 
     df0 = sumDataFrameAcrossRegion(args, df0)
 
+    doHeatMaps(args, df0)
+
     # if not os.path.isfile('scatter_EU_cases.png'):
     #     doScatterPlots(args, df0)
 
@@ -50,6 +52,46 @@ def main():
             doLinePlots(args, df0, region, comparison=False)
 
     doFitPlots(args, df0)
+
+    return
+
+
+def doHeatMaps(args, df0):
+
+    for region in args.d_region2countries.keys():
+        for k in ('cases', 'deaths'):
+            lol = []
+            countries = []
+            for country in args.d_region2countries[region]:
+                # print(region, k, country)
+                l = df0[df0['countriesAndTerritories'].isin([country])][k].rolling(window=7, min_periods=1).mean().to_list()
+                if len(l) == 0:
+                    continue
+                try:
+                    pop = args.d_country2pop[country]
+                except KeyError:
+                    continue
+                countries.append(country)
+                lol.append([_ / pop for _ in reversed(l)])
+            # array = np.array([np.array(l) for l in lol])
+            length = max(map(len, lol))
+            array = np.array(list(reversed([xi + [0] * (length - len(xi)) for xi in lol])))
+
+            fig, ax = plt.subplots()
+            heatmap = ax.pcolor(array, cmap='OrRd')
+            cbar = plt.colorbar(heatmap)
+            ax.set_yticks(np.arange(array.shape[0]) + 0.5, minor=False)
+            ax.set_yticklabels(list(reversed(countries)), minor=False, fontsize='xx-small')
+            ax.set_xlabel('Day')
+            ax.set_title('{}\n{}{} per million'.format(region, k[0].upper(), k[1:]))
+            path = 'plot_heat_{}_{}.png'.format(k, region)
+            plt.savefig(path, dpi=80)
+            print(path)
+            plt.clf()
+            plt.close()
+            # im = ax.imshow(array)
+
+    exit()          
 
     return
 
@@ -75,7 +117,7 @@ def doFitPlots(args, df0):
     set([
     'Singapore', 'Taiwan', 'Hong Kong', 'Japan',
     'United States of America', 'EU', 'China',
-    'Japan', 'Germany', 'India', 'United Kingdom', 'France', 'Italy',
+    'Germany', 'India', 'United Kingdom', 'France', 'Italy',
     'Brazil', 'Canada', 'South Korea', 'Spain', 'Australia', 'Mexico',
     'Indonesia', 'Netherlands', 'Saudia Arabia', 'Turkey', 'Switzerland',
     'Peru',
@@ -242,7 +284,7 @@ def plot_per_country(args, df, k, colors):
         print(max(df[k].values))
         # exit()
 
-    # tFit = None
+    tFit = None  # tmp to avoid fits because of long tails
 
     if tFit is not None:
         popt, perr = tFit
@@ -959,6 +1001,7 @@ def parseArgs():
             'Solomon Islands',
             ),
         'Scandinavia': ('Denmark', 'Sweden', 'Norway'),
+        'Nordic': ('Denmark', 'Sweden', 'Norway', 'Finland', 'Iceland', 'Greenland', 'Faroe Islands'),
         # https://en.wikipedia.org/wiki/Eurovoc#Northern_Europe
         'EuropeNorth': [
             'Denmark', 'Sweden', 'Norway',
@@ -1042,18 +1085,11 @@ def parseArgs():
         # 'Iran',  # fake numbers?
         'India',
         # 'Singapore',
-        'Israel',
         'Japan',
         'Hong Kong',
         # 'Macao',
 
         'EU',
-        'Italy',
-        'Spain',
-        'Germany',
-        'France',
-        'Austria',
-        'Belgium',
         'Sweden',
         # 'Estonia',
 
@@ -1078,7 +1114,6 @@ def parseArgs():
         'Israel',
         'New Zealand',
         'Malaysia',
-        'Japan',
         'Hong Kong',
         # 'Macao',
 
@@ -1090,7 +1125,6 @@ def parseArgs():
         # Non-EU Europe
         'Iceland',
         'Norway',
-        'United Kingdom',
 
         ])
 
