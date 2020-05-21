@@ -4,6 +4,7 @@ import matplotlib.patheffects as path_effects
 import math
 from adjustText import adjust_text
 import numpy as np
+from datetime import date
 
 eu27 = [
     'AUT',
@@ -230,9 +231,14 @@ def main():
     df_owid = pd.read_csv('owid.csv')
 
     for region in (
+        'Americas',
         'Nordic',
-        'Europe', 'Americas', 'Asia', 'Oceania', 'Africa',
-        'G7', 'EU',
+        'Europe',
+        'Asia',
+        'Oceania',
+        'Africa',
+        'G7',
+        'EU',
         ):
         countries = d_regions[region]
 
@@ -261,12 +267,12 @@ def main():
             deaths = df_ecdc[df_ecdc['countryterritoryCode'] == country]['deaths']
             x2 = cases.head(7).sum()
             x1 = cases.head(14).tail(7).sum()
-            if country == 'LTU':
-                continue  # negative values???
-                print(cases.to_string())
-                exit()
-            if country in ('CYP', 'BRA'):
-                continue  # no testing?
+            # if country == 'LTU':
+            #     continue  # negative values???
+            #     print(cases.to_string())
+            #     exit()
+            # if country in ('CYP',):
+            #     continue  # no testing?
             y2 = deaths.head(7).sum()
             y1 = deaths.head(14).tail(7).sum()
             # if x1 == 0 or y1 == 0:
@@ -286,7 +292,8 @@ def main():
             x1 = cases.sum() - cases.head(7).sum()
             x2 = cases.sum()
             changeCasesWeekly = 100 * (x2 - x1) / x1
-            if changeCasesWeekly > 200:
+            # Skip outliers.
+            if changeCasesWeekly > 100:
                 continue
 
             y1 = deaths.sum() - deaths.head(7).sum()
@@ -295,13 +302,14 @@ def main():
                 changeDeathsWeekly = 0
             else:
                 changeDeathsWeekly = 100 * (y2 - y1) / y1
-            if changeDeathsWeekly > 200:
+            # Skip outliers.
+            if changeDeathsWeekly > 100:
                 continue
 
             z2 = total_tests_per_thousand.max()
             # Skip if no testing.
             if z2 == 0 or np.isnan(z2):
-                if country in ('FRO'):
+                if country in ('FRO',):
                     z.append(0)
                 else:
                     continue
@@ -442,8 +450,6 @@ def main():
 
         ax.set_xlabel('Weekly change in total cases (%)')
         ax.set_ylabel('Weekly change in total fatalities (%)')
-        # ax.set_title('Europe + G7')
-        # ax.set_title('Americas')
         ax.set_title(region)
 
         # ax.set_xlim(0, 75)  # El Salvador
@@ -452,14 +458,15 @@ def main():
         # ax.set_ylim(0, 120)  # Senegal
         # ax.set_xlim(0, 5 + 5 * max((25, max(x), max(y))) // 5)
         # ax.set_ylim(0, 5 + 5 * max((25, max(x), max(y))) // 5)
-        ax.set_xlim(0, 2 + 2 * max((20, max(x))) // 2)
-        ax.set_ylim(0, 2 + 2 * max((20, max(y))) // 2)
+        ax.set_xlim(0, min(100, 2 + 2 * max((20, max(x))) // 2))
+        ax.set_ylim(0, min(100, 2 + 2 * max((20, max(y))) // 2))
         # ax.set_xlim(0, 25)  # Canada
         # ax.set_ylim(0, 30)  # Canada
 
         path = 'plot_bubble_{}.png'.format(region)
         fig.savefig(path, dpi=200)
         print(path)
+        fig.savefig('plot_bubble_{}_{}.png'.format(region, date.today().isoformat()), dpi=200)
 
     return
 

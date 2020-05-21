@@ -40,6 +40,8 @@ def main():
 
     df0 = sumDataFrameAcrossRegion(args, df0)
 
+    doBarPlots(args, df0)
+
     doHeatMaps(args, df0)
 
     # if not os.path.isfile('scatter_EU_cases.png'):
@@ -56,13 +58,39 @@ def main():
     return
 
 
+def doBarPlots(args, df0):
+
+    for countriesAndTerritories in df0['countriesAndTerritories'].unique():
+        print('barplot', countriesAndTerritories)
+        if df0[df0['countriesAndTerritories'] == countriesAndTerritories]['cases'].sum() < 100:
+            continue
+        for k in ('cases', 'deaths'):
+            x = df0[df0['countriesAndTerritories'] == countriesAndTerritories].sort_values(by='dateRep', ascending=True).set_index('dateRep')[k]
+            ax = x.plot.bar()
+            ticks = ax.xaxis.get_ticklocs()
+            # ticklabels = [l.get_text() for l in ax.xaxis.get_ticklabels()]
+            # ticklabels = [item.strftime('%b %d') for item in ticklabels]
+            ticklabels = [l.strftime('%b %d') for l in x.index]
+            ax.xaxis.set_ticks(ticks[::14])
+            ax.xaxis.set_ticklabels(ticklabels[::14], rotation=45, fontsize='x-small')
+            ax.set_title('{}\n{}'.format(k[0].upper() + k[1:], countriesAndTerritories))
+            fig = ax.get_figure()
+            fig.set_size_inches(16 / 2, 9 / 2)
+            path = 'plot_bar_{}_{}.png'.format(k, countriesAndTerritories.replace(' ','_'))
+            fig.savefig(path, dpi=75)
+            print(path)
+            fig.clf()
+            plt.close(fig)
+
+    return
+
 def doHeatMaps(args, df0):
 
     for region in args.d_region2countries.keys():
         for k in ('cases', 'deaths'):
             lol = []
             countries = []
-            for country in sorted(args.d_region2countries[region]):
+            for country in sorted(set(args.d_region2countries[region])):
                 # print(region, k, country)
                 l = df0[df0['countriesAndTerritories'].isin([country])][k].rolling(window=7, min_periods=1).mean().to_list()
                 if len(l) == 0:
@@ -71,27 +99,31 @@ def doHeatMaps(args, df0):
                     pop = args.d_country2pop[country]
                 except KeyError:
                     continue
+                if pop < 1:
+                # if pop < 1 and country not in ('Iceland', 'Faroe Islands'):
+                    continue
+                country = country.replace('United States of America', 'US')
                 countries.append(country)
-                lol.append([_ / pop for _ in reversed(l)])
+                lol.append([_ / pop for _ in l])
             # array = np.array([np.array(l) for l in lol])
             length = max(map(len, lol))
-            array = np.array(list(reversed([xi + [0] * (length - len(xi)) for xi in lol])))
+            array = np.array(list(reversed([list(reversed(xi + [0] * (length - len(xi)))) for xi in lol])))
 
             fig, ax = plt.subplots()
             heatmap = ax.pcolor(array, cmap='OrRd')
             cbar = plt.colorbar(heatmap)
             ax.set_yticks(np.arange(array.shape[0]) + 0.5, minor=False)
-            ax.set_yticklabels(list(reversed(countries)), minor=False, fontsize='xx-small')
+            ax.set_yticklabels(list(reversed(countries)), minor=False, fontsize='x-small')
             ax.set_xlabel('Day')
             ax.set_title('{}\n{}{} per million'.format(region, k[0].upper(), k[1:]))
             path = 'plot_heat_{}_{}.png'.format(k, region)
-            plt.savefig(path, dpi=80)
+            plt.tight_layout()
+            fig.set_tight_layout(True)
+            plt.savefig(path, dpi=75)
             print(path)
             plt.clf()
             plt.close()
             # im = ax.imshow(array)
-
-    exit()          
 
     return
 
@@ -371,10 +403,10 @@ def plot_per_country(args, df, k, colors):
     # plt.yscale('log')
     path = 'COVID19_sigmoid_{}_{}_{}.png'.format(k, args.affix, args.dateToday)
     print(path)
-    plt.savefig(path, dpi=80)
+    plt.savefig(path, dpi=75)
     path = 'COVID19_sigmoid_{}_{}.png'.format(k, args.affix)
     print(path)
-    plt.savefig(path, dpi=80)
+    plt.savefig(path, dpi=75)
     print(path)
     plt.clf()
 
@@ -390,8 +422,10 @@ def plot_per_country(args, df, k, colors):
         s += '<td>{}</td>'.format(args.d_country2continent.get(args.title))
         s += '<td>{}</td>'.format(df['cases'].values.sum())
         s += '<td><img src="days100_cases_perCapitaFalse_{}.png" height="45"></td>'.format(args.affix)
+        s += '<td><img src="plot_bar_cases_{}.png" height="45"></td>'.format(args.affix)
         s += '<td>{}</td>'.format(int(df['deaths'].values.sum()))
         s += '<td><img src="days100_deaths_perCapitaFalse_{}.png" height="45"></td>'.format(args.affix)
+        s += '<td><img src="plot_bar_deaths_{}.png" height="45"></td>'.format(args.affix)
         s += '<td>{:.1f}</td>'.format(100 * df['deaths'].values.sum() / df['cases'].values.sum())
         s += '<td>{}</td>'.format(df['cases'].values[-1])
         s += '<td>{}</td>'.format(df['deaths'].values[-1])
@@ -479,7 +513,7 @@ def doScatterPlots(args, df0):
             plt.title(region + '\n' + k[0].upper() + k[1:])
             # plt.label()
             path = 'scatter_{}_{}.png'.format(region, k)
-            plt.savefig(path, dpi=80)
+            plt.savefig(path, dpi=75)
             plt.clf()
 
     return
@@ -638,7 +672,7 @@ def doLinePlots(args, df0, key_geo, comparison=True):
             keyUpperCase = '{}{}'.format(k[0].upper(), k[1:])
             plt.title('{}\n{}{} after first day with more than {} {}'.format(
                 key_geo, keyUpperCase, textPerCapita, lim, textLim), fontsize='small')
-            plt.savefig(path, dpi=80)
+            plt.savefig(path, dpi=75)
             plt.clf()
 
     return
@@ -1064,7 +1098,7 @@ def parseArgs():
             'Slovenia',
             ],
     }
-    d_region2countries['Europe'] = list(d_region2countries['EU']) + d_region2countries['EuropeEastCentral'] + d_region2countries['EuropeNorth'] + d_region2countries['EuropeSouth'] + d_region2countries['EuropeWest']
+    d_region2countries['Europe'] = set(list(d_region2countries['EU']) + d_region2countries['EuropeEastCentral'] + d_region2countries['EuropeNorth'] + d_region2countries['EuropeSouth'] + d_region2countries['EuropeWest'])
     d_region2countries['Americas'] = d_region2countries['AmericaSouth'] + d_region2countries['AmericaNorth'] + d_region2countries['AmericaCentral'] + d_region2countries['Carribean']
     d_region2countries['Africa'] = d_region2countries['AfricaNorth'] + d_region2countries['AfricaEast'] + d_region2countries['AfricaSouth'] + d_region2countries['AfricaWest'] + d_region2countries['AfricaCentral']
     d_region2countries['Asia'] = d_region2countries['AsiaSouthEast'] + d_region2countries['AsiaCentral'] + d_region2countries['AsiaEast'] + d_region2countries['AsiaSouth'] + d_region2countries['AsiaWestern']
