@@ -317,6 +317,7 @@ def download_and_read(url, path, func):
     if os.path.isfile(path) and time.time() - os.path.getmtime(path) < 2 * 3600:
         pass
     else:
+        print(url)
         r = requests.get(url)
         with open(path, 'w') as f:
             f.write(r.text)
@@ -332,7 +333,7 @@ def parse_data(args):
     path = 'owid.csv'
     df_owid = download_and_read(url, path, pd.read_csv)
 
-    url = 'https://ocgptweb.azurewebsites.net/CSVDownload'
+    url = 'https://github.com/OxCGRT/covid-policy-tracker/raw/master/data/OxCGRT_latest.csv'
     path = 'bsg.csv'
     df_bsg = download_and_read(url, path, pd.read_csv)
 
