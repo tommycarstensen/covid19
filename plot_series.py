@@ -14,6 +14,7 @@ import random
 import operator
 from countryinfo import CountryInfo
 import itertools
+import time
 
 
 def main():
@@ -31,6 +32,8 @@ def main():
     df0['countriesAndTerritories'] = df0['countriesAndTerritories'].str.replace('_', ' ')
 
     doCountry2Continent(args, df0)
+
+    doHeatMapsBSG(args)
 
     for region in ('Europe', 'AmericaNorth', 'AmericaSouth', 'Oceania', 'Asia', 'Africa',):
         for country in args.d_region2countries[region]:
@@ -61,38 +64,132 @@ def main():
 def doBarPlots(args, df0):
 
     for countriesAndTerritories in df0['countriesAndTerritories'].unique():
-        print('barplot', countriesAndTerritories)
         if df0[df0['countriesAndTerritories'] == countriesAndTerritories]['cases'].sum() < 100:
             continue
+        path = 'plot_bar_{}.png'.format(countriesAndTerritories.replace(' ','_'))
+        print(path)
+        if os.path.isfile(path):
+            continue
+        fig, ax = plt.subplots()
+        ax2 = plt.twinx()
         for k in ('cases', 'deaths'):
-            x = df0[df0['countriesAndTerritories'] == countriesAndTerritories].sort_values(by='dateRep', ascending=True).set_index('dateRep')[k]
-            ax = x.plot.bar()
-            ticks = ax.xaxis.get_ticklocs()
-            # ticklabels = [l.get_text() for l in ax.xaxis.get_ticklabels()]
-            # ticklabels = [item.strftime('%b %d') for item in ticklabels]
-            ticklabels = [l.strftime('%b %d') for l in x.index]
-            ax.xaxis.set_ticks(ticks[::14])
-            ax.xaxis.set_ticklabels(ticklabels[::14], rotation=45, fontsize='x-small')
-            ax.set_title('{}\n{}'.format(k[0].upper() + k[1:], countriesAndTerritories))
-            fig = ax.get_figure()
-            fig.set_size_inches(16 / 2, 9 / 2)
-            path = 'plot_bar_{}_{}.png'.format(k, countriesAndTerritories.replace(' ','_'))
-            fig.savefig(path, dpi=75)
-            print(path)
-            fig.clf()
-            plt.close(fig)
+            ps = df0[df0['countriesAndTerritories'] == countriesAndTerritories].sort_values(by='dateRep', ascending=True).set_index('dateRep')[k]
+            # Do clip to avoid negative values such as the UK:
+            # https://www.theguardian.com/world/2020/aug/12/coronavirus-death-toll-in-england-revised-down-by-more-than-5000
+            ps.clip(lower=0, inplace=True)
+            x = list(range(len(ps)))
+            if k == 'deaths':
+                y = [-_ for _ in ps]
+            else:
+                y = ps
+            ax.bar(x, y, label=k[0].upper() + k[1:])
+        ticks = ax.xaxis.get_ticklocs()
+        # ticklabels = [l.get_text() for l in ax.xaxis.get_ticklabels()]
+        # ticklabels = [item.strftime('%b %d') for item in ticklabels]
+        ticklabels = [l.strftime('%b %d') for l in ps.index]
+        ax.xaxis.set_ticks(ticks[::14])
+        ax.xaxis.set_ticklabels(ticklabels[::14], rotation=45, fontsize='x-small')
+        ax.set_title('{}'.format(countriesAndTerritories))
+        fig = ax.get_figure()
+        plt.legend()
+        fig.set_size_inches(16 / 2, 9 / 2)
+        fig.savefig(path, dpi=75)
+        print(path)
+        plt.savefig(path[:-4] + '_thumb.png', dpi=25)
+        fig.clf()
+        plt.close(fig)
 
     return
+
+
+def doHeatMapsBSG(args):
+
+    url = 'https://github.com/OxCGRT/covid-policy-tracker/raw/master/data/OxCGRT_latest.csv'
+    path = 'bsg.csv'
+    df0 = df = df_bsg = download_and_read(url, path, pd.read_csv)
+
+    for region in args.d_region2countries.keys():
+        for k in (
+            'EconomicSupportIndex',
+            'ContainmentHealthIndex',
+            'GovernmentResponseIndex',
+            'StringencyIndex',
+            ):
+            path = 'plot_heat_bsg_{}_{}.png'.format(k, region)
+            if os.path.isfile(path):
+                continue
+            lol = []
+            countries = []
+            for country in sorted(set(args.d_region2countries[region])):
+                # print(region, k, country)
+                l = df0[df0['CountryName'].isin([country])][k].to_list()
+                if len(l) == 0:
+                    continue
+                try:
+                    pop = args.d_country2pop[country]
+                except KeyError:
+                    continue
+                # if pop < 1:
+                # # if pop < 1 and country not in ('Iceland', 'Faroe Islands'):
+                #     continue
+                country = country.replace('United States of America', 'US')
+                countries.append(country)
+                # Do max to avoid negative values such as the UK:
+                # https://www.theguardian.com/world/2020/aug/12/coronavirus-death-toll-in-england-revised-down-by-more-than-5000
+                lol.append([max(0, _) for _ in reversed(l)])
+            # array = np.array([np.array(l) for l in lol])
+            length = max(map(len, lol))
+            array = np.array(list(reversed([list(reversed(xi + [0] * (length - len(xi)))) for xi in lol])))
+
+            fig, ax = plt.subplots()
+            fig.set_size_inches(16 / 2, 9 / 2)
+            heatmap = ax.pcolor(array, cmap='OrRd')
+            cbar = plt.colorbar(heatmap)
+            ax.set_yticks(np.arange(array.shape[0]) + 0.5, minor=False)
+            ax.set_yticklabels(list(reversed(countries)), minor=False, fontsize='x-small')
+            ax.set_xlabel('Day')
+            ax.set_title('{}\n{}{}'.format(region, k[0].upper(), k[1:]))
+            plt.tight_layout()
+            fig.set_tight_layout(True)
+            plt.savefig(path, dpi=75)
+            print(path)
+            plt.clf()
+            plt.close()
+            # im = ax.imshow(array)
+
+    return
+
+
+def download_and_read(url, path, func):
+
+    # df_owid = pd.read_html(url)
+
+    if os.path.isfile(path) and time.time() - os.path.getmtime(path) < 2 * 3600:
+        pass
+    else:
+        print(url)
+        r = requests.get(url)
+        with open(path, 'w') as f:
+            f.write(r.text)
+
+    df = func(path)
+
+    return df
+
 
 def doHeatMaps(args, df0):
 
     for region in args.d_region2countries.keys():
         for k in ('cases', 'deaths'):
+            path = 'plot_heat_{}_{}.png'.format(k, region)
+            if os.path.isfile(path):
+                continue
             lol = []
             countries = []
             for country in sorted(set(args.d_region2countries[region])):
                 # print(region, k, country)
-                l = df0[df0['countriesAndTerritories'].isin([country])][k].rolling(window=7, min_periods=1).mean().to_list()
+                # Use clip to avoid negative counts of cases and/or deaths.
+                l = df0[df0['countriesAndTerritories'].isin([country])][k].clip(lower=0).rolling(window=7, min_periods=1).mean().to_list()
                 if len(l) == 0:
                     continue
                 try:
@@ -116,7 +213,6 @@ def doHeatMaps(args, df0):
             ax.set_yticklabels(list(reversed(countries)), minor=False, fontsize='x-small')
             ax.set_xlabel('Day')
             ax.set_title('{}\n{}{} per million'.format(region, k[0].upper(), k[1:]))
-            path = 'plot_heat_{}_{}.png'.format(k, region)
             plt.tight_layout()
             fig.set_tight_layout(True)
             plt.savefig(path, dpi=75)
@@ -202,8 +298,8 @@ def sumDataFrameAcrossRegion(args, df0):
             .groupby('dateRep').sum().reset_index())
         df['countriesAndTerritories'] = region
         # Assume no two countries have the same population size...
-        popSum = df0[df0['countriesAndTerritories'].isin(countries)]['popData2018'].unique().sum()
-        df['popData2018'] = popSum
+        popSum = df0[df0['countriesAndTerritories'].isin(countries)]['popData2019'].unique().sum()
+        df['popData2019'] = popSum
         df0 = df0.append(df)
 
     return df0
@@ -421,11 +517,12 @@ def plot_per_country(args, df, k, colors):
         s += '<td>{:.1f}</td>'.format(popSize)
         s += '<td>{}</td>'.format(args.d_country2continent.get(args.title))
         s += '<td>{}</td>'.format(df['cases'].values.sum())
-        s += '<td><img src="days100_cases_perCapitaFalse_{}.png" height="45"></td>'.format(args.affix)
-        s += '<td><img src="plot_bar_cases_{}.png" height="45"></td>'.format(args.affix)
+        s += '<td><a href="days100_cases_perCapitaFalse_{}.png"><img src="days100_cases_perCapitaFalse_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
+        # s += '<td><a href="plot_bar_cases_{}.png"><img src="plot_bar_cases_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
         s += '<td>{}</td>'.format(int(df['deaths'].values.sum()))
-        s += '<td><img src="days100_deaths_perCapitaFalse_{}.png" height="45"></td>'.format(args.affix)
-        s += '<td><img src="plot_bar_deaths_{}.png" height="45"></td>'.format(args.affix)
+        s += '<td><a href="days100_deaths_perCapitaFalse_{}.png"><img src="days100_deaths_perCapitaFalse_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
+        # s += '<td><a href="plot_bar_deaths_{}.png"><img src="plot_bar_deaths_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
+        s += '<td><a href="plot_bar_cases_{}.png"><img src="plot_bar_cases_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
         s += '<td>{:.1f}</td>'.format(100 * df['deaths'].values.sum() / df['cases'].values.sum())
         s += '<td>{}</td>'.format(df['cases'].values[-1])
         s += '<td>{}</td>'.format(df['deaths'].values[-1])
@@ -548,7 +645,7 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                 if perCapita is True:
                     value = operator.truediv(
                         10**6 * df0[df0['countriesAndTerritories'].isin([country])][k].sum(),
-                        df0[df0['countriesAndTerritories'].isin([country])]['popData2018'].unique(),
+                        df0[df0['countriesAndTerritories'].isin([country])]['popData2019'].unique(),
                         )[0]
                     if np.isnan(value):
                         continue
@@ -595,9 +692,9 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                     lim = 1
                     # s = 10**6 * df[k].cumsum()[df[k].cumsum() > 100].values / df['popData2018'].unique()[0]
                     # y = s
-                    s = 10**6 * df[k].cumsum() / df['popData2018'].unique()
+                    s = 10**6 * df[k].cumsum() / df['popData2019'].unique()
                     y = s[s > lim]
-                    y = df[k].cumsum()[df[k].cumsum() > 100].values / df['popData2018'].unique()
+                    y = df[k].cumsum()[df[k].cumsum() > 100].values / df['popData2019'].unique()
                 if df[k].sum() < lim:
                     continue
                 if len(y) == 0:
@@ -673,6 +770,7 @@ def doLinePlots(args, df0, key_geo, comparison=True):
             plt.title('{}\n{}{} after first day with more than {} {}'.format(
                 key_geo, keyUpperCase, textPerCapita, lim, textLim), fontsize='small')
             plt.savefig(path, dpi=75)
+            plt.savefig(path[:-4] + '_thumb.png', dpi=25)
             plt.clf()
 
     return
@@ -768,6 +866,7 @@ def parseURL(url):
 
     basename = os.path.basename(url)
     if not os.path.isfile(basename):
+        print(url)
         r = requests.get(url)
         if r.status_code != 200:
             print(url)
@@ -1162,6 +1261,12 @@ def parseArgs():
 
         ])
 
+    d_region2countries['GoogleTrends'] = set([
+        'Germany',
+        'Brazil',
+        'India',
+        'United States of America',
+        ])
 
     d_region2countries['website'] = set([
         'United States of America',
