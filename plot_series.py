@@ -245,7 +245,7 @@ def doFitPlots(args, df0):
 
     df = (
         df0[df0['countriesAndTerritories'].isin(args.countries)]
-        .filter(['cases_weekly', 'dateRep', 'deaths'])
+        .filter(['cases_weekly', 'dateRep', 'deaths_weekly'])
         .groupby('dateRep').sum())
     print(df.tail(1))
 
@@ -311,7 +311,7 @@ def sumDataFrameAcrossRegion(args, df0):
 
     for region, countries in args.d_region2countries.items():
         df = (df0[df0['countriesAndTerritories'].isin(countries)]
-            .filter(['cases', 'dateRep', 'deaths'])
+            .filter(['cases_weekly', 'dateRep', 'deaths_weekly'])
             .groupby('dateRep').sum().reset_index())
         df['countriesAndTerritories'] = region
         # Assume no two countries have the same population size...
@@ -439,7 +439,7 @@ def plot_per_country(args, df, k, colors):
         if fitMax > 1.05 * max(yCumYesterday):
             tFit = None
 
-    plt.xlabel('Days')
+    plt.xlabel('Weeks')
     plt.ylabel(k[0].upper() + k[1:].replace('_', ' '))
 
     if tFit is not None:
@@ -500,7 +500,6 @@ def plot_per_country(args, df, k, colors):
     # except KeyError:
     #     pass
     title += ', {}'.format(args.dateToday)
-    print(df.columns)
     title += '\nCases this week={}, Deaths this week={}'.format(
         df['cases_weekly'].values[-1],
         df['deaths_weekly'].values[-1],
@@ -542,8 +541,8 @@ def plot_per_country(args, df, k, colors):
         # s += '<td><a href="plot_bar_deaths_{}.png"><img src="plot_bar_deaths_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
         s += '<td><a href="plot_bar_{}.png"><img src="plot_bar_cases_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
         s += '<td>{:.1f}</td>'.format(100 * df['deaths'].values.sum() / df['cases'].values.sum())
-        s += '<td>{}</td>'.format(df['cases'].values[-1])
-        s += '<td>{}</td>'.format(df['deaths'].values[-1])
+        s += '<td>{}</td>'.format(df['cases_weekly'].values[-1])
+        s += '<td>{}</td>'.format(df['deaths_weekly'].values[-1])
         try:
             s += '<td>{:.1f}</td>'.format(df['cases'].values.sum() / popSize)
             s += '<td>{:.1f}</td>'.format(df['deaths'].values.sum() / popSize)
