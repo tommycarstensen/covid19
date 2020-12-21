@@ -230,6 +230,9 @@ def main():
 
     df_owid = pd.read_csv('owid.csv')
 
+    days = 14
+    weeks = 2
+
     for region in (
         'Americas',
         'Nordic',
@@ -263,18 +266,24 @@ def main():
             #     continue
             if country not in countries:
                 continue
-            cases = df_ecdc[df_ecdc['countryterritoryCode'] == country]['cases']
-            deaths = df_ecdc[df_ecdc['countryterritoryCode'] == country]['deaths']
-            x2 = cases.head(7).sum()
-            x1 = cases.head(14).tail(7).sum()
+
+            casesTotal = df_ecdc[df_ecdc['countryterritoryCode'] == country]['cases_weekly'].sum()
+            if casesTotal < 100:  # Faroe Islands 188, Iceland 1882
+                print('casesTotal', country, casesTotal)
+                continue
+
+            cases = df_ecdc[df_ecdc['countryterritoryCode'] == country]['cases_weekly']
+            deaths = df_ecdc[df_ecdc['countryterritoryCode'] == country]['deaths_weekly']
+            x2 = cases.head(1 * weeks).sum()
+            x1 = cases.head(2 * weeks).tail(1 * weeks).sum()
             # if country == 'LTU':
             #     continue  # negative values???
             #     print(cases.to_string())
             #     exit()
             # if country in ('CYP',):
             #     continue  # no testing?
-            y2 = deaths.head(7).sum()
-            y1 = deaths.head(14).tail(7).sum()
+            y2 = deaths.head(1 * weeks).sum()
+            y1 = deaths.head(2 * weeks).tail(1 * weeks).sum()
             # if x1 == 0 or y1 == 0:
             #     continue
 
@@ -284,48 +293,83 @@ def main():
 
             label = df_owid[df_owid['iso_code'] == country]['location'].iloc[0]
 
-            deathsTotal = df_ecdc[df_ecdc['countryterritoryCode'] == country]['deaths'].sum()
-
             # changeCasesWeekly = 100 * (x2 - x1) / x1
             # changeDeathsWeekly = 100 * (y2 - y1) / y1
 
-            x1 = cases.sum() - cases.head(7).sum()
-            x2 = cases.sum()
-            changeCasesWeekly = 100 * (x2 - x1) / x1
-            # Skip outliers.
-            if changeCasesWeekly > 100:
+            # x1 = cases.sum() - cases.head(7).sum()
+            # x2 = cases.sum()
+            x1 = cases.head(2 * weeks).tail(1 * weeks).sum()
+            x2 = cases.head(1 * weeks).sum()
+            if x1 < 0 or x2 < 0:
                 continue
+            if x1 == 0:
+                changeCasesWeekly = 0
+            else:
+                changeCasesWeekly = 100 * (x2 - x1) / x1
+            # Skip outliers.
+            if changeCasesWeekly > 200:
+                # Small absolute change.
+                if y1 < 50 or y2 < 50:
+                    changeCasesWeekly = 200
+                else:
+                    pass
+                # print('changeCasesWeekly', country, changeCasesWeekly)
+                # continue
 
-            y1 = deaths.sum() - deaths.head(7).sum()
-            y2 = deaths.sum()
+            # y1 = deaths.sum() - deaths.head(7).sum()
+            # y2 = deaths.sum()
+            x1 = deaths.head(2 * weeks).tail(1 * weeks).sum()
+            x2 = deaths.head(1 * weeks).sum()
             if y1 == 0:  # Faroe Islands have zero deaths
                 changeDeathsWeekly = 0
             else:
                 changeDeathsWeekly = 100 * (y2 - y1) / y1
-            # Skip outliers.
-            if changeDeathsWeekly > 100:
+            # Skip when deaths are negative:
+            # https://www.theguardian.com/world/2020/aug/12/coronavirus-death-toll-in-england-revised-down-by-more-than-5000
+            if y1 < 0 or y2 < 0:
                 continue
+            # Skip outliers.
+            if changeDeathsWeekly > 200:
+                # Few absolute changes.
+                if y1 < 50 or y2 < 50:
+                    changeDeathsWeekly = 200
+                else:
+                    pass
+                # print('changeDeathsWeekly', country, changeDeathsWeekly)
+                # continue
 
-            z2 = total_tests_per_thousand.max()
-            # Skip if no testing.
-            if z2 == 0 or np.isnan(z2):
-                if country in ('FRO',):
-                    z.append(0)
-                else:
-                    continue
+            # z2 = total_tests_per_thousand.max()
+            # # Skip if no testing.
+            # if z2 == 0 or np.isnan(z2):
+            #     if country in ('FRO',):
+            #         change = 0
+            #     else:
+            #         continue
+            # else:
+            #     for i in range(7, 21):
+            #         z1 = total_tests_per_thousand.iloc[-i]
+            #         if z1 == z2:
+            #             continue
+            #         if not np.isnan(z1):
+            #             change = 100 * (z2 - z1) / z1
+            #             break
+            #     else:
+            #         change = 0
+            #         # print(country, z2)
+            #         # print(total_tests_per_thousand.to_string())
+            #         # exit()
+
+            v1 = total_tests_per_thousand.tail(3 * days).head(1 * days).max()
+            v2 = total_tests_per_thousand.tail(2 * days).head(1 * days).max()
+            v3 = total_tests_per_thousand.tail(1 * days).max()
+            z2 = v3 - v2
+            z1 = v2 - v1
+
+            if z1 == 0:
+                change = 0
             else:
-                for i in range(7, 21):
-                    z1 = total_tests_per_thousand.iloc[-i]
-                    if z1 == z2:
-                        continue
-                    if not np.isnan(z1):
-                        z.append(100 * (z2 - z1) / z1)
-                        break
-                else:
-                    z.append(0)
-                    # print(country, z2)
-                    # print(total_tests_per_thousand.to_string())
-                    # exit()
+                change = 100 * (z2 - z1) / z1
+            z.append(change)
 
             # z.append(100 * (z2 - z1) / z1)
 
@@ -335,7 +379,9 @@ def main():
             y.append(changeDeathsWeekly)
             labels.append(label)
             # sizes.append(5 * math.sqrt(deaths))
-            size = 10 * deathsTotal ** (1/3)
+            deathsTotal = df_ecdc[df_ecdc['countryterritoryCode'] == country]['deaths_weekly'].sum()
+            # size = 10 * deathsTotal ** (1/3)
+            size = max(20, 10 * deathsTotal ** (1/3))
             sizes.append(size)
             # print(country, changeCasesWeekly, changeDeathsWeekly, size)
 
@@ -377,8 +423,8 @@ def main():
             cmap = 'viridis',
             # vmin = min(l_total_tests_per_thousand),
             # vmax = max(l_total_tests_per_thousand),
-            vmin = 0,
-            vmax = max(colors),
+            vmin = min(0, min(colors)),
+            vmax = max(0, max(colors)),
             # vmax = 25,
             )
 
@@ -387,7 +433,9 @@ def main():
 
         cbar = fig.colorbar(paths)
         # cbar.set_label('Total tests per thousand')
-        cbar.set_label('Weekly change in total tests (%)')
+        # cbar.set_label('Weekly change in total tests (%)')
+        # cbar.set_label(f'{days} day change in weekly tests (%)')
+        cbar.set_label('Change in weekly tests (%)')
 
         texts = []
         for xi, yi, label in zip(x, y, labels):
@@ -448,8 +496,12 @@ def main():
         #     )
         # ax.add_artist(legend_size)
 
-        ax.set_xlabel('Weekly change in total cases (%)')
-        ax.set_ylabel('Weekly change in total fatalities (%)')
+        # ax.set_xlabel('Weekly change in total cases (%)')
+        # ax.set_ylabel('Weekly change in total fatalities (%)')
+        # ax.set_xlabel(f'{weeks} week change in weekly cases (%)')
+        # ax.set_ylabel(f'{weeks} week change in weekly fatalities (%)')
+        ax.set_xlabel(f'Change in weekly cases (%)')
+        ax.set_ylabel(f'Change in weekly fatalities (%)')
         ax.set_title(region)
 
         # ax.set_xlim(0, 75)  # El Salvador
@@ -458,10 +510,15 @@ def main():
         # ax.set_ylim(0, 120)  # Senegal
         # ax.set_xlim(0, 5 + 5 * max((25, max(x), max(y))) // 5)
         # ax.set_ylim(0, 5 + 5 * max((25, max(x), max(y))) // 5)
-        ax.set_xlim(0, min(100, 2 + 2 * max((20, max(x))) // 2))
-        ax.set_ylim(0, min(100, 2 + 2 * max((20, max(y))) // 2))
+
         # ax.set_xlim(0, 25)  # Canada
         # ax.set_ylim(0, 30)  # Canada
+
+        # ax.set_xlim(0, min(100, 2 + 2 * max((20, max(x))) // 2))
+        # ax.set_ylim(0, min(100, 2 + 2 * max((20, max(y))) // 2))
+
+        ax.axvline(x=0, ls='--', color='.1', lw=0.5)
+        ax.axhline(y=0, ls='--', color='.1', lw=0.5)
 
         path = 'plot_bubble_{}.png'.format(region)
         fig.savefig(path, dpi=200)

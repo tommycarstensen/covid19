@@ -25,7 +25,7 @@ def main():
     basename = 'COVID-19-geographic-disbtribution-worldwide-{}.xlsx'.format(
         args.dateToday)
     url = '{}/sites/default/files/documents/{}'.format(domain, basename)
-    url = 'https://opendata.ecdc.europa.eu/covid19/casedistribution/csv'
+    url = 'https://opendata.ecdc.europa.eu/covid19/casedistribution/csv/'
     df0 = parseURL(url)
 
     df0['dateRep'] = pd.to_datetime(df0['dateRep'], format='%d/%m/%Y')
@@ -64,34 +64,50 @@ def main():
 def doBarPlots(args, df0):
 
     for countriesAndTerritories in df0['countriesAndTerritories'].unique():
-        if df0[df0['countriesAndTerritories'] == countriesAndTerritories]['cases'].sum() < 100:
+        if df0[df0['countriesAndTerritories'] == countriesAndTerritories]['cases_weekly'].sum() < 1000:
             continue
         path = 'plot_bar_{}.png'.format(countriesAndTerritories.replace(' ','_'))
         print(path)
         if os.path.isfile(path):
             continue
         fig, ax = plt.subplots()
-        ax2 = plt.twinx()
-        for k in ('cases', 'deaths'):
+        l = []
+        colors = ['#66c2a5', '#fc8d62', '#8da0cb',]
+        for i, k in enumerate(('cases_weekly', 'deaths_weekly')):
             ps = df0[df0['countriesAndTerritories'] == countriesAndTerritories].sort_values(by='dateRep', ascending=True).set_index('dateRep')[k]
             # Do clip to avoid negative values such as the UK:
             # https://www.theguardian.com/world/2020/aug/12/coronavirus-death-toll-in-england-revised-down-by-more-than-5000
             ps.clip(lower=0, inplace=True)
             x = list(range(len(ps)))
-            if k == 'deaths':
+            l.append(ps)
+            if k == 'deaths_weekly':
                 y = [-_ for _ in ps]
             else:
                 y = ps
-            ax.bar(x, y, label=k[0].upper() + k[1:])
+            ax.bar(x, y, label=k[0].upper() + k[1:].replace('_', ' '), color=colors[i])
+
+        ax2 = ax.twinx()  # instantiate a second axes that shares the same x-axis
+        ax2.set_ylabel('Deaths / Cases', color=colors[2])
+        ax2.plot([l[1][i] / l[0][i] if l[0][i] > 100 else None for i in range(len(l[0]))], label='Deaths / Cases')
+        ax2.tick_params(axis='y', labelcolor=colors[2])
+        # ax2.set_xlim(0, ax2.get_xlim()[1])
+
         ticks = ax.xaxis.get_ticklocs()
         # ticklabels = [l.get_text() for l in ax.xaxis.get_ticklabels()]
         # ticklabels = [item.strftime('%b %d') for item in ticklabels]
         ticklabels = [l.strftime('%b %d') for l in ps.index]
-        ax.xaxis.set_ticks(ticks[::14])
-        ax.xaxis.set_ticklabels(ticklabels[::14], rotation=45, fontsize='x-small')
+        ticks_modified = []
+        ticklabels_modified = []
+        for tick in ticks:
+            if tick not in x:
+                continue
+            ticklabels[x.index(tick)]
+            x.index(tick)
+        ax.xaxis.set_ticks(ticks_modified)
+        ax.xaxis.set_ticklabels(ticklabels_modified, rotation=45, fontsize='x-small')
         ax.set_title('{}'.format(countriesAndTerritories))
-        fig = ax.get_figure()
-        plt.legend()
+        ax.legend()
+        # ax2.legend()
         fig.set_size_inches(16 / 2, 9 / 2)
         fig.savefig(path, dpi=75)
         print(path)
@@ -184,6 +200,7 @@ def doHeatMaps(args, df0):
             path = 'plot_heat_{}_{}.png'.format(k, region)
             if os.path.isfile(path):
                 continue
+            k += '_weekly'
             lol = []
             countries = []
             for country in sorted(set(args.d_region2countries[region])):
@@ -211,8 +228,8 @@ def doHeatMaps(args, df0):
             cbar = plt.colorbar(heatmap)
             ax.set_yticks(np.arange(array.shape[0]) + 0.5, minor=False)
             ax.set_yticklabels(list(reversed(countries)), minor=False, fontsize='x-small')
-            ax.set_xlabel('Day')
-            ax.set_title('{}\n{}{} per million'.format(region, k[0].upper(), k[1:]))
+            ax.set_xlabel('Week')
+            ax.set_title('{}\n{}{} per million'.format(region, k[0].upper(), k[1:].replace('_', '')))
             plt.tight_layout()
             fig.set_tight_layout(True)
             plt.savefig(path, dpi=75)
@@ -228,13 +245,13 @@ def doFitPlots(args, df0):
 
     df = (
         df0[df0['countriesAndTerritories'].isin(args.countries)]
-        .filter(['cases', 'dateRep', 'deaths'])
+        .filter(['cases_weekly', 'dateRep', 'deaths'])
         .groupby('dateRep').sum())
     print(df.tail(1))
 
     # Exclude the most recent data point, which does not capture all new cases.
     # xConfCasesCumToday = list(range(len(yConfCasesCumToday)))
-    yConfCasesCumYesterday = np.delete(df['cases'].values.cumsum(), -1)
+    yConfCasesCumYesterday = np.delete(df['cases_weekly'].values.cumsum(), -1)
     xConfCasesCumYesterday = list(range(len(yConfCasesCumYesterday)))
 
     dayFirstCase = yConfCasesCumYesterday.tolist().count(0)
@@ -253,8 +270,8 @@ def doFitPlots(args, df0):
     ]) & set(args.countries)) == 0:  # Singapore 187
         print('Insufficient cumulated cases (n={}) to carry out fitting.'.format(df['cases'].values.sum()))
         x = df.index.strftime('%Y-%m-%d').values
-        y = df['cases'].values.cumsum()
-        z = df['deaths'].values.cumsum()
+        y = df['cases_weekly'].values.cumsum()
+        z = df['deaths_weekly'].values.cumsum()
         print('\n'.join('{}\t{}\t{}'.format(*t) for t in zip(x, y, z)))
         exit()
 
@@ -283,7 +300,7 @@ def doFitPlots(args, df0):
 
     colors = define_colors()
 
-    for k in ('cases', 'deaths'):
+    for k in ('cases_weekly', 'deaths_weekly'):
 
         plot_per_country(args, df, k, colors)
 
@@ -355,7 +372,7 @@ def plot_per_country(args, df, k, colors):
     colorNewCases = colors[1]
     colorErr = colors[2]
 
-    yCumYesterday = np.delete(df['cases'].values.cumsum(), -1)
+    yCumYesterday = np.delete(df['cases_weekly'].values.cumsum(), -1)
     xCumYesterday = list(range(len(yCumYesterday)))
     dayFirstCase = yCumYesterday.tolist().count(0)
 
@@ -383,8 +400,8 @@ def plot_per_country(args, df, k, colors):
 
         # At least a number of cases must have been confirmed.
         max(yCumYesterday) > 1000,
-        )
-    if all(booleans) or len(set((
+        )    
+    if False and (all(booleans) or len(set((
         'United States of America',
         'United Kingdom',
         'Germany',
@@ -393,7 +410,7 @@ def plot_per_country(args, df, k, colors):
         'France',
         'Japan',
         'Peru',
-        )) & set(args.countries)) > 1:
+        )) & set(args.countries)) > 1):
         yFit = np.delete(df[k].values.cumsum(), -1)
         xFit = list(range(len(yFit)))
         tFit = fit(args, df, xFit, yFit)
@@ -423,7 +440,7 @@ def plot_per_country(args, df, k, colors):
             tFit = None
 
     plt.xlabel('Days')
-    plt.ylabel(k[0].upper() + k[1:])
+    plt.ylabel(k[0].upper() + k[1:].replace('_', ' '))
 
     if tFit is not None:
         xFit = list(range(2 * len(yCumYesterday)))
@@ -483,17 +500,18 @@ def plot_per_country(args, df, k, colors):
     # except KeyError:
     #     pass
     title += ', {}'.format(args.dateToday)
-    title += '\nCases today={}, Deaths today={}'.format(
-        df['cases'].values[-1],
-        df['deaths'].values[-1],
+    print(df.columns)
+    title += '\nCases this week={}, Deaths this week={}'.format(
+        df['cases_weekly'].values[-1],
+        df['deaths_weekly'].values[-1],
         )
     if tFit is not None:
         title += '\nCalculated cumulated {}={:d}, midpoint={:d}, steepness={:.2f}'.format(
             k, int(popt[0]), int(popt[2]), popt[1])
     title += '\nCurrent day={}'.format(len(df))
     title += ', Day of first case={}'.format(dayFirstCase)
-    title += ', Total confirmed cases={}'.format(max(df['cases'].values.cumsum()))
-    title += ', Total confirmed deaths={}'.format(int(max(df['deaths'].values.cumsum())))
+    title += ', Total confirmed cases={}'.format(max(df['cases_weekly'].values.cumsum()))
+    title += ', Total confirmed deaths={}'.format(int(max(df['deaths_weekly'].values.cumsum())))
     plt.title(title, fontsize='x-small')
     plt.legend()
     # plt.yscale('log')
@@ -522,7 +540,7 @@ def plot_per_country(args, df, k, colors):
         s += '<td>{}</td>'.format(int(df['deaths'].values.sum()))
         s += '<td><a href="days100_deaths_perCapitaFalse_{}.png"><img src="days100_deaths_perCapitaFalse_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
         # s += '<td><a href="plot_bar_deaths_{}.png"><img src="plot_bar_deaths_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
-        s += '<td><a href="plot_bar_cases_{}.png"><img src="plot_bar_cases_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
+        s += '<td><a href="plot_bar_{}.png"><img src="plot_bar_cases_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
         s += '<td>{:.1f}</td>'.format(100 * df['deaths'].values.sum() / df['cases'].values.sum())
         s += '<td>{}</td>'.format(df['cases'].values[-1])
         s += '<td>{}</td>'.format(df['deaths'].values[-1])
@@ -605,9 +623,9 @@ def doScatterPlots(args, df0):
             plt.xscale('log')
             plt.yscale('log')
             plt.xlabel('Population size')    
-            plt.ylabel(k[0].upper() + k[1:])    
+            plt.ylabel(k[0].upper() + k[1:].replace('_', ' '))    
             plt.legend(prop={'size': 6})
-            plt.title(region + '\n' + k[0].upper() + k[1:])
+            plt.title(region + '\n' + k[0].upper() + k[1:].replace('_', ' '))
             # plt.label()
             path = 'scatter_{}_{}.png'.format(region, k)
             plt.savefig(path, dpi=75)
@@ -627,12 +645,15 @@ def doLinePlots(args, df0, key_geo, comparison=True):
         region = key_geo
 
     for perCapita in (True, False,):
-        for k, limSum in (('cases', 20000), ('deaths', 500)):
+        # for k, limSum in (('cases_weekly', 20000), ('deaths_weekly', 500)):
+        for k in ('cases', 'deaths'):
             print('line', key_geo, perCapita, k)
 
             path = 'days100_{}_perCapita{}_{}.png'.format(k, perCapita, key_geo.replace(' ', '_'))
             if os.path.isfile(path):
                 continue
+
+            k += '_weekly'
 
             d = {True: [], False: []}
             # for country in df0['countriesAndTerritories'].unique():
@@ -686,7 +707,7 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                 # print(country, df[k].sum())
                 # print(country, df[k].sum())
                 if perCapita is False:
-                    lim = {'cases': 100, 'deaths': 10}[k]
+                    lim = {'cases_weekly': 1000, 'deaths_weekly': 100}[k]
                     y = df[k].cumsum()[df[k].cumsum() > lim].values
                 else:
                     lim = 1
@@ -756,18 +777,22 @@ def doLinePlots(args, df0, key_geo, comparison=True):
                 textPerCapita = ' per 1 million capita'
             else:
                 textPerCapita = ''
+
             if lim == 1:
-                kSingPlur = k.lower()[:-1]
+                kSingPlur = k.lower().split('_')[0][:-1]
             else:
-                kSingPlur = k.lower()
-            plt.xlabel('Days since {} confirmed {}{}'.format(lim, kSingPlur, textPerCapita))
-            plt.ylabel('Cumulated confirmed {}{}'.format(k.lower(), textPerCapita))
+                kSingPlur = k.lower().split('_')[0]
+
+            plt.xlabel('Weeks since {} confirmed {}{}'.format(lim, kSingPlur, textPerCapita))
+            plt.ylabel('Cumulated confirmed {}{}'.format(k.lower().split('_')[0], textPerCapita))
             if lim == 1:
                 textLim = '{}{}'.format(k.lower()[:-1], textPerCapita)
+                textLim = kSingPlur
             else:
                 textLim = '{}{}'.format(k.lower(), textPerCapita)
-            keyUpperCase = '{}{}'.format(k[0].upper(), k[1:])
-            plt.title('{}\n{}{} after first day with more than {} {}'.format(
+                textLim = kSingPlur
+            keyUpperCase = '{}{} {}'.format(k.split('_')[1][0].upper(), k.split('_')[1][1:], k.split('_')[0])
+            plt.title('{}\n{}{} after first week with more than {} {}'.format(
                 key_geo, keyUpperCase, textPerCapita, lim, textLim), fontsize='small')
             plt.savefig(path, dpi=75)
             plt.savefig(path[:-4] + '_thumb.png', dpi=25)
@@ -784,7 +809,7 @@ def fit(args, df, xCumYesterday, yCumYesterday):
     else:
         guessMidpoint = 40
     # Cases less than 5 percent of ConfCasesCum
-    if df['cases'].values[-2] / yCumYesterday[-1] < 0.05:
+    if df['cases_weekly'].values[-2] / yCumYesterday[-1] < 0.05:
         guessCasesMax = 1.5 * max(yCumYesterday)
     else:
         guessCasesMax = 10 * max(yCumYesterday)
@@ -864,7 +889,7 @@ def logistic(x, a, b, c, amax=None):
 
 def parseURL(url):
 
-    basename = os.path.basename(url)
+    basename = os.path.basename(url.rstrip('/'))
     if not os.path.isfile(basename):
         print(url)
         r = requests.get(url)
@@ -1213,46 +1238,57 @@ def parseArgs():
         d_region2countries['WorldAll'] |= set(d_region2countries[region])
 
     d_region2countries['World1'] = set([
+        'EU',
         'United States of America',
+        'Brazil',
+        'India',
+        'Mexico',
+#        'Italy',
+        'United Kingdom',
+        'Iran',
+#        'Spain',
+        'Russia',
+        'Argentina',
+        'Colombia',
+        'Peru',
+        'South Africa',
+#        'Poland',
+        'Indonesia',
+
         # 'China',  # fake numbers?
         # 'Iran',  # fake numbers?
-        'India',
         # 'Singapore',
-        'Japan',
-        'Hong Kong',
         # 'Macao',
 
-        'EU',
         'Sweden',
         # 'Estonia',
-
-        # Non-EU Europe
-        'United Kingdom',
-
-        'Brazil',
-        'Mexico',
-        'Russia',
 
         ])
 
     d_region2countries['World2'] = set([
+        'Taiwan',
+        'Vietnam',
+        'Thailand',
+        'Singapore',
+        'New Zealand',
+        'South Korea',
+        'Malaysia',
+        'Japan',
+        'Australia',
+
         # 'China',  # fake numbers?
         # 'Iran',  # fake numbers?
         'South Korea',
         # 'Singapore',
-        'Taiwan',
         'Uruguay',
-        'Vietnam',
         'Australia',
-        'Israel',
-        'New Zealand',
-        'Malaysia',
-        'Hong Kong',
+#        'Israel',
         # 'Macao',
 
-        'Greece',
+#        'Greece',
         'Denmark',
-        'Austria',
+        'Sweden',
+#        'Austria',
         # 'Estonia',
 
         # Non-EU Europe
