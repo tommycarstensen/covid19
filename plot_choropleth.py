@@ -22,7 +22,9 @@ def main():
     df1, df2, df_owid = parse_data(args)
 
     df2['dateRep'] = pd.to_datetime(df2['dateRep'], format='%d/%m/%Y')
-    df0 = df2[['alpha3', 'dateRep', 'cases', 'deaths']].groupby(['alpha3', 'dateRep']).sum()
+    df0 = df2[[
+        'alpha3', 'dateRep', 'cases_weekly', 'deaths_weekly']].groupby([
+            'alpha3', 'dateRep']).sum()
 
     df1.rename(columns={'iso_a3': 'alpha3'}, inplace=True)
 
@@ -55,6 +57,7 @@ def main():
         'per week': {'cases': 'YlGnBu', 'deaths': 'PuBuGn'},
         }
     for period in ('per week', 'cumulated'):  # cumulated or weekly
+        print(period)
     # for period in ('', 'per week', ''):  # cumulated or weekly
 
         # Do groupby and sum for UK, Denmark (Denmark, Greenland, Faroe Islands) and others? I can't remember.
@@ -65,11 +68,13 @@ def main():
             df2 = df2.reset_index()
             # Fill intermittently missing data for each alpha3 group after resampling grouped dataframe.
             df2 = df2.set_index('dateRep').groupby('alpha3').resample('1D').ffill().reset_index(level='dateRep').reset_index(drop=True)
+            # df2 = df2.set_index('dateRep').groupby('alpha3').resample('1W').ffill().reset_index(level='dateRep').reset_index(drop=True)
         else:  # cumulative
             # Cumulated sum by country (alpha3).
             df2 = df0.groupby(level='alpha3').cumsum().reset_index()
             # Fill intermittently missing data for each alpha3 group after resampling grouped dataframe.
             df2 = df2.set_index('dateRep').groupby('alpha3').resample('1D').ffill().reset_index(level='dateRep').reset_index(drop=True)
+            # df2 = df2.set_index('dateRep').groupby('alpha3').resample('1W').ffill().reset_index(level='dateRep').reset_index(drop=True)
 
         # df = pd.merge(df1, df2, on=['alpha3'], how='left').fillna(value={'cases': 0, 'deaths': 0})
 
@@ -77,15 +82,17 @@ def main():
         # maxDateRep = max(df2['dateRep'].unique())
         # for boolLog in (False, True,):
         boolLog = True
-        for column in ('cases', 'deaths'):
-            cmap = cmaps[period][column]
+        for key in ('cases', 'deaths'):
+            column = key + '_weekly'
+            print(column)
+            cmap = cmaps[period][key]
             # df = pd.merge(df1, df2[df2['dateRep'] == maxDateRep], on=['alpha3'], how='left').fillna(value={'cases': 0, 'deaths': 0})
             # zlim_max = max(10**6 * df[column] / df['pop_est'])
             # 
             valuemax = {
-            'cases': 10000,  # cum Iceland 5262.5; week Luxembourg 3.219995
-            'deaths': 1000,  # Spain 539.7; week Belgium 2.282052
-            }[column]
+                'cases': 10000,  # cum Iceland 5262.5; week Luxembourg 3.219995
+                'deaths': 1000,  # Spain 539.7; week Belgium 2.282052
+                }[key]
                 # ax.clim(0, 100)
             # for cmap in ('OrRd', 'YlGn'):
             # import matplotlib as mpl
@@ -98,6 +105,8 @@ def main():
             paths = []
             dateToday = max(df2['dateRep'])
             for DateRep in sorted(df2['dateRep'].unique()):
+                # if (dateToday - DateRep).days % 14 != 0:
+                #     continue
                 if dateToday.weekday() != pd.to_datetime(DateRep).weekday():
                     continue
                 try:
@@ -105,21 +114,26 @@ def main():
                 except ValueError:
                     continue
                 print(cmap, column, dateString)
-                df = pd.merge(df1, df2[df2['dateRep'] == DateRep], on=['alpha3'], how='left').fillna(value={'cases': 0, 'deaths': 0})
+                df = pd.merge(
+                    df1, df2[df2['dateRep'] == DateRep],
+                    on=['alpha3'], how='left'
+                    ).fillna(value={'cases': 0, 'deaths': 0})
                 if boolLog is True:
-                    df['proportion'] = np.log10(10**6 * df[column] / df['pop_est'])
+                    df['proportion'] = np.log10(
+                        10**6 * df[column] / df['pop_est'])
                     df.loc[df['proportion'] == -math.inf, 'proportion'] = None
                     vmax = int(math.log10(valuemax))
                     vmin = {
                         'cumulated': {'cases': -2, 'deaths': -3},
                         'per week': {'cases': -2, 'deaths': -3},  # cases India -3.107866, deaths China -2.83863
-                        }[period][column]
-                    label = 'log10 of {} per 1 million'.format(column)
+                        }[period][key]
+                    label = 'log10 of {} per 1 million'.format(key)
                 else:
                     df['proportion'] = 10**6 * df[column] / df['pop_est']
                     vmin = 0
-                    vmax = 10 ** math.ceil(math.log10(max(0.001, max(df['proportion']))))
-                    label = '{} per 1 million'.format(column)
+                    vmax = 10 ** math.ceil(math.log10(max(
+                        0.001, max(df['proportion']))))
+                    label = '{} per 1 million'.format(key)
                 # df = df[df['proportion'] != -math.inf]
                 # df_plot['proportion'].multiply(10**6)  # per million
                 # https://geopandas.org/mapping.html
@@ -127,7 +141,7 @@ def main():
                 ax.axis('off')
                 ax.set_title(
                     'CoViD19 {} {}\n{}'.format(
-                        column, period, dateString), fontsize='large')
+                        key, period, dateString), fontsize='large')
                 # vmax = int(math.log10(max(0.001, max(df['proportion']))))
                 df.plot(
                     column='proportion',
@@ -156,7 +170,7 @@ def main():
 
                 # plt.tight_layout()
                 path = 'covid19_{}{}_{}_log{}_{}.png'.format(
-                    column, period.replace(' ',''), cmap, boolLog, dateString,
+                    key, period.replace(' ',''), cmap, boolLog, dateString,
                     )
                 # fig.colorbar()
                 plt.savefig(path, dpi=80)
@@ -166,9 +180,9 @@ def main():
                 print(path)
 
             shutil.copyfile(path, 'covid19_{}{}_{}_log{}.png'.format(
-                    column, period.replace(' ',''), cmap, boolLog))
+                    key, period.replace(' ',''), cmap, boolLog))
             path_gif = 'covid19_{}{}_{}_log{}.gif'.format(
-                column, period.replace(' ', ''), cmap, boolLog)
+                key, period.replace(' ', ''), cmap, boolLog)
             # Do custom frame lengths with imagemagick.
             command = 'convert -delay 50 {} -delay 400 {} {}'.format(
                 ' '.join(paths[:-1]), paths[-1], path_gif)
@@ -213,7 +227,9 @@ def plot_owid(df, df_geo):
     df = df.set_index('date').groupby('alpha3').resample('1D').ffill()
     df = df.reset_index(level='alpha3', drop=True)
     # https://stackoverflow.com/a/48027252/778533
-    df['total_tests_per_thousand'] = df[['total_tests_per_thousand', 'alpha3']].groupby('alpha3').apply(pd.DataFrame.interpolate)
+    print('interpolating')
+    df['total_tests_per_thousand'] = df[['total_tests_per_thousand', 'alpha3']].groupby('alpha3').transform(pd.DataFrame.interpolate)
+    print('interpolated')
 
     # Convert cumulative sum to daily values *after* filling missing values.
     # For example Australia blank on 2nd of March.
@@ -237,6 +253,7 @@ def plot_owid(df, df_geo):
         'total_tests_per_thousand': [],
         }
     for date in sorted(df_owid['date'].unique()):
+        print(date)
         if dateMax.weekday() != pd.to_datetime(date).weekday():
             continue
         dateString = pd.to_datetime(date).strftime('%Y-%m-%d')
