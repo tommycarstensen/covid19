@@ -1,32 +1,70 @@
-<html>
-    <head>
-        <title>COVID-19 / 2019-nCoV</title>
-        <meta charset="UTF-8">
-        <meta name="twitter:card" content="https://www.tommycarstensen.com/covid19/COVID19_sigmoid_cases_EU.png">
-        <meta name="twitter:site" content="@tommycarstensen">
-        <meta name="twitter:creator" content="@tommycarstensen">
-        <meta name="twitter:title" content="COVID19 logistic function fitting">
-        <meta name="twitter:description" content="COVID19 logistic function fitting.">
-        <meta name="twitter:image" content="https://www.tommycarstensen.com/covid19/COVID19_sigmoid_cases_EU.png">
-        <link rel="shortcut icon" type="image/png" href="https://www.tommycarstensen.com/covid19/COVID19_sigmoid_cases_EU.png"/>
-        <meta name="thumbnail" content="https://www.tommycarstensen.com/covid19/COVID19_sigmoid_cases_EU.png"/>
-
-
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-163885543-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'UA-163885543-1');
-</script>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>COVID-19 / 2019-nCoV</title>
+<meta name="description" content="An archive of a COVID-19 tracker kept from March 2020 to January 2021: maps, aligned time series and a sortable table of cases and deaths by country, from ECDC data.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@tommycarstensen">
+<meta name="twitter:creator" content="@tommycarstensen">
+<meta name="twitter:title" content="COVID-19 tracker, 2020-2021 (archive)">
+<meta name="twitter:description" content="Maps, aligned time series and a sortable table of COVID-19 cases and deaths by country, from ECDC data to January 2021.">
+<meta name="twitter:image" content="https://tommycarstensen.com/covid19/days100_cases_perCapitaFalse_EU.png">
 
 <!--https://www.w3schools.com/howto/howto_js_sort_table.asp-->
 <script src="sortable.js"></script>
 
 <style>
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: #111;
+  background: #fff;
+  margin: 0 auto;
+  padding: 0 16px 32px;
+  max-width: 1500px;
+}
+
+img {
+  max-width: 100%;
+}
+
+img:not([height]) {
+  height: auto;
+}
+
+iframe {
+  max-width: 100%;
+}
+
+iframe[src*="youtube.com"] {
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+img.flag {
+  border: 1px solid #999;
+  vertical-align: middle;
+}
+
+.archive-note {
+  background: #fff8e1;
+  border-left: 4px solid #e0a800;
+  padding: 12px 16px;
+  margin: 16px 0;
+  max-width: 60em;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.credits {
+  font-size: small;
+  color: #555;
+  max-width: 60em;
+}
+
 table {
   border-spacing: 0;
   width: 100%;
@@ -47,6 +85,7 @@ tr:nth-child(even) {
 
 <body>
 
+<p class="archive-note">This page is an archive. It tracked COVID-19 from March 2020 to January 2021 with data from the European Centre for Disease Prevention and Control (ECDC) and is no longer updated; the table's counts run to mid-January 2021. In October 2026 the charts of 63 countries in the table, which had gone missing, were redrawn from the last ECDC file kept, which ends on 10 January 2021, and images that no longer loaded were removed.</p>
 
 
 
@@ -93,208 +132,123 @@ https://www.reuters.com/article/us-china-health-italy/coronavirus-outbreak-grows
 
 <h1>CoViD19 aligned time series data</h1>
 
-<img src="days100_cases_perCapitaFalse_World1.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_World1.png?dummy=2021-11-06">
+<img src="days100_cases_perCapitaFalse_World1.png">
+<img src="days100_deaths_perCapitaFalse_World1.png">
 <br>
-<img src="days100_cases_perCapitaFalse_World2.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_World2.png?dummy=2021-11-06">
+<img src="days100_cases_perCapitaFalse_World2.png">
+<img src="days100_deaths_perCapitaFalse_World2.png">
 <br>
-<!--         <img src="days100_cases_perCapitaTrue_World.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaTrue_World.png?dummy=2021-11-06">
-<br>
--->
-<img src="plot_bubble_G7.png?dummy=2021-11-06" width="800">
+
+<img src="plot_bubble_G7.png" width="800">
 
 <h3>
     <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_States">
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/a4/Flag_of_the_United_States.svg/46px-Flag_of_the_United_States.svg.png" border="1"> United States of America (USA)
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/COVID-19_outbreak_USA_per_capita_cases_map.svg/440px-COVID-19_outbreak_USA_per_capita_cases_map.svg.png" height="75">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/COVID-19_Outbreak_Cases_in_the_United_States_by_counties_%28Confirmed%29.svg/360px-COVID-19_Outbreak_Cases_in_the_United_States_by_counties_%28Confirmed%29.svg.png" height="75">
-    </a>
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_California">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/COVID-19_Prevalence_in_California_by_county.svg/440px-COVID-19_Prevalence_in_California_by_county.svg.png" height="75">
-    </a>
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_New_York_(state)">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/COVID-19_outbreak_New_York_per_capita_cases_map.svg/440px-COVID-19_outbreak_New_York_per_capita_cases_map.svg.png" height="75">
-    </a>
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_New_York_City">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/COVID-19_outbreak_New_York_CSA_per_capita_cases_map.svg/440px-COVID-19_outbreak_New_York_CSA_per_capita_cases_map.svg.png" height="75">
-    </a>
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_New_Jersey">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/COVID_19_cases_in_New_Jersey_by_County.svg/440px-COVID_19_cases_in_New_Jersey_by_County.svg.png" height="75">
-    </a>
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Pennsylvania">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/COVID-19_outbreak_Pennsylvania_per_capita_cases_map.svg/600px-COVID-19_outbreak_Pennsylvania_per_capita_cases_map.svg.png" height="75">
-    </a>
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Connecticut">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/COVID-19_Cases_in_Connecticut_by_counties.png/480px-COVID-19_Cases_in_Connecticut_by_counties.png" height="75">
-    </a>
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Louisiana">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Number_of_COVID-19_cases_in_Louisiana_by_parish.svg/440px-Number_of_COVID-19_cases_in_Louisiana_by_parish.svg.png" height="75">
-    </a>
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Florida">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/COVID-19_Cases_in_Florida_by_counties.svg/440px-COVID-19_Cases_in_Florida_by_counties.svg.png" height="75">
+        <img src="img/Flag_of_the_United_States.svg.png" height="30" alt="" class="flag"> United States of America (USA)
+
     </a>
 </h3>
-<!-- <img src="COVID19_sigmoid_cases_United_States_of_America.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_United_States_of_America.png?dummy=2021-11-06">
-<br>
- -->
- <img src="days100_cases_perCapitaFalse_United_States_of_America.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_United_States_of_America.png?dummy=2021-11-06">
+
+ <img src="days100_cases_perCapitaFalse_United_States_of_America.png">
+<img src="days100_deaths_perCapitaFalse_United_States_of_America.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Flag_of_Europe.svg/45px-Flag_of_Europe.svg.png" border="1"> European Union (EU) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Red_COVID-19_Outbreak_Cases_per_capita_in_Europe.svg/440px-Red_COVID-19_Outbreak_Cases_per_capita_in_Europe.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_EU.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_EU.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_EU.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_EU.png?dummy=2021-11-06">
-<br>
-<img src="scatter_EU_cases.png?dummy=2021-11-06">
-<img src="scatter_EU_deaths.png?dummy=2021-11-06">
-<br>
-<img src="plot_bubble_EU.png?dummy=2021-11-06" width="800">
-<br>
-<img src="plot_heat_cases_EU.png?dummy=2021-11-06">
-<img src="plot_heat_deaths_EU.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Europe.svg.png" height="30" alt="" class="flag"> European Union (EU) </h3>
 
+<img src="days100_cases_perCapitaFalse_EU.png">
+<img src="days100_deaths_perCapitaFalse_EU.png">
+<br>
+<img src="scatter_EU_cases.png">
+<img src="scatter_EU_deaths.png">
+<br>
+<img src="plot_bubble_EU.png" width="800">
+<br>
+<img src="plot_heat_cases_EU.png">
+<img src="plot_heat_deaths_EU.png">
 
+<h3><img src="img/Europe_orthographic_Caucasus_Urals_boundary.svg.png" width="45" alt="" class="flag"> Europe</h3>
+<img src="days100_cases_perCapitaFalse_Europe.png">
+<img src="days100_deaths_perCapitaFalse_Europe.png">
+<br>
+<img src="plot_bubble_Europe.png" width="800">
+<br>
+<img src="plot_heat_cases_Europe.png">
+<img src="plot_heat_deaths_Europe.png">
 
-
-<!-- Europe -->
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Europe_orthographic_Caucasus_Urals_boundary.svg/440px-Europe_orthographic_Caucasus_Urals_boundary.svg.png" border="1" width="45"> Europe</h3>
-<img src="days100_cases_perCapitaFalse_Europe.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Europe.png?dummy=2021-11-06">
+<h3><img src="img/Americas_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Americas</h3>
+<img src="days100_cases_perCapitaFalse_Americas.png">
+<img src="days100_deaths_perCapitaFalse_Americas.png">
 <br>
-<img src="plot_bubble_Europe.png?dummy=2021-11-06" width="800">
+<img src="plot_bubble_Americas.png" width="800">
 <br>
-<img src="plot_heat_cases_Europe.png?dummy=2021-11-06">
-<img src="plot_heat_deaths_Europe.png?dummy=2021-11-06">
-
-
-<!-- Americas -->
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Americas_%28orthographic_projection%29.svg/440px-Americas_%28orthographic_projection%29.svg.png" border="1" width="45"> Americas</h3>
-<img src="days100_cases_perCapitaFalse_Americas.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Americas.png?dummy=2021-11-06">
+<img src="plot_heat_cases_Americas.png">
+<img src="plot_heat_deaths_Americas.png">
 <br>
-<img src="plot_bubble_Americas.png?dummy=2021-11-06" width="800">
+<img src="days100_cases_perCapitaFalse_AmericaNorth.png">
+<img src="days100_deaths_perCapitaFalse_AmericaNorth.png">
 <br>
-<img src="plot_heat_cases_Americas.png?dummy=2021-11-06">
-<img src="plot_heat_deaths_Americas.png?dummy=2021-11-06">
-<br>
-<img src="days100_cases_perCapitaFalse_AmericaNorth.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_AmericaNorth.png?dummy=2021-11-06">
-<br>
-<img src="days100_cases_perCapitaFalse_AmericaSouthExVenezuela.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_AmericaSouthExVenezuela.png?dummy=2021-11-06">
-<br>
-<!-- <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Latin_America_%28orthographic_projection%29.svg/440px-Latin_America_%28orthographic_projection%29.svg.png" border="1" width="45"> Latin America ex Venezuela</h3> -->
-<!-- <img src="COVID19_sigmoid_cases_LatinAmericaExVenezuela.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_LatinAmericaExVenezuela.png?dummy=2021-11-06">
-<br> -->
-<!-- <img src="days100_cases_perCapitaFalse_LatinAmericaExVenezuela.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_LatinAmericaExVenezuela.png?dummy=2021-11-06">
-<br> -->
-<img src="plot_heat_cases_AmericaSouthExVenezuela.png?dummy=2021-11-06">
-<img src="plot_heat_deaths_AmericaSouthExVenezuela.png?dummy=2021-11-06">
-
-
-<!-- Asia -->
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Asia_%28orthographic_projection%29.svg/440px-Asia_%28orthographic_projection%29.svg.png" border="1" width="45"> Asia ex China</h3>
-<!-- <img src="COVID19_sigmoid_cases_AsiaExChina.png?dummy=2021-11-06"> -->
-<img src="days100_cases_perCapitaFalse_AsiaExChina.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_AsiaExChina.png?dummy=2021-11-06">
-<img src="plot_bubble_Asia.png?dummy=2021-11-06" width="800">
-<br>
-<img src="plot_heat_cases_Asia.png?dummy=2021-11-06" width="800">
-<img src="plot_heat_deaths_Asia.png?dummy=2021-11-06" width="800">
-<br>
-<!-- <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Southeast_Asia_%28orthographic_projection%29.svg/440px-Southeast_Asia_%28orthographic_projection%29.svg.png" border="1" width="45"> South East Asia</h3> -->
-<img src="days100_cases_perCapitaFalse_AsiaSouthEast.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_AsiaSouthEast.png?dummy=2021-11-06">
-<br>
-<!-- <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/East_Asia_%28orthographic_projection%29.svg/160px-East_Asia_%28orthographic_projection%29.svg.png" border="1" width="45"> East Asia excluding China <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/COVID-19_Outbreak_Cases_in_Asia.svg/440px-COVID-19_Outbreak_Cases_in_Asia.svg.png" height="75"></h3> -->
-<!-- <img src="COVID19_sigmoid_cases_AsiaEastExChina.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_AsiaEastExChina.png?dummy=2021-11-06">
-<br>
- -->
- <img src="days100_cases_perCapitaFalse_AsiaEastExChina.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_AsiaEastExChina.png?dummy=2021-11-06">
-<br>
-<!-- <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Western_Asia_%28orthographic_projection%29.svg/440px-Western_Asia_%28orthographic_projection%29.svg.png" border="1" width="45"> Western Asia excluding Iran</h3> -->
-<!-- <img src="COVID19_sigmoid_cases_AsiaWesternExIran.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_AsiaWesternExIran.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_AsiaWesternExIran.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_AsiaWesternExIran.png?dummy=2021-11-06">
+<img src="days100_cases_perCapitaFalse_AmericaSouthExVenezuela.png">
+<img src="days100_deaths_perCapitaFalse_AmericaSouthExVenezuela.png">
 <br>
 
+<img src="plot_heat_cases_AmericaSouthExVenezuela.png">
+<img src="plot_heat_deaths_AmericaSouthExVenezuela.png">
 
-<!-- Africa -->
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Africa_%28orthographic_projection%29.svg/440px-Africa_%28orthographic_projection%29.svg.png" border="1" width="45"> Africa</h3>
-<!-- <img src="COVID19_sigmoid_cases_Africa.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Africa.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Africa.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Africa.png?dummy=2021-11-06">
+<h3><img src="img/Asia_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Asia ex China</h3>
+
+<img src="days100_cases_perCapitaFalse_AsiaExChina.png">
+<img src="days100_deaths_perCapitaFalse_AsiaExChina.png">
+<img src="plot_bubble_Asia.png" width="800">
 <br>
-<img src="plot_bubble_Africa.png?dummy=2021-11-06" width="800">
-<img src="plot_heat_cases_Africa.png?dummy=2021-11-06">
-<img src="plot_heat_deaths_Africa.png?dummy=2021-11-06">
-
-<!--         <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Asia_%28orthographic_projection%29.svg/440px-Asia_%28orthographic_projection%29.svg.png" border="1" width="45"> Asia</h3>
-<img src="COVID19_sigmoid_Asia.png?dummy=2021-11-06">
-<img src="days100_cases_perCapitaTrue_Asia.png?dummy=2021-11-06">
+<img src="plot_heat_cases_Asia.png" width="800">
+<img src="plot_heat_deaths_Asia.png" width="800">
 <br>
--->
 
-
-<!-- Oceania -->
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Oceania_%28orthographic_projection%29.svg/400px-Oceania_%28orthographic_projection%29.svg.png" border="1" width="45"> Oceania</h3>
-<!-- <img src="COVID19_sigmoid_cases_Oceania.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Oceania.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Oceania.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Oceania.png?dummy=2021-11-06">
+<img src="days100_cases_perCapitaFalse_AsiaSouthEast.png">
+<img src="days100_deaths_perCapitaFalse_AsiaSouthEast.png">
 <br>
-<img src="plot_bubble_Oceania.png?dummy=2021-11-06" width="800">
+
+ <img src="days100_cases_perCapitaFalse_AsiaEastExChina.png">
+<img src="days100_deaths_perCapitaFalse_AsiaEastExChina.png">
 <br>
-<img src="plot_heat_cases_Oceania.png?dummy=2021-11-06">
-<img src="plot_heat_deaths_Oceania.png?dummy=2021-11-06">
 
-
-<!-- Nordic -->
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Nordic_countries_orthographic.svg/440px-Nordic_countries_orthographic.svg.png" border="1" width="45">Northern Europe (Nordic countries)</h3>
-<!-- <img src="COVID19_sigmoid_cases_Nordic.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Nordic.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Nordic.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Nordic.png?dummy=2021-11-06">
+<img src="days100_cases_perCapitaFalse_AsiaWesternExIran.png">
+<img src="days100_deaths_perCapitaFalse_AsiaWesternExIran.png">
 <br>
-<img src="plot_bubble_Nordic.png?dummy=2021-11-06" width="800">
+
+<h3><img src="img/Africa_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Africa</h3>
+
+<img src="days100_cases_perCapitaFalse_Africa.png">
+<img src="days100_deaths_perCapitaFalse_Africa.png">
 <br>
-<img src="plot_heat_cases_Nordic.png?dummy=2021-11-06">
-<img src="plot_heat_deaths_Nordic.png?dummy=2021-11-06">
+<img src="plot_bubble_Africa.png" width="800">
+<img src="plot_heat_cases_Africa.png">
+<img src="plot_heat_deaths_Africa.png">
 
-<!-- <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Mediterranean_Sea_16.61811E_38.99124N.jpg/560px-Mediterranean_Sea_16.61811E_38.99124N.jpg" border="1" width="45">Southern/Mediterranean Europe</h3>
-<img src="COVID19_sigmoid_cases_EuropeMediterranean.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_EuropeMediterranean.png?dummy=2021-11-06">
+<h3><img src="img/Oceania_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Oceania</h3>
+
+<img src="days100_cases_perCapitaFalse_Oceania.png">
+<img src="days100_deaths_perCapitaFalse_Oceania.png">
 <br>
-<img src="days100_cases_perCapitaFalse_EuropeMediterranean.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_EuropeMediterranean.png?dummy=2021-11-06">
+<img src="plot_bubble_Oceania.png" width="800">
 <br>
- -->
+<img src="plot_heat_cases_Oceania.png">
+<img src="plot_heat_deaths_Oceania.png">
 
+<h3><img src="img/Nordic_countries_orthographic.svg.png" width="45" alt="" class="flag">Northern Europe (Nordic countries)</h3>
 
-<!-- <h1>CoViD19 logistic function fitting</h1>
-
-The figures below with the sigmoid curves show the cumulated confirmed COVID19 cases in various geographic segments fitted to a <a href="https://en.wikipedia.org/wiki/Logistic_function">logistic function</a> in order to determine 1) midpoint (day with peak number of new cases), 2) future maximum number of cumulated cases and 3) steepness of the curve. When a larger percentage of the population is tested, then the data points and hence the data fitting becomes more reliable. The quality of the fitted models is highly dependent on the quality of the input data. If the data cannot be fitted, then it could among other things be a sign of 1) incorrect data due to insufficient testing, 2) too few cases, 3) government intervention/quarantines preventing the natural propagation of the virus, 1) deliberately falsified data. The code to generate the colorblind optimized plots below is available on <a href="https://gist.github.com/tommycarstensen/fa5be3c3ba94e1c53dfe12cb67bdfe01">GitHub</a>. The data was downloaded from the European Center for Disease Prevention and Control (ECDC) <a href="https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide">here</a>. Figures for China are not included, as the validity of the data has been questioned. -->
+<img src="days100_cases_perCapitaFalse_Nordic.png">
+<img src="days100_deaths_perCapitaFalse_Nordic.png">
+<br>
+<img src="plot_bubble_Nordic.png" width="800">
+<br>
+<img src="plot_heat_cases_Nordic.png">
+<img src="plot_heat_deaths_Nordic.png">
 
 <h1>Tabulation</h1> 
 
 Click a column header to sort by that column header.
 <br>
+<div class="table-wrap">
 <table id="myTable2">
     <tr>
         <th onclick="sortTable(0)">Country</th>
@@ -401,269 +355,163 @@ Click a column header to sort by that column header.
 <tr><td>Iran</td><td>78.0</td><td>Asia</td><td>1330411</td><td><a href="days100_cases_perCapitaFalse_Iran.png"><img src="days100_cases_perCapitaFalse_Iran_thumb.png" height="45"></a></td><td>56803</td><td><a href="days100_deaths_perCapitaFalse_Iran.png"><img src="days100_deaths_perCapitaFalse_Iran_thumb.png" height="45"></a></td><td><a href="plot_bar_Iran.png"><img src="plot_bar_cases_Iran_thumb.png" height="45"></a></td><td>4.3</td><td>44005</td><td>632</td><td>17063.9</td><td>728.6</td><td>107.3</td></tr>
 <tr><td>Dominican Republic</td><td>10.4</td><td>Americas</td><td>194966</td><td><a href="days100_cases_perCapitaFalse_Dominican_Republic.png"><img src="days100_cases_perCapitaFalse_Dominican_Republic_thumb.png" height="45"></a></td><td>2448</td><td><a href="days100_deaths_perCapitaFalse_Dominican_Republic.png"><img src="days100_deaths_perCapitaFalse_Dominican_Republic_thumb.png" height="45"></a></td><td><a href="plot_bar_Dominican_Republic.png"><img src="plot_bar_cases_Dominican_Republic_thumb.png" height="45"></a></td><td>1.3</td><td>11684</td><td>21</td><td>18786.0</td><td>235.9</td><td>92.5</td></tr>
 
-
 </table>
+</div>
 <br>
-
-<!--<br><a href="Asia.htm">Asia</a>-->
-<!--<br><a href="Europe.htm">Europe</a>-->
-<!--<br><a href="AmericaNorth.htm">North America</a>-->
-<!--<br><a href="AmericaSouth.htm">South America</a>-->
-<!--<br><a href="Oceania.htm">Oceania</a>-->
-<!--<br><a href="Africa.htm">Africa</a>-->
-
-<!--         <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flag_of_the_People%27s_Republic_of_China.svg/45px-Flag_of_the_People%27s_Republic_of_China.svg.png" border="1"> China / 中国</h3>
-<img src="COVID19_sigmoid_cases_China.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_China.png?dummy=2021-11-06">
-<br> -->
 
 <hr>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Flag_of_Australia_%28converted%29.svg/46px-Flag_of_Australia_%28converted%29.svg.png" border="1"> Australia <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/81/COVID-19_outbreak_Australia_per_capita_cases_map.svg/440px-COVID-19_outbreak_Australia_per_capita_cases_map.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Australia.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Australia.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Australia.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Australia.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Australia_(converted).svg.png" height="30" alt="" class="flag"> Australia </h3>
+
+<img src="days100_cases_perCapitaFalse_Australia.png">
+<img src="days100_deaths_perCapitaFalse_Australia.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_Austria.svg/45px-Flag_of_Austria.svg.png" border="1"> Austria <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Covid-19_-_Austria_Cases_per_100k_-_1403.svg/440px-Covid-19_-_Austria_Cases_per_100k_-_1403.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Austria.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Austria.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Austria.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Austria.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Austria.svg.png" height="30" alt="" class="flag"> Austria </h3>
+
+<img src="days100_cases_perCapitaFalse_Austria.png">
+<img src="days100_deaths_perCapitaFalse_Austria.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Flag_of_Belgium_%28civil%29.svg/45px-Flag_of_Belgium_%28civil%29.svg.png" border="1"> Belgium / Belgique <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Spread_of_COVID19_in_Belgium.png/440px-Spread_of_COVID19_in_Belgium.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Belgium.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Belgium.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Belgium.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Belgium.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Belgium_(civil).svg.png" height="30" alt="" class="flag"> Belgium / Belgique </h3>
+
+<img src="days100_cases_perCapitaFalse_Belgium.png">
+<img src="days100_deaths_perCapitaFalse_Belgium.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Flag_of_Brazil.svg/43px-Flag_of_Brazil.svg.png" border="1"> Brazil / Brasil <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/COVID-19_Outbreak_Cases_in_Brazil.svg/440px-COVID-19_Outbreak_Cases_in_Brazil.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Brazil.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Brazil.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Brazil.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Brazil.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Brazil.svg.png" height="30" alt="" class="flag"> Brazil / Brasil </h3>
+
+<img src="days100_cases_perCapitaFalse_Brazil.png">
+<img src="days100_deaths_perCapitaFalse_Brazil.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Canada_%28Pantone%29.svg/46px-Flag_of_Canada_%28Pantone%29.svg.png" border="1"> Canada / Canada <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/COVID-19_outbreak_Canada_per_capita_cases_map.svg/712px-COVID-19_outbreak_Canada_per_capita_cases_map.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Canada.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Canada.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Canada.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Canada.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Canada_(Pantone).svg.png" height="30" alt="" class="flag"> Canada / Canada </h3>
+
+<img src="days100_cases_perCapitaFalse_Canada.png">
+<img src="days100_deaths_perCapitaFalse_Canada.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Flag_of_Denmark.svg/40px-Flag_of_Denmark.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Denmark">Denmark</a> / <a href="">Danmark</a> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/COVID-19_Outbreak_Cases_in_Denmark.svg/440px-COVID-19_Outbreak_Cases_in_Denmark.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Denmark.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Denmark.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Denmark.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Denmark.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Denmark.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Denmark">Denmark</a> / <a href="">Danmark</a> </h3>
+
+<img src="days100_cases_perCapitaFalse_Denmark.png">
+<img src="days100_deaths_perCapitaFalse_Denmark.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Flag_of_France.svg/45px-Flag_of_France.svg.png" border="1"> France / La France <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/COVID-19_outbreak_France_per_capita_cases_map.svg/440px-COVID-19_outbreak_France_per_capita_cases_map.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_France.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_France.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_France.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_France.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_France.svg.png" height="30" alt="" class="flag"> France / La France </h3>
+
+<img src="days100_cases_perCapitaFalse_France.png">
+<img src="days100_deaths_perCapitaFalse_France.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/b/ba/Flag_of_Germany.svg/46px-Flag_of_Germany.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Germany">Germany</a> / <a href="https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland">Deutschland</a> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/COVID-19_outbreak_Germany_per_capita_cases_map.svg/440px-COVID-19_outbreak_Germany_per_capita_cases_map.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Germany.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Germany.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Germany.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Germany.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Germany.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Germany">Germany</a> / <a href="https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland">Deutschland</a> </h3>
+
+<img src="days100_cases_perCapitaFalse_Germany.png">
+<img src="days100_deaths_perCapitaFalse_Germany.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/41/Flag_of_India.svg/45px-Flag_of_India.svg.png" border="1"> India / भारत <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ef/COVID-19_Outbreak_Cases_in_India.svg/440px-COVID-19_Outbreak_Cases_in_India.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_India.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_India.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_India.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_India.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_India.svg.png" height="30" alt="" class="flag"> India / भारत </h3>
+
+<img src="days100_cases_perCapitaFalse_India.png">
+<img src="days100_deaths_perCapitaFalse_India.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Flag_of_Indonesia.svg/45px-Flag_of_Indonesia.svg.png" border="1"> Indonesia / Republik Indonesia <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/COVID-19_Outbreak_Cases_in_Indonesia_%28Density%29.svg/440px-COVID-19_Outbreak_Cases_in_Indonesia_%28Density%29.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Indonesia.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Indonesia.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Indonesia.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Indonesia.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Indonesia.svg.png" height="30" alt="" class="flag"> Indonesia / Republik Indonesia </h3>
+
+<img src="days100_cases_perCapitaFalse_Indonesia.png">
+<img src="days100_deaths_perCapitaFalse_Indonesia.png">
 <br>
 
-<!--
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Flag_of_Iran.svg/46px-Flag_of_Iran.svg.png"> Iran / ایران <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/COVID-19_Outbreak_Cases_in_Iran_%28Density%29.svg/440px-COVID-19_Outbreak_Cases_in_Iran_%28Density%29.svg.png" height="75"></h3>
-<img src="COVID19_sigmoid_cases_Iran.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Iran.png?dummy=2021-11-06">
-<br>
-<img src="days100_cases_perCapitaFalse_Iran.png">
-<img src="days100_deaths_perCapitaFalse_Iran.png">
-<br>
- -->
+<h3><img src="img/Flag_of_Italy.svg.png" height="30" alt="" class="flag"> Italy / Italia </h3>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/0/03/Flag_of_Italy.svg/45px-Flag_of_Italy.svg.png" border="1"> Italy / Italia <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/COVID-19_Outbreak_Cases_in_Italy_%28Density%29.svg/440px-COVID-19_Outbreak_Cases_in_Italy_%28Density%29.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Italy.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Italy.png?dummy=2021-11-06">
-<br>
- -->
-<img src="days100_cases_perCapitaFalse_Italy.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Italy.png?dummy=2021-11-06">
+<img src="days100_cases_perCapitaFalse_Italy.png">
+<img src="days100_deaths_perCapitaFalse_Italy.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Flag_of_Japan.svg/45px-Flag_of_Japan.svg.png" border="1"> Japan / 日本 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/COVID-19_outbreak_Japan_per_capita_cases_map.svg/740px-COVID-19_outbreak_Japan_per_capita_cases_map.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Japan.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Japan.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Japan.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Japan.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Japan.svg.png" height="30" alt="" class="flag"> Japan / 日本 </h3>
+
+<img src="days100_cases_perCapitaFalse_Japan.png">
+<img src="days100_deaths_perCapitaFalse_Japan.png">
 <br>
 
 <h3>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Flag_of_Mexico.svg/46px-Flag_of_Mexico.svg.png" border="1">
+    <img src="img/Flag_of_Mexico.svg.png" height="30" alt="" class="flag">
     <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Mexico">Mexico</a> / <a href="https://es.wikipedia.org/wiki/Pandemia_de_enfermedad_por_coronavirus_de_2020_en_M%C3%A9xico">México</a>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/COVID-19_Outbreak_Cases_in_Mexico.svg/440px-COVID-19_Outbreak_Cases_in_Mexico.svg.png" height="75">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/COVID-19_Outbreak_Cases_in_Mexico_per_100%2C000_inhabitants.svg/400px-COVID-19_Outbreak_Cases_in_Mexico_per_100%2C000_inhabitants.svg.png" height="75">
+
 </h3>
-<!-- <img src="COVID19_sigmoid_cases_Mexico.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Mexico.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Mexico.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Mexico.png?dummy=2021-11-06">
+
+<img src="days100_cases_perCapitaFalse_Mexico.png">
+<img src="days100_deaths_perCapitaFalse_Mexico.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flag_of_the_Netherlands.svg/45px-Flag_of_the_Netherlands.svg.png" border="1"> Netherlands / Nederland <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/COVID-19_outbreak_the_Netherlands_per_capita_cases_map.svg/440px-COVID-19_outbreak_the_Netherlands_per_capita_cases_map.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Netherlands.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Netherlands.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Netherlands.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Netherlands.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_the_Netherlands.svg.png" height="30" alt="" class="flag"> Netherlands / Nederland </h3>
+
+<img src="days100_cases_perCapitaFalse_Netherlands.png">
+<img src="days100_deaths_perCapitaFalse_Netherlands.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Flag_of_New_Zealand.svg/46px-Flag_of_New_Zealand.svg.png" border="1"> New Zealand / New Zealand <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/COVID-19_Outbreak_Cases_in_New_Zealand_%28DHB_Totals%29.svg/440px-COVID-19_Outbreak_Cases_in_New_Zealand_%28DHB_Totals%29.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_New_Zealand.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_New_Zealand.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_New_Zealand.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_New_Zealand.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_New_Zealand.svg.png" height="30" alt="" class="flag"> New Zealand / New Zealand </h3>
+
+<img src="days100_cases_perCapitaFalse_New_Zealand.png">
+<img src="days100_deaths_perCapitaFalse_New_Zealand.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/41px-Flag_of_Norway.svg.png" border="1"> Norway / <a href="https://no.wikipedia.org/wiki/Norge_under_koronaviruspandemien_i_2020">Norge</a> <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/COVID-19_Outbreak_Cases_in_Norway_by_municipalities.png/440px-COVID-19_Outbreak_Cases_in_Norway_by_municipalities.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Norway.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Norway.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Norway.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Norway.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Norway.svg.png" height="30" alt="" class="flag"> Norway / <a href="https://no.wikipedia.org/wiki/Norge_under_koronaviruspandemien_i_2020">Norge</a> </h3>
+
+<img src="days100_cases_perCapitaFalse_Norway.png">
+<img src="days100_deaths_perCapitaFalse_Norway.png">
 <br>
-
-<!--<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Flag_of_Peru.svg/45px-Flag_of_Peru.svg.png" border="1"> Peru / Perú</h3>-->
-<!--<img src="COVID19_sigmoid_Peru.png?dummy=2021-11-06">-->
-<!--<br>-->
-
-<!--<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Flag_of_Poland.svg/46px-Flag_of_Poland.svg.png" border="1"> Poland / Polska</h3>-->
-<!--<img src="COVID19_sigmoid_Poland.png?dummy=2021-11-06">-->
-<!--<br>-->
 
 <h3>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Portugal.svg/45px-Flag_of_Portugal.svg.png" border="1">
+    <img src="img/Flag_of_Portugal.svg.png" height="30" alt="" class="flag">
     <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Portugal">Portugal</a>
     /
     <a href="https://pt.wikipedia.org/wiki/Pandemia_de_COVID-19_em_Portugal">Portugal</a>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Pt%28covid19.png/440px-Pt%28covid19.png" height="75">
+    
 </h3>
-<!-- <img src="COVID19_sigmoid_cases_Portugal.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Portugal.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Portugal.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Portugal.png?dummy=2021-11-06">
+
+<img src="days100_cases_perCapitaFalse_Portugal.png">
+<img src="days100_deaths_perCapitaFalse_Portugal.png">
 <br>
 
-<!-- <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Flag_of_Singapore.svg/45px-Flag_of_Singapore.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Singapore">Singapore</a> / Singapura <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/COVID-19_Cases_in_Singapore_by_Planning_Areas.svg/440px-COVID-19_Cases_in_Singapore_by_Planning_Areas.svg.png" height="75"></h3>
-<img src="COVID19_sigmoid_cases_Singapore.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Singapore.png?dummy=2021-11-06">
-<br>
-<img src="days100_cases_perCapitaFalse_Singapore.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Singapore.png?dummy=2021-11-06">
-<br>
- -->
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/45px-Flag_of_South_Korea.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_South_Korea">South Korea</a> / 한국/韓國 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/COVID-19_outbreak_South_Korea_per_capita_cases_map.svg/440px-COVID-19_outbreak_South_Korea_per_capita_cases_map.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_South_Korea.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_South_Korea.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_South_Korea.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_South_Korea.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_South_Korea.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_South_Korea">South Korea</a> / 한국/韓國 </h3>
+
+<img src="days100_cases_perCapitaFalse_South_Korea.png">
+<img src="days100_deaths_perCapitaFalse_South_Korea.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/45px-Flag_of_Spain.svg.png" border="1"> Spain / España <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/COVID-19_outbreak_Spain_per_capita_map.svg/600px-COVID-19_outbreak_Spain_per_capita_map.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Spain.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Spain.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Spain.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Spain.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Spain.svg.png" height="30" alt="" class="flag"> Spain / España </h3>
+
+<img src="days100_cases_perCapitaFalse_Spain.png">
+<img src="days100_deaths_perCapitaFalse_Spain.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Flag_of_Sweden.svg/46px-Flag_of_Sweden.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Sweden">Sweden</a> / Sverige <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/COVID-19_Outbreak_Cases_in_Sweden_by_Number_with_Legend.svg/440px-COVID-19_Outbreak_Cases_in_Sweden_by_Number_with_Legend.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Sweden.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Sweden.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Sweden.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Sweden.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Sweden.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Sweden">Sweden</a> / Sverige </h3>
+
+<img src="days100_cases_perCapitaFalse_Sweden.png">
+<img src="days100_deaths_perCapitaFalse_Sweden.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Switzerland.svg/32px-Flag_of_Switzerland.svg.png" border="1"> Switzerland / Schweiz <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/COVID-19_Outbreak_Cases_in_Switzerland_by_Canton.svg/440px-COVID-19_Outbreak_Cases_in_Switzerland_by_Canton.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Switzerland.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Switzerland.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Switzerland.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Switzerland.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_Switzerland.svg.png" height="30" alt="" class="flag"> Switzerland / Schweiz </h3>
+
+<img src="days100_cases_perCapitaFalse_Switzerland.png">
+<img src="days100_deaths_perCapitaFalse_Switzerland.png">
 <br>
 
-<h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/72/Flag_of_the_Republic_of_China.svg/45px-Flag_of_the_Republic_of_China.svg.png" border="1"> Taiwan / 台湾 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/COVID-19_outbreak_Taiwan_per_capita_cases_map.svg/440px-COVID-19_outbreak_Taiwan_per_capita_cases_map.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_Taiwan.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Taiwan.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_Taiwan.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_Taiwan.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_the_Republic_of_China.svg.png" height="30" alt="" class="flag"> Taiwan / 台湾 </h3>
+
+<img src="days100_cases_perCapitaFalse_Taiwan.png">
+<img src="days100_deaths_perCapitaFalse_Taiwan.png">
 <br>
 
-<!--         <h3><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Flag_of_Turkey.svg/45px-Flag_of_Turkey.svg.png" border="1"> Turkey / Türkiye</h3>
-<img src="COVID19_sigmoid_cases_Turkey.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_Turkey.png?dummy=2021-11-06">
+<h3><img src="img/Flag_of_the_United_Kingdom.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_Kingdom">United Kingdom</a> (Great Britain; <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_England">England</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Scotland">Scotland</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Wales">Wales</a>, Northern Ireland) </h3>
+
+<img src="days100_cases_perCapitaFalse_United_Kingdom.png">
+<img src="days100_deaths_perCapitaFalse_United_Kingdom.png">
 <br>
--->
-<h3><img src="https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Flag_of_the_United_Kingdom.svg/46px-Flag_of_the_United_Kingdom.svg.png" border="1"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_Kingdom">United Kingdom</a> (Great Britain; <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_England">England</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Scotland">Scotland</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Wales">Wales</a>, Northern Ireland) <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/COVID-19_outbreak_UK_case_counts.svg/440px-COVID-19_outbreak_UK_case_counts.svg.png" height="75"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/COVID-19_outbreak_England_per_capita_cases_map.svg/440px-COVID-19_outbreak_England_per_capita_cases_map.svg.png" height="75"></h3>
-<!-- <img src="COVID19_sigmoid_cases_United_Kingdom.png?dummy=2021-11-06">
-<img src="COVID19_sigmoid_deaths_United_Kingdom.png?dummy=2021-11-06">
-<br> -->
-<img src="days100_cases_perCapitaFalse_United_Kingdom.png?dummy=2021-11-06">
-<img src="days100_deaths_perCapitaFalse_United_Kingdom.png?dummy=2021-11-06">
-<br>
-
-
-
-
 
 <hr>
 
-
-
-
-
-
-
 <hr>
-
-
-
-
-
 
 <h1>Infographics and other news clips</h1>
 
@@ -678,22 +526,16 @@ South America
 <iframe src="https://ourworldindata.org/grapher/full-list-cumulative-total-tests-per-thousand?country=ARG+BOL+CHL+COL+ECU+SLV+MEX+PAN+PRY+PER+URY" style="width: 100%; height: 600px; border: 0px none;"></iframe>
 
 <br><br>
-<iframe title="COVID-19 confirmed and recovered cases" aria-label="World Symbol map" src="//datawrapper.dwcdn.net/RQJvk/5/" scrolling="no" frameborder="0" style="border: none;" width="713" height="500"></iframe>
-
+<iframe title="COVID-19 confirmed and recovered cases" aria-label="World Symbol map" src="https://datawrapper.dwcdn.net/RQJvk/6/" scrolling="no" frameborder="0" style="border: none;" width="713" height="500"></iframe>
 
 <br><br>
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">Countries that don’t fit the &#39;normal&#39; pattern based on the mobility data from <a href="https://twitter.com/Apple?ref_src=twsrc%5Etfw">@Apple</a> <br><br>Data: Apple Map&#39;s Mobility Trends Reports<a href="https://t.co/XrZOXQhvFU">https://t.co/XrZOXQhvFU</a> <a href="https://t.co/bAVrfXdjX7">pic.twitter.com/bAVrfXdjX7</a></p>&mdash; Kan Nishida (@KanAugust) <a href="https://twitter.com/KanAugust/status/1250158640515833856?ref_src=twsrc%5Etfw">April 14, 2020</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-
-
 
 <br>
 <a href="press_international.html">International/US Press</a>
 <br>
 <a href="press_denmark.html">Danish Press</a>
 <br>
-
-
 
 <br><br>
 <a href="https://www.washingtonpost.com/news/to-your-health/wp/2018/05/10/top-white-house-official-in-charge-of-pandemic-response-exits-abruptly/">2018-05-10 - Top White House official in charge of pandemic response exits abruptly</a>
@@ -708,22 +550,14 @@ South America
 <br>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/6Af6b_wyiwI" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
-
-
-
-
 <br><br>
-<img src="https://2oqz471sa19h3vbwa53m33yj-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/History-of-Pandemics-Deadliest-1-scaled.jpg" width="713">
-
-
+<a href="https://www.visualcapitalist.com/history-of-pandemics-deadliest/">Visual Capitalist - The History of Pandemics, by Death Toll</a>
 
 <h1>References</h1>
 
 Here are other good pages (please send additional suggestions to <a href="mailto:covid19@tommycarstensen.com">covid19@tommycarstensen.com</a>):
-<br><a href="https://covid19info.live/">covid19info.live</a>
 <br><a href="https://www.bloomberg.com/graphics/2020-wuhan-novel-coronavirus-outbreak/">Bloomberg</a>
 <br><a href="https://ourworldindata.org/coronavirus-data">Our World in Data</a>
-<br><a href="https://www.bing.com/covid">Bing</a>
 <br><a href="https://www.worldometers.info/coronavirus/">Worldometer</a>
 <br><a href="https://multimedia.scmp.com/infographics/news/china/article/3047038/wuhan-virus/index.html">South China Morning Post</a>
 <br><a href="https://who.maps.arcgis.com/apps/opsdashboard/index.html">WHO / OMS</a>
@@ -740,6 +574,8 @@ Here are other good pages (please send additional suggestions to <a href="mailto
 <br><a href="https://www.economist.com/graphic-detail/2020/04/16/tracking-covid-19-excess-deaths-across-countries">The Economist - Tracking covid-19 excess deaths across countries</a>
 <br><a href="https://www.covidexitstrategy.org/">covidexitstrategy.org</a>
 <br><a href="https://www.cdc.gov/nchs/nvss/vsrr/covid19/excess_deaths.htm">CDC excess deaths</a>
+
+<p class="credits">Flags and continent maps from Wikimedia Commons and Wikipedia, in the public domain except: <a href="https://commons.wikimedia.org/wiki/File:Asia_(orthographic_projection).svg">Asia (orthographic projection).svg</a> by Koyos + Ssolbergj, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Africa_(orthographic_projection).svg">Africa (orthographic projection).svg</a> by Martin23230, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Oceania_(orthographic_projection).svg">Oceania (orthographic projection).svg</a> by Ch1902, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Americas_(orthographic_projection).svg">Americas (orthographic projection).svg</a> by Martin23230, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>.</p>
 
 </body>
 </html>
