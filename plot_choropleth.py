@@ -5,7 +5,6 @@ import argparse
 import math
 import os
 import shutil
-import time
 from datetime import date, datetime
 
 import geopandas as gpd
@@ -331,12 +330,14 @@ def download_and_read(url: str, path: str) -> pd.DataFrame:
 
     # df_owid = pd.read_html(url)
 
-    if (os.path.isfile(path)
-            and time.time() - os.path.getmtime(path) < 2 * 3600):
-        pass
-    else:
+    # Download only when there is no local copy. The sources stopped
+    # updating, and the ECDC URL now serves the daily data to 14 December
+    # 2020, which would overwrite the weekly ecdc.csv (to 11 January 2021)
+    # this script reads. Delete a file to fetch it again.
+    if not os.path.isfile(path):
         print(url)
-        r = requests.get(url)
+        r = requests.get(url, timeout=60)
+        r.raise_for_status()
         with open(path, 'w') as f:
             f.write(r.text)
 
