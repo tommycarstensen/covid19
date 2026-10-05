@@ -33,7 +33,7 @@ def main():
 
     doCountry2Continent(args, df0)
 
-    doHeatMapsBSG(args)
+    # doHeatMapsBSG(args)
 
     for region in ('Europe', 'AmericaNorth', 'AmericaSouth', 'Oceania', 'Asia', 'Africa',):
         for country in args.d_region2countries[region]:
@@ -47,8 +47,8 @@ def main():
 
     doHeatMaps(args, df0)
 
-    # if not os.path.isfile('scatter_EU_cases.png'):
-    #     doScatterPlots(args, df0)
+    if not os.path.isfile('scatter_EU_cases.png'):
+        doScatterPlots(args, df0)
 
     if not os.path.isfile('days100_cases_perCapitaFalse_EU.png'):
         for country in args.d_region2countries['website']:
@@ -64,6 +64,9 @@ def main():
 def doBarPlots(args, df0):
 
     for countriesAndTerritories in df0['countriesAndTerritories'].unique():
+        print(df0.columns)
+        print(df0)
+        exit()
         if df0[df0['countriesAndTerritories'] == countriesAndTerritories]['cases_weekly'].sum() < 1000:
             continue
         path = 'plot_bar_{}.png'.format(countriesAndTerritories.replace(' ','_'))
@@ -229,7 +232,7 @@ def doHeatMaps(args, df0):
             ax.set_yticks(np.arange(array.shape[0]) + 0.5, minor=False)
             ax.set_yticklabels(list(reversed(countries)), minor=False, fontsize='x-small')
             ax.set_xlabel('Week')
-            ax.set_title('{}\n{}{} per million'.format(region, k[0].upper(), k[1:].replace('_', '')))
+            ax.set_title('{}\n{}{} per million'.format(region, k[0].upper(), k[1:].replace('_', ' ')))
             plt.tight_layout()
             fig.set_tight_layout(True)
             plt.savefig(path, dpi=75)
@@ -523,7 +526,7 @@ def plot_per_country(args, df, k, colors):
     print(path)
     plt.clf()
 
-    if k == 'cases':  # just do table once for cases
+    if k == 'cases_weekly':  # just do table once for cases
 
         try:
             popSize = args.d_country2pop[args.title]
@@ -533,19 +536,19 @@ def plot_per_country(args, df, k, colors):
         s += '<td>{}</td>'.format(args.title)
         s += '<td>{:.1f}</td>'.format(popSize)
         s += '<td>{}</td>'.format(args.d_country2continent.get(args.title))
-        s += '<td>{}</td>'.format(df['cases'].values.sum())
+        s += '<td>{}</td>'.format(df['cases_weekly'].values.sum())
         s += '<td><a href="days100_cases_perCapitaFalse_{}.png"><img src="days100_cases_perCapitaFalse_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
         # s += '<td><a href="plot_bar_cases_{}.png"><img src="plot_bar_cases_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
-        s += '<td>{}</td>'.format(int(df['deaths'].values.sum()))
+        s += '<td>{}</td>'.format(int(df['deaths_weekly'].values.sum()))
         s += '<td><a href="days100_deaths_perCapitaFalse_{}.png"><img src="days100_deaths_perCapitaFalse_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
         # s += '<td><a href="plot_bar_deaths_{}.png"><img src="plot_bar_deaths_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
         s += '<td><a href="plot_bar_{}.png"><img src="plot_bar_cases_{}_thumb.png" height="45"></a></td>'.format(args.affix, args.affix)
-        s += '<td>{:.1f}</td>'.format(100 * df['deaths'].values.sum() / df['cases'].values.sum())
+        s += '<td>{:.1f}</td>'.format(100 * df['deaths_weekly'].values.sum() / df['cases_weekly'].values.sum())
         s += '<td>{}</td>'.format(df['cases_weekly'].values[-1])
         s += '<td>{}</td>'.format(df['deaths_weekly'].values[-1])
         try:
-            s += '<td>{:.1f}</td>'.format(df['cases'].values.sum() / popSize)
-            s += '<td>{:.1f}</td>'.format(df['deaths'].values.sum() / popSize)
+            s += '<td>{:.1f}</td>'.format(df['cases_weekly'].values.sum() / popSize)
+            s += '<td>{:.1f}</td>'.format(df['deaths_weekly'].values.sum() / popSize)
         except UnboundLocalError:
             pass
 
@@ -587,6 +590,7 @@ def doScatterPlots(args, df0):
 
     for region in args.d_region2countries.keys():
         for k in ('cases', 'deaths'):
+            k += '_weekly'
             d = {k: ([], []) for k in set(args.d_country2continent.values())}
             xx = []
             yy = []
@@ -622,11 +626,11 @@ def doScatterPlots(args, df0):
             plt.xscale('log')
             plt.yscale('log')
             plt.xlabel('Population size')    
-            plt.ylabel(k[0].upper() + k[1:].replace('_', ' '))    
+            plt.ylabel(k[0].upper() + k[1:].replace('_weekly', '').replace('_', ' '))    
             plt.legend(prop={'size': 6})
-            plt.title(region + '\n' + k[0].upper() + k[1:].replace('_', ' '))
+            plt.title(region + '\n' + k[0].upper() + k[1:].replace('_weekly', '').replace('_', ' '))
             # plt.label()
-            path = 'scatter_{}_{}.png'.format(region, k)
+            path = 'scatter_{}_{}.png'.format(region, k.replace('_weekly', ''))
             plt.savefig(path, dpi=75)
             plt.clf()
 
@@ -692,7 +696,7 @@ def doLinePlots(args, df0, key_geo, comparison=True):
             for t in tuples:
                 country = t[1]
                 df = df0[df0['countriesAndTerritories'].isin([country])].sort_values(by='dateRep', ascending=True)
-                if k == 'deaths' and 'South' in country:
+                if k == 'deaths_weekly' and 'South' in country:
                     print(k, country, df[k].sum())
                 if df[k].sum() < 10:
                     continue
@@ -1367,7 +1371,7 @@ def parseArgs():
         args.title = args.region
         args.affix = args.region
     else:
-        args.countries = [_.replace('_',' ') for _ in df['countriesAndTerritories'].unique()]
+        args.countries = [_.replace('_', ' ') for _ in df['countriesAndTerritories'].unique()]
         args.title = 'World'
         args.affix = 'World'
 
