@@ -178,7 +178,7 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
     ncols = layout.ncols
     nrows = math.ceil(len(order) / ncols)
     narrow = ncols < 5
-    header = 1.25 if narrow else 0.95
+    header = 1.45 if narrow else 0.95
     # Room below the bottom panels for their tick labels and the source line.
     footer = 0.8 if narrow else 0.62
     width = ncols * layout.panel_width + 0.55
@@ -256,18 +256,45 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
     return path
 
 
+def css_size(path: Path, dpi: int) -> tuple[int, int]:
+    """The image's size in CSS pixels: 100 per inch, as the figures are laid out."""
+    with Image.open(path) as im:
+        return round(im.size[0] * 100 / dpi), round(im.size[1] * 100 / dpi)
+
+
+def picture(df: pd.DataFrame, set_name: str, measure: Measure, paths: dict[str, Path]) -> str:
+    """A <picture> that serves the two-column figure below 700 CSS pixels, with every total in its alt text."""
+    wide, narrow = LAYOUTS
+    w, h = css_size(paths[wide.suffix], wide.dpi)
+    nw, nh = css_size(paths[narrow.suffix], narrow.dpi)
+    totals = sorted(((series(df, c, measure.column).cumulative[-1], c) for c in SETS[set_name]), reverse=True)
+    listed = '; '.join(f'{display_name(c)} {v:,.0f}' for v, c in totals)
+    alt = (f'Cumulative COVID-19 {measure.name} from the week each country passed {measure.threshold:,}, '
+           f'one panel per country. Totals on 10 January 2021: {listed}.')
+    return (f'<picture>\n'
+            f'<source media="(max-width: 700px)" srcset="{paths[narrow.suffix].name}" width="{nw}" height="{nh}">\n'
+            f'<img src="{paths[wide.suffix].name}" width="{w}" height="{h}" alt="{alt}">\n'
+            f'</picture>')
+
+
 def main() -> None:
     matplotlib.use('Agg')
     df = load()
     print(f'Drawing {len(SETS) * len(MEASURES) * len(LAYOUTS)} figures from ecdc.csv into '
           f'{OUT.relative_to(ROOT)}/ (last report {df["dateRep"].max():%Y-%m-%d})')
+    pictures = []
     for set_name in SETS:
         for measure in MEASURES:
+            paths = {}
             for layout in LAYOUTS:
-                path = draw(df, set_name, measure, layout)
+                path = paths[layout.suffix] = draw(df, set_name, measure, layout)
                 with Image.open(path) as im:
                     print(f'  {path.name}: {im.size[0]}x{im.size[1]} px, {path.stat().st_size / 1e3:.0f} kB')
-    print('Done.')
+            pictures.append(picture(df, set_name, measure, paths))
+    markup = ROOT / 'tmp' / 'plot_days100_world_markup.html'
+    markup.parent.mkdir(exist_ok=True)
+    markup.write_text('\n'.join(pictures) + '\n')
+    print(f'Done. <picture> tags for site/index.html are in {markup.relative_to(ROOT)}')
 
 
 if __name__ == '__main__':
