@@ -2,9 +2,9 @@
 
 The page used to show seven animated GIFs (9.6 MB in all). This writes each one to site/anim/ as an H.264 MP4 plus a JPEG poster of its last frame, cropped to the area the map, title and colour bar use in any frame. site/anim/scrubber.js turns each <video data-fps> into a player with a play/pause button and a slider that steps one frame at a time.
 
-Sources are the files the live page served, as upload.py left them in archive/: the 43 PNG frames of europe.gif (sharper than the GIF's 256-colour palette), and the six world GIFs, whose frames no longer exist separately.
+Sources are the files the live page served, as upload.py left them in archive/: the 43 PNG frames of europe.gif (sharper than the GIF's 256-colour palette), and the six world GIFs, whose frames no longer exist separately. A world GIF that plot_choropleth.py has written to the repo root since takes precedence over the archive/ copy. The archived weekly cases and deaths GIFs show seven-week totals (fixed in plot_choropleth.py in 40f795d), so the page keeps the server's GIFs for those two until they are regenerated.
 
-Usage: python3 build_animations.py
+Usage: python3 build_animations.py. The <video> tags for site/index.html are written to tmp/build_animations_markup.html.
 """
 
 import shutil
@@ -38,6 +38,7 @@ GOP = 30
 @dataclass(frozen=True)
 class Animation:
     name: str
+    source: Path
     frames: list[Image.Image]
     fps: int
     labels: list[str]
@@ -87,6 +88,7 @@ def europe() -> Animation:
             frames.append(flatten(im))
     return Animation(
         name='europe',
+        source=gif,
         frames=frames,
         fps=fps_from(durations, gif),
         labels=[p.stem.removeprefix('europe_') for p in paths],
@@ -96,7 +98,7 @@ def europe() -> Animation:
     )
 
 
-# Name in archive/, date in the first frame's title, and what it shows.
+# File name, the date in the first frame's title, and what it shows. Check the first date against a regenerated GIF's first frame: the labels are counted from it in weeks.
 WORLD = [
     ('covid19_casescumulated_OrRd_logTrue', date(2020, 1, 6),
      'Cumulative COVID-19 cases per million, by country'),
@@ -114,11 +116,14 @@ WORLD = [
 
 
 def world(name: str, first: date, what: str) -> Animation:
-    gif = ARCHIVE / f'{name}.gif'
+    gif = ROOT / f'{name}.gif'
+    if not gif.exists():
+        gif = ARCHIVE / gif.name
     frames, durations = gif_frames(gif)
     labels = weekly(first, len(frames))
     return Animation(
         name=name,
+        source=gif,
         frames=frames,
         fps=fps_from(durations, gif),
         labels=labels,
@@ -196,17 +201,19 @@ def main() -> None:
     snippets = []
     for spec in specs:
         anim = spec()
-        gif = ARCHIVE / f'{anim.name}.gif'
+        gif_size = anim.source.stat().st_size
         width, height, mp4_size, jpg_size = encode(anim)
-        before += gif.stat().st_size
+        before += gif_size
         after += mp4_size + jpg_size
-        print(f'  {anim.name}: {len(anim.frames)} frames at {anim.fps} fps, '
+        print(f'  {anim.name}: {len(anim.frames)} frames at {anim.fps} fps '
+              f'from {anim.source.relative_to(ROOT)}, '
               f'{anim.frames[0].size[0]}x{anim.frames[0].size[1]} cropped '
-              f'to {width}x{height}; GIF {gif.stat().st_size / 1e6:.2f} MB '
+              f'to {width}x{height}; GIF {gif_size / 1e6:.2f} MB '
               f'-> MP4 {mp4_size / 1e6:.2f} MB + poster '
               f'{jpg_size / 1e3:.0f} kB')
         snippets.append(markup(anim, width, height))
-    snippet_path = OUT / 'markup.html'
+    snippet_path = ROOT / 'tmp' / 'build_animations_markup.html'
+    snippet_path.parent.mkdir(exist_ok=True)
     snippet_path.write_text('\n'.join(snippets) + '\n')
     print(f'Done: {before / 1e6:.1f} MB of GIF -> {after / 1e6:.1f} MB of '
           f'MP4 and posters. <video> tags for site/index.html are in '
