@@ -8,9 +8,9 @@ each one that does not must already be on the server. Nothing is deleted.
     python3 deploy.py           # upload what differs, check the live page
     python3 deploy.py --dry     # list what would be uploaded
 
-site/index.html must be committed, and the server's index.html must be one
-this repository has committed: a copy it has never seen means someone
-changed the page on the server, and is refused. The charts and images in
+The pages in site/ must be committed, and the server's copy of a page must
+be one this repository has committed: a copy it has never seen means
+someone changed the page on the server, and is refused. The charts and images in
 site/ are ignored by git and rebuilt by redraw_charts.py and
 fetch_images.py, so before a server file is overwritten its copy is saved
 under tmp/deploy_backup/<time>/. The log is tmp/deploy.log.
@@ -159,8 +159,9 @@ def plan(
     sftp: paramiko.SFTPClient, out: Tee
 ) -> tuple[list[tuple[str, bytes]], dict[str, bytes]]:
     """What to upload, and the server copies it would replace."""
-    if git("status", "--porcelain", "--", "site/index.html"):
-        raise SystemExit("commit site/index.html before deploying")
+    dirty = git("status", "--porcelain", "--", "site/*.html")
+    if dirty:
+        raise SystemExit(f"commit the pages before deploying:\n{dirty}")
     html = (SITE / "index.html").read_text(encoding="utf-8")
     files = ["index.html", *used_files(html)]
     local = [rel for rel in files if (SITE / rel).is_file()]
@@ -186,15 +187,15 @@ def plan(
         else:
             remote = read_remote(sftp, rel) if size is not None else None
         if (
-            rel == "index.html"
+            rel.endswith(".html")
             and remote is not None
             and blob_id(remote) not in committed_blobs(rel)
         ):
             raise SystemExit(
-                "the server's index.html is not one this repository has "
-                "committed, so someone changed the page on the server. "
-                "Save it, commit it as site/index.html, put the change "
-                "back on top, and deploy again."
+                f"the server's {rel} is not one this repository has "
+                "committed, so someone changed it on the server. Save it, "
+                f"commit it as site/{rel}, put the change back on top, and "
+                "deploy again."
             )
         if remote is not None:
             replaced[rel] = remote
