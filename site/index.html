@@ -54,6 +54,15 @@ video {
   max-width: 100%;
 }
 
+.aligned picture {
+  display: block;
+  margin: 0 0 32px;
+}
+
+.aligned img {
+  height: auto;
+}
+
 iframe[src*="youtube.com"] {
   height: auto;
   aspect-ratio: 16 / 9;
@@ -145,12 +154,24 @@ tr:nth-child(even) {
 
 <h1>CoViD19 aligned time series data</h1>
 
-<img src="days100_cases_perCapitaFalse_World1.png">
-<img src="days100_deaths_perCapitaFalse_World1.png">
-<br>
-<img src="days100_cases_perCapitaFalse_World2.png">
-<img src="days100_deaths_perCapitaFalse_World2.png">
-<br>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_World1_narrow.png" width="415" height="1310">
+<img src="aligned_cases_World1.png" width="1355" height="727" alt="Cumulative COVID-19 cases from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: United States 22,423,006; EU 16,874,613; India 10,466,595; Brazil 8,131,612; Russia 3,425,269; United Kingdom 3,072,349; Colombia 1,801,903; Argentina 1,730,908; Mexico 1,541,633; Iran 1,286,406; South Africa 1,231,597; Peru 1,037,350; Indonesia 828,026; Sweden 502,227.">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_World1_narrow.png" width="415" height="1310">
+<img src="aligned_deaths_World1.png" width="1355" height="727" alt="Cumulative COVID-19 deaths from the week each country passed 100, one panel per country. Totals on 10 January 2021: EU 400,979; United States 374,442; Brazil 203,580; India 151,160; Mexico 134,368; United Kingdom 81,431; Russia 62,273; Iran 56,171; Colombia 46,451; Argentina 44,654; Peru 38,335; South Africa 33,163; Indonesia 24,129; Sweden 9,666.">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_World2_narrow.png" width="415" height="1310">
+<img src="aligned_cases_World2.png" width="1355" height="727" alt="Cumulative COVID-19 cases from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: Sweden 502,227; Japan 286,752; Denmark 182,725; Malaysia 135,992; South Korea 69,114; Singapore 58,907; Norway 55,473; Australia 28,614; Uruguay 26,901; Thailand 10,547; Iceland 5,898; New Zealand 2,222; Vietnam 1,514; Taiwan 834.">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_World2_narrow.png" width="415" height="1310">
+<img src="aligned_deaths_World2.png" width="1355" height="727" alt="Cumulative COVID-19 deaths from the week each country passed 100, one panel per country. Totals on 10 January 2021: Sweden 9,666; Japan 4,044; Denmark 1,597; South Korea 1,140; Australia 909; Malaysia 551; Norway 478; Uruguay 262; Thailand 67; Vietnam 35; Singapore 29; Iceland 29; New Zealand 25; Taiwan 7.">
+</picture>
+</div>
 
 <img src="plot_bubble_G7.png" width="800">
 
