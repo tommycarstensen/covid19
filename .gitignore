@@ -62,6 +62,9 @@
 # FTP password read by upload.py
 .password
 
+# Logs and scratch work
+/tmp/
+
 # Caches and editor state
 __pycache__/
 .ruff_cache/
