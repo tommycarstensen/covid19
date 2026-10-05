@@ -85,9 +85,11 @@
       if (!wantPlay || !visible || holdTimer !== null) return;
       var promise = video.play();
       if (promise && promise.catch) {
-        // Autoplay can be refused (iOS Low Power Mode): show a play button instead.
+        // Autoplay can be refused (iOS Low Power Mode): show a play button and the last frame, which is the poster.
         promise.catch(function () {
+          if (!wantPlay) return;
           wantPlay = false;
+          seek(count - 1);
           render();
         });
       }
