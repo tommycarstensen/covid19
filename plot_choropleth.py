@@ -48,11 +48,11 @@ def main():
 
         # Do groupby and sum for UK, Denmark (Denmark, Greenland, Faroe
         # Islands) and others? I can't remember.
-        if period == 'per week':  # rolling sum 7 days
-            df2 = df0.reset_index(level='alpha3')
-            df2 = df2.groupby('alpha3')
-            df2 = df2.rolling(window=7).sum()
-            df2 = df2.reset_index()
+        if period == 'per week':
+            # Each ECDC row is already one week's total since the switch from
+            # daily to weekly data; the 7-row rolling sum kept from the daily
+            # data summed seven weeks.
+            df2 = df0.reset_index()
         else:  # cumulative
             # Cumulated sum by country (alpha3).
             df2 = df0.groupby(level='alpha3').cumsum().reset_index()
