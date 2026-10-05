@@ -159,12 +159,13 @@ def plan(
     sftp: paramiko.SFTPClient, out: Tee
 ) -> tuple[list[tuple[str, bytes]], dict[str, bytes]]:
     """What to upload, and the server copies it would replace."""
-    dirty = git("status", "--porcelain", "--", "site/*.html")
-    if dirty:
-        raise SystemExit(f"commit the pages before deploying:\n{dirty}")
     html = (SITE / "index.html").read_text(encoding="utf-8")
     files = ["index.html", *used_files(html)]
     local = [rel for rel in files if (SITE / rel).is_file()]
+    pages = [f"site/{rel}" for rel in local if rel.endswith(".html")]
+    dirty = git("status", "--porcelain", "--", *pages)
+    if dirty:
+        raise SystemExit(f"commit the pages before deploying:\n{dirty}")
     elsewhere = [rel for rel in files if not (SITE / rel).is_file()]
     print(
         f"the page uses {len(files)} files: {len(local)} in site/, "
