@@ -48,6 +48,8 @@ SETS = {
 }
 
 NAMES = {'United_States_of_America': 'United States'}
+# On the two-column figure 'United Kingdom' runs into its total.
+NARROW_NAMES = {'United_Kingdom': 'UK'}
 
 
 @dataclass(frozen=True)
@@ -196,10 +198,10 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
         for other, (x, y) in drawn.items():
             if other != country:
                 ax.plot(x, y, color=CONTEXT, linewidth=0.8, zorder=1, solid_capstyle='round')
-        name = display_name(country)
+        name = NARROW_NAMES.get(country, display_name(country)) if narrow else display_name(country)
         total = f'{short(totals[country])}'
-        ax.set_title(name, loc='left', fontsize=9.5, color=INK, fontweight='bold', pad=4)
-        ax.set_title(total, loc='right', fontsize=9, color=INK_2, pad=4)
+        ax.set_title(name, loc='left', fontsize=9 if narrow else 9.5, color=INK, fontweight='bold', pad=4)
+        ax.set_title(total, loc='right', fontsize=8.5 if narrow else 9, color=INK_2, pad=4)
         if country in drawn:
             x, y = drawn[country]
             ax.plot(x, y, color=FOCUS, linewidth=2, zorder=3, solid_capstyle='round')
