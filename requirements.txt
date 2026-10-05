@@ -1,0 +1,9 @@
+# What plot_series.py, redraw_charts.py and deploy.py import.
+# countryinfo 1.x removed CountryInfo().all(), which plot_series.py calls.
+countryinfo==0.1.2
+matplotlib
+numpy
+pandas
+paramiko
+requests
+scipy
