@@ -51,6 +51,8 @@ def main():
 
     plot_owid(df_owid, df1)
 
+    aspect = map_aspect(df1)
+
     cmap = 'OrRd'
     cmaps = {
         'cumulated': {'cases': 'OrRd', 'deaths': 'PuRd'},
@@ -161,6 +163,7 @@ def main():
                     # vmax = vmax,
                     vmax = vmax,
                     )
+                ax.set_aspect(aspect)
 
                 # https://stackoverflow.com/questions/53158096/editing-colorbar-legend-in-geopandas
                 # pcm = ax[0].pcolor(X, Y, Z,
@@ -195,7 +198,19 @@ def main():
     return
 
 
+def map_aspect(df_geo):
+
+    # The aspect geopandas gives the whole map. geopandas recomputes the
+    # aspect from the missing_kwds countries alone when it draws them, so the
+    # map stretched and jumped between frames as the set of countries without
+    # data changed. Setting this after each plot keeps every frame identical.
+    bounds = df_geo.total_bounds
+    return 1 / np.cos(np.radians((bounds[1] + bounds[3]) / 2))
+
+
 def plot_owid(df, df_geo):
+
+    aspect = map_aspect(df_geo)
 
     print(df[['tests_units', 'location']].drop_duplicates().dropna().to_string())
     print(df['tests_units'].unique())
@@ -308,6 +323,7 @@ def plot_owid(df, df_geo):
                 # vmax = vmax,
                 vmax = vmax,
                 )
+            ax.set_aspect(aspect)
             path = 'covid19_{}_{}.png'.format(
                 column, dateString,
                 )
