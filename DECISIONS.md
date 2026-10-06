@@ -261,6 +261,8 @@ Ten advisers (Sonnet sub-agents) then judged twelve open decisions, from the ang
 
 Fixed from the advisers' other findings: date and source had no space between them, so a screen reader read "2020-05-14ProPublica"; MEDPAGETODAY is written MedPage Today; links show a focus ring; headlines break in balanced lines, with COVID-19 kept whole. Not taken: a `noindex` (one adviser), hidden headings for the tweets and videos, and making the source names consistent ("AP" and "AP News", "The New York Times" and "New York Times"), which would rewrite Tommy's labels.
 
+Tommy then chose (832d99c): the tab title "Press clippings, January to May 2020: international and US press", with no visible heading; a "← COVID-19 tracker" link at the top of the page; and the four images left hotlinked. He asked for backups of every image the pages load from other sites, which covid19-ac is writing.
+
 ## 2026-10-06: the EU's scatter plots and the USA's charts redrawn in the October 2026 style (covid19-67)
 
 The last two items of covid19-b6's design review: the USA section's pair of 2020 line charts and the EU's two 2020 scatter plots, all 480x360 in the old style, between figures redrawn in October 2026.
