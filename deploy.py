@@ -10,7 +10,7 @@ each one that does not must already be on the server. Nothing is deleted.
 
 The pages in site/ must be committed, and the server's copy of a page must
 be one this repository has committed: a copy it has never seen means
-someone changed the page on the server, and is refused. The charts and images in
+someone changed the page on the server, and is refused. Pages are sent as committed at HEAD, never read from the working tree, so an edit another session starts mid-deploy cannot go live unfinished. The charts and images in
 site/ are ignored by git and rebuilt by redraw_charts.py and
 fetch_images.py, so before a server file is overwritten its copy is saved
 under tmp/deploy_backup/<time>/. The log is tmp/deploy.log.
@@ -68,6 +68,16 @@ def git(*args: str) -> str:
         text=True,
     )
     return done.stdout.strip()
+
+
+def committed_page(rel: str) -> bytes:
+    """site/<rel> as committed at HEAD."""
+    done = subprocess.run(
+        ["git", "-C", str(ROOT), "show", f"HEAD:site/{rel}"],
+        capture_output=True,
+        check=True,
+    )
+    return done.stdout
 
 
 def used_files(html: str) -> list[str]:
@@ -160,10 +170,11 @@ def put(sftp: paramiko.SFTPClient, rel: str, data: bytes) -> None:
 
 def plan(
     sftp: paramiko.SFTPClient, out: Tee
-) -> tuple[list[tuple[str, bytes]], dict[str, bytes]]:
-    """What to upload, and the server copies it would replace."""
-    html = (SITE / "index.html").read_text(encoding="utf-8")
-    files = ["index.html", *used_files(html)]
+) -> tuple[list[tuple[str, bytes]], dict[str, bytes], bytes]:
+    """What to upload, the server copies it would replace, and the
+    index.html it sends."""
+    index = committed_page("index.html")
+    files = ["index.html", *used_files(index.decode("utf-8"))]
     local = [rel for rel in files if (SITE / rel).is_file()]
     pages = [f"site/{rel}" for rel in local if rel.endswith(".html")]
     dirty = git("status", "--porcelain", "--", *pages)
@@ -182,7 +193,12 @@ def plan(
     uploads: list[tuple[str, bytes]] = []
     replaced: dict[str, bytes] = {}
     for done, rel in enumerate(local, 1):
-        data = (SITE / rel).read_bytes()
+        if rel == "index.html":
+            data = index
+        elif rel.endswith(".html"):
+            data = committed_page(rel)
+        else:
+            data = (SITE / rel).read_bytes()
         size = remote_size(sftp, rel)
         if size == len(data):
             remote = read_remote(sftp, rel)
@@ -206,14 +222,13 @@ def plan(
         uploads.append((rel, data))
         if done % 50 == 0:
             print(f"  compared {done}/{len(local)}", file=out)
-    return uploads, replaced
+    return uploads, replaced, index
 
 
-def check_live(out: Tee, uploaded: list[str]) -> None:
-    """The plain URL must serve exactly site/index.html, and every file
-    uploaded must answer. Varnish in front of the host serves its old copy
-    for a while after an upload, so the check asks again."""
-    expected = (SITE / "index.html").read_bytes()
+def check_live(out: Tee, uploaded: list[str], expected: bytes) -> None:
+    """The plain URL must serve exactly the index.html this deploy sent,
+    and every file uploaded must answer. Varnish in front of the host serves
+    its old copy for a while after an upload, so the check asks again."""
     tries = 9
     for attempt in range(1, tries + 1):
         live = requests.get(URL, timeout=30)
@@ -225,7 +240,7 @@ def check_live(out: Tee, uploaded: list[str]) -> None:
             file=out,
         )
         if attempt == tries:
-            raise SystemExit(f"{URL} differs from site/index.html")
+            raise SystemExit(f"{URL} differs from the index.html sent")
         time.sleep(10)
     broken = {}
     for rel in uploaded:
@@ -279,7 +294,7 @@ def main() -> None:
         )
         try:
             sftp = client.open_sftp()
-            uploads, replaced = plan(sftp, out)
+            uploads, replaced, index = plan(sftp, out)
             total = sum(len(data) for _, data in uploads) / 1e6
             print(
                 f"{len(uploads)} to upload ({total:.1f} MB), "
@@ -313,7 +328,7 @@ def main() -> None:
             sftp.close()
         finally:
             client.close()
-        check_live(out, [rel for rel, _ in uploads])
+        check_live(out, [rel for rel, _ in uploads], index)
         print("exit status: 0", file=out)
 
 
