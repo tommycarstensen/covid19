@@ -319,3 +319,21 @@ Ten advisers (Sonnet sub-agents: an archivist, a Danish media historian, an acce
 - Twitter's widgets.js is gone from both press pages (1 of 10, the privacy adviser: it sent every visitor's IP address to X and set X's cookies without consent). The tweets show as the styled quotes they fell back to, with no word changed (0759d54, edb77dd). One of them, DR2 Deadline's of 22 April 2020, had already been deleted.
 
 Tommy also asked for a backup of every image the pages take from other sites: `backup_external_images.py` saved 63 files to `external_images/` (343a91b), with a manifest; the deleted DR2 tweet's image came from the Wayback Machine's copy of the tweet.
+
+## 2026-10-06: world totals and the record last week under the archive line (covid19-59)
+
+Tommy asked whether the page should have headline numbers at the top. The earlier panel had split three to three on putting the world totals in the archive line, so Tommy asked ten new advisers (Sonnet sub-agents): a member of the public from a search engine, a data journalist who linked to the page in 2020, a surveillance epidemiologist, a web archivist, a UX writer, a newspaper graphics editor, an accessibility specialist, a fact-checker of out-of-context screenshots, a hiring manager, and a devil's advocate for adding nothing. They saw a draft of two sentences: the world totals to 10 January 2021 and the week of 4 to 10 January, which in `ecdc.csv` has the highest weekly cases and deaths of any week (5,270,998 and 93,681; the previous highest, 14 to 20 December, had 4,579,414 and 81,186).
+
+Six voted for the paragraph and four against (the archivist, accessibility, the fact-checker and the devil's advocate). The devil's advocate conceded that a plain sentence with its date inside "mostly neutralises" the screenshot risk. All ten rejected big-number tiles, which read as a live dashboard and get cropped away from their dates. The paragraph sits straight under the archive line, as a second `standfirst`:
+
+> By 10 January 2021, 214 countries and territories had reported 89.8 million cases and 1.94 million deaths to ECDC, figures that undercount the real toll. The week of 4 to 10 January 2021, the last in the data, had the highest weekly counts reported up to then: 5.27 million cases and 93,700 deaths.
+
+The draft's wording changed where most of the advisers agreed:
+
+- "Yet" became "up to then" (9 of 10): on a frozen page "yet" reads as now.
+- The undercount sits next to the totals (8 of 10), so a quote or a cropped screenshot carries it. "How to read this page" says the same further down.
+- "The last week" became "the week of 4 to 10 January 2021, the last in the data" (the UX writer: "last week" reads as last week from today), with the year in both sentences, so each one carries its own date.
+- "Weekly counts reported" (the graphics editor and the epidemiologist): the week's high may partly be reports held over the Christmas and New Year holidays, so the sentence claims the most reported, not the most infections.
+- 93,681 became 93,700, three significant figures like the other numbers (three advisers flagged mixed precision).
+
+Left out: WHO's later total of about 7 million deaths and the excess-death estimates (only the hiring manager wanted a clause; the others said a second source turns the paragraph into commentary); a link to "How to read" (two advisers); a note that the table runs a week later (the archive line already says so). The 214 does not count the Diamond Princess, which `ecdc.csv` lists as a 215th place. The world totals were never on the page in 2020, which the archivist raised; they are sums of the same ECDC file the charts and maps were drawn from.
