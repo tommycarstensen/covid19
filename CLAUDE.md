@@ -5,6 +5,8 @@ Source for https://tommycarstensen.com/covid19/, a COVID-19 dashboard Tommy ran 
 ## What is live, and what is not
 
 - `site/index.html` is the source of truth for the live page. It started as a byte-for-byte copy of the server's page on 5 October 2026, and the server's page is newer than anything else in this folder.
+- Since 6 October 2026 every h2 and h3 in `site/index.html` has an id, which outside links may point to (`#denmark`, `#table`), so do not rename one. The Contents list after the archive note is written by hand: a new h2 or h3 needs an id, a `<a class="anchor">` link and a line in the Contents.
+- Do not load the live page many times in a row from a headless browser: each load fetches about 250 images. On 6 October 2026 the host stopped answering at about 04:45, after two sessions had sent some 2,500 requests in a few minutes; whether that caused it is not known. To check a local `site/index.html`, serve it at the live URL through Playwright's `page.route` and block the images unless the check needs them.
 - `index.html` at the root is the December 2020 template. `upload.py` filled in its `xxxDATExxx` and `xxxTABLEROWSxxx` placeholders at upload time. Do not edit it to change the live page.
 - `archive/` holds every image `upload.py` ever uploaded (about 37,000 PNGs plus the GIFs): it uploaded each file from the root, then moved it here. The newest copy of a file in `archive/` is what the server serves, unless `site/` has a newer one.
 - The `?dummy=YYYY-MM-DD` on image URLs is only a cache-buster set to the upload date. It does not say when the image was drawn: the live `days100_*_World1.png` dates from 24 December 2020.
