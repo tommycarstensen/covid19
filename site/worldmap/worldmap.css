@@ -9,10 +9,12 @@
   margin: 0 0 24px;
 }
 .worldmap button { font: inherit; }
-.wm-controls { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 12px; padding: 8px 0; background: var(--wm-surface); max-width: 1000px; }
+.wm-controls { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 8px 0; background: var(--wm-surface); max-width: 1000px; }
 .wm-play { border: 1px solid var(--wm-line); border-radius: 6px; background: var(--wm-surface); color: var(--wm-ink); padding: 6px 12px; cursor: pointer; min-width: 6.5em; }
 .wm-slider { flex: 1; min-width: 100px; accent-color: var(--wm-ink); }
-.wm-week { min-width: 9.5em; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.wm-week { min-width: 13em; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* On phones the week goes on a line of its own, so that the row never runs past the screen and never rewraps while it plays. */
+@media (max-width: 600px) { .wm-week { flex-basis: 100%; min-width: 0; } }
 .wm-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 24px; }
 @media (max-width: 900px) { .wm-row { grid-template-columns: minmax(0, 1fr); } }
 /* The caption grows to the row's tallest, so the six maps line up even when one caption wraps. */
