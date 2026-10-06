@@ -74,6 +74,9 @@ def used_files(html: str) -> list[str]:
     """The files on this site that the page loads or links."""
     live = re.sub(r"<!--.*?-->", "", html, flags=re.DOTALL)
     found = re.findall(r'(?:src|href|poster)="([^"]+)"', live)
+    # srcset lists candidates as "url [descriptor], url [descriptor]", e.g. a <picture>'s phone image.
+    for srcset in re.findall(r'srcset="([^"]+)"', live):
+        found += [candidate.split()[0] for candidate in srcset.split(",") if candidate.strip()]
     files = set()
     for value in found:
         if value.startswith(("http:", "https:", "//", "mailto:", "#")):
