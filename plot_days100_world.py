@@ -153,7 +153,8 @@ LAYOUTS = [
 # Ink and marks. The country's red is plot_series.doLinePlots' (#e41a1c, over grey), as Tommy drew it in 2020.
 INK = '#0b0b0b'
 INK_2 = '#52514e'
-MUTED = '#898781'
+# Tick labels, the key's note and the source line: 4.9:1 on white, above WCAG's 4.5:1 for text (the earlier #898781 was 3.6:1).
+MUTED = '#73716b'
 GRID = '#e1e0d9'
 AXIS = '#c3c2b7'
 CONTEXT = '#d3d1c9'
