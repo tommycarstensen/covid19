@@ -9,10 +9,10 @@ Several Claude sessions work in this folder at once. Before starting a task, rea
   - Done: B1, B2 (France and Sweden), B6, C3, C4, C5 (table after the maps), C6 (lazy loading; "Charts by country" removed), C7, C8, C9, C10, C11, the table's readability. C1 and C2 superseded: Tommy had the archive note removed (covid19-91).
   - Open: B5 (`plot_series.py`'s causes of the continent and EU bugs, with a full lint cleanup), C12 (the table's 2014 populations), C13 (the press pages). Not started; for Tommy to choose.
 - Design review of the whole page (Tommy asked covid19-b6 on 6 Oct 2026, 05:00, to work through it), split by agreement between three sessions:
-  1. The region sections' 2020 line charts (30-50 lines sharing 10 colours, unreadable legends) redrawn as small multiples like the World figures: covid19-cd, extending `plot_days100_world.py`.
+  1. The region sections' 2020 line charts (30-50 lines sharing 10 colours, unreadable legends) redrawn as small multiples like the World figures: Western Asia except Iran by covid19-cd (8b8b4b7); every other region by covid19-b6 in `plot_days100_world.py` (c8c5ab7), not yet on the page.
   2. "Charts by country" dropped, its ids moved to the table rows; 3. the table moved up after the maps; 4. the table's numbers formatted, right-aligned, sorted by total cases, with a sort indicator and tighter rows: covid19-4f.
   5. Inconsistent country headings: moot once 2 lands.
-  6. One colour language: the heat maps (`plot_heat_*`, 2020 orange-red, illegible country labels) redrawn in the interactive world map's colour scale and bins, by a new script, then swapped into the page after 4f's restructure lands: covid19-b6 (6 Oct 2026, 05:15). Not started, and needing a decision: the two test maps still say "CoViD19" in their frames and use their own green and blue scales.
+  6. One colour language: the heat maps (`plot_heat_*`, 2020 orange-red, illegible country labels) redrawn in the interactive world map's colour scale and bins, by a new script, then swapped into the page after 4f's restructure lands: covid19-b6 (6 Oct 2026, 05:15). Drawn by `plot_heat.py` (c491d11), with the region lists in `regions.py` (9a0da91); not yet on the page. Not started, and needing a decision: the two test maps still say "CoViD19" in their frames and use their own green and blue scales.
 
 ## Decided, still to do
 
