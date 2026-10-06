@@ -14,7 +14,6 @@ Several Claude sessions work in this folder at once. Before starting a task, rea
   - Trim "Infographics and other news clips" and "References" to what still works and belongs on an archive.
   - A footer with data and basemap credits, licences, and how to cite the page.
   - Then: a "How to read this page" section, chart captions and alt text, and a restructure (aligned charts first, per-country charts on a subpage, the table's thumbnail columns).
-- Confirm over HTTP that the 20 files of the 04:36 deploy on 6 Oct 2026 (13fe780: the map players and the World small multiples) answer, once the host is back. The page itself was confirmed live, and SFTP confirmed every file's size; the host started refusing this machine after a burst of about 40 quick requests from this session at about 04:40, which is likely why it stopped answering: covid19-8f (6 Oct 2026, 04:50).
 
 ## Decided, still to do
 
