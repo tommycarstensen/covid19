@@ -45,7 +45,7 @@
 /regional_maps/*/*.xml
 /regional_maps/europe/tmp_names.txt
 /map/covid19map.html
-/map/obesity-trends.html
+/other/maps/obesity-trends.html
 
 # Separate git repositories with their own history
 /repos/
