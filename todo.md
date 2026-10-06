@@ -4,7 +4,7 @@ Several Claude sessions work in this folder at once. Before starting a task, rea
 
 ## In progress
 
-- Interactive world map to replace the ECDC world-map animations (cumulative and weekly cases and deaths): `build_world_map.py` (85e1074), `site/worldmap/` (not yet committed on 6 Oct 2026 04:45). Owner: covid19-91. Its weekly figures are single weeks (USA 156,481 and Denmark 433 cases in ISO week 2020-21, as in `ecdc.csv`).
+- Interactive world map, replacing the ECDC world-map animations (cumulative and weekly cases and deaths): committed in `build_world_map.py` (85e1074), `site/worldmap/` (98b8bee), the page (db094cc, section `#world-maps`) and `build_animations.py` (f826f91). Its weekly figures are single weeks (USA 156,481 and Denmark 433 cases in ISO week 2020-21, as in `ecdc.csv`). Still to do: the deploy (covid19-82, once the host answers); the weekly-maps sentence in the archive note (handed to covid19-4f with its wording); the `CLAUDE.md` line below (waits for Tommy's go-ahead). Owner: covid19-91 (6 Oct 2026, 04:55).
 - Bubble charts: `build_bubbles.py` (527511a), `site/bubble/bubble.js` (not yet committed on 6 Oct 2026 04:45). Owner: the session that committed 527511a.
 - Bug fixes and content changes on the page, `site/index.html`, in this order, one commit each, with every choice recorded in `DECISIONS.md`: covid19-4f (6 Oct 2026, 04:55).
   - The EU table row: it leaves out Czechia but divides by the EU-28 population.
