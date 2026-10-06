@@ -1,19 +1,11 @@
 """Deploy the covid19 page to https://tommycarstensen.com/covid19/ over SFTP.
 
-site/ maps to /www/covid19/ on the host, which holds about 4,000 files from
-2020 and 2021. Only the files site/index.html uses are considered: each one
-that exists in site/ is uploaded when it differs from the server's copy, and
-each one that does not must already be on the server. Nothing is deleted.
+site/ maps to /www/covid19/ on the host, which holds about 4,000 files from 2020 and 2021. Only the files site/index.html uses are considered: each one that exists in site/ is uploaded when it differs from the server's copy, and each one that does not must already be on the server. Nothing is deleted.
 
     python3 deploy.py           # upload what differs, check the live page
     python3 deploy.py --dry     # list what would be uploaded
 
-The pages in site/ must be committed, and the server's copy of a page must
-be one this repository has committed: a copy it has never seen means
-someone changed the page on the server, and is refused. Pages are sent as committed at HEAD, never read from the working tree, so an edit another session starts mid-deploy cannot go live unfinished. The charts and images in
-site/ are ignored by git and rebuilt by redraw_charts.py and
-fetch_images.py, so before a server file is overwritten its copy is saved
-under tmp/deploy_backup/<time>/. The log is tmp/deploy.log.
+Every file git tracks (the pages, scripts, styles and data) is sent as committed at HEAD, never read from the working tree, so an edit another session has in progress cannot go live unfinished, nor a script that does not match the page. The pages in site/ must also be committed before a deploy starts, and the server's copy of a page must be one this repository has committed: a copy it has never seen means someone changed the page on the server, and is refused. Another tracked file whose working copy differs from HEAD is sent as committed, and the log names it. The charts and images in site/ are ignored by git and rebuilt by redraw_charts.py and fetch_images.py, so they are sent from the working tree; a file in site/ that git neither tracks nor ignores is refused until it is committed. Before a server file is overwritten its copy is saved under tmp/deploy_backup/<time>/. The log is tmp/deploy.log.
 """
 
 import argparse
@@ -70,7 +62,7 @@ def git(*args: str) -> str:
     return done.stdout.strip()
 
 
-def committed_page(rel: str) -> bytes:
+def committed_file(rel: str) -> bytes:
     """site/<rel> as committed at HEAD."""
     done = subprocess.run(
         ["git", "-C", str(ROOT), "show", f"HEAD:site/{rel}"],
@@ -78,6 +70,29 @@ def committed_page(rel: str) -> bytes:
         check=True,
     )
     return done.stdout
+
+
+def tracked(rels: list[str]) -> set[str]:
+    """Which of site/<rel> git tracks."""
+    listed = git("ls-files", "--", *[f"site/{rel}" for rel in rels])
+    return {line.removeprefix("site/") for line in listed.splitlines()}
+
+
+def ignored(rels: list[str]) -> set[str]:
+    """Which of site/<rel> .gitignore ignores."""
+    if not rels:
+        return set()
+    done = subprocess.run(
+        ["git", "-C", str(ROOT), "check-ignore", "--"]
+        + [f"site/{rel}" for rel in rels],
+        capture_output=True,
+        check=False,
+        text=True,
+    )
+    # check-ignore exits 1 when it ignores none of them, 128 on an error.
+    if done.returncode not in (0, 1):
+        raise SystemExit(f"git check-ignore failed: {done.stderr.strip()}")
+    return {line.removeprefix("site/") for line in done.stdout.splitlines()}
 
 
 def used_files(html: str) -> list[str]:
@@ -148,8 +163,7 @@ def ensure_dir(sftp: paramiko.SFTPClient, rel: str) -> None:
 
 
 def put(sftp: paramiko.SFTPClient, rel: str, data: bytes) -> None:
-    """Write to a temporary name and rename it into place, so the live
-    site never serves half a file."""
+    """Write to a temporary name and rename it into place, so the live site never serves half a file."""
     ensure_dir(sftp, rel)
     remote = f"{REMOTE}/{rel}"
     tmp = remote + ".tmp"
@@ -171,15 +185,26 @@ def put(sftp: paramiko.SFTPClient, rel: str, data: bytes) -> None:
 def plan(
     sftp: paramiko.SFTPClient, out: Tee
 ) -> tuple[list[tuple[str, bytes]], dict[str, bytes], bytes]:
-    """What to upload, the server copies it would replace, and the
-    index.html it sends."""
-    index = committed_page("index.html")
+    """What to upload, the server copies it would replace, and the index.html it sends."""
+    index = committed_file("index.html")
     files = ["index.html", *used_files(index.decode("utf-8"))]
     local = [rel for rel in files if (SITE / rel).is_file()]
     pages = [f"site/{rel}" for rel in local if rel.endswith(".html")]
     dirty = git("status", "--porcelain", "--", *pages)
     if dirty:
         raise SystemExit(f"commit the pages before deploying:\n{dirty}")
+    committed = tracked(local)
+    untracked = [rel for rel in local if rel not in committed]
+    loose = sorted(set(untracked) - ignored(untracked))
+    if loose:
+        names = "\n".join(f"site/{rel}" for rel in loose)
+        raise SystemExit(
+            f"git neither tracks nor ignores these, so commit them first:\n{names}"
+        )
+    others = [f"site/{rel}" for rel in sorted(committed) if not rel.endswith(".html")]
+    edited = git("status", "--porcelain", "--", *others) if others else ""
+    if edited:
+        print(f"sent as committed at HEAD, not as edited here:\n{edited}", file=out)
     elsewhere = [rel for rel in files if not (SITE / rel).is_file()]
     print(
         f"the page uses {len(files)} files: {len(local)} in site/, "
@@ -195,8 +220,8 @@ def plan(
     for done, rel in enumerate(local, 1):
         if rel == "index.html":
             data = index
-        elif rel.endswith(".html"):
-            data = committed_page(rel)
+        elif rel in committed:
+            data = committed_file(rel)
         else:
             data = (SITE / rel).read_bytes()
         size = remote_size(sftp, rel)
@@ -226,9 +251,7 @@ def plan(
 
 
 def check_live(out: Tee, uploaded: list[str], expected: bytes) -> None:
-    """The plain URL must serve exactly the index.html this deploy sent,
-    and every file uploaded must answer. Varnish in front of the host serves
-    its old copy for a while after an upload, so the check asks again."""
+    """The plain URL must serve exactly the index.html this deploy sent, and every file uploaded must answer. Varnish in front of the host serves its old copy for a while after an upload, so the check asks again."""
     tries = 9
     for attempt in range(1, tries + 1):
         live = requests.get(URL, timeout=30)
@@ -255,8 +278,7 @@ def check_live(out: Tee, uploaded: list[str], expected: bytes) -> None:
 
 
 def answers(url: str, tries: int = 3, wait: float = 5.0) -> int:
-    """The status a file answers with. The host refuses a quick burst of
-    requests, so they are paced and a failure is asked again."""
+    """The status a file answers with. The host refuses a quick burst of requests, so they are paced and a failure is asked again."""
     status = 0
     for _ in range(tries):
         time.sleep(0.5)
