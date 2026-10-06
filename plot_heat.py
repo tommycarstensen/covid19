@@ -1,15 +1,15 @@
-"""Draw the page's regional heat maps of weekly COVID-19 cases and deaths per million people, in the interactive world map's colours.
+"""Draw the page's regional heat maps of weekly COVID-19 cases and deaths per million people, in Tommy's 2020 OrRd on one fixed log scale.
 
-The 2020 heat maps (plot_heat_{cases,deaths}_<region>.png, drawn by plot_series.doHeatMaps) used matplotlib's OrRd scale, rescaled for every chart, so the same colour meant different rates in different charts; their country names were too small to read; they averaged seven weekly rows, a leftover from ECDC's daily data; and the EU chart left out Czechia. These show single weeks, with the world map's eight classes and colours (blue for cases, orange for deaths, half-decade steps per million people), so a colour means the same rate in every heat map and on the map. Cases and deaths sit side by side with the country names beside them.
+The 2020 heat maps (plot_heat_{cases,deaths}_<region>.png, drawn by plot_series.doHeatMaps) used matplotlib's OrRd on a linear scale rescaled for every chart, so the same colour meant different rates in different charts and a region's one big wave washed out everything else; their country names were too small to read; they averaged seven weekly rows, a leftover from ECDC's daily data; and the EU chart left out Czechia. These keep OrRd, but on one logarithmic scale per measure shared by every region (cases 1 to 10,000 per million people per week, deaths 0.1 to 1,000; a rate outside it takes the colour of its end), with a light grey for 0, and show single weeks. Rows run from the largest population to the smallest, with each population beside the name, so the rows where one case or death is a large rate per million sit together at the bottom and say so. On wide screens cases and deaths sit side by side with the names between them; on phones the two maps are stacked.
 
-Reads ecdc.csv (ECDC weekly cases and deaths to ISO week 2021-01, with ECDC's populations of 2019, as the world map uses) and the regions in regions.py, and downloads nothing. A week before a country's first report counts as 0, as does a week whose count ECDC revised below 0; a missing week after the first report would be hatched, as on the map, but ecdc.csv has none for these countries. Countries of fewer than 100,000 people are left out, because one case there is ten or more per million; the figure names them.
+Reads ecdc.csv (ECDC weekly cases and deaths to ISO week 2021-01, with ECDC's populations of 2019) and the regions in regions.py, and downloads nothing. A week before a place's first report counts as 0, as does a week whose count ECDC revised below 0; a missing week after the first report would be hatched, but ecdc.csv has none for these places. Places of fewer than 100,000 people are left out, because one case there is ten or more per million; the figure names them.
 
-Writes site/heat_<region>.png (wide screens, 2x pixel density) and site/heat_<region>_narrow.png (phones, the two maps stacked, 3x), and their <picture> tags to tmp/plot_heat_markup.html.
+Writes site/heat_<region>.png (wide screens, 2x pixel density) and site/heat_<region>_narrow.png (phones, 3x), and their <picture> tags to tmp/plot_heat_markup.html. Stops if any text runs off a figure or a name runs into its population.
 
 Usage: python3 plot_heat.py
 """
 
-import re
+import math
 import textwrap
 from dataclasses import dataclass
 from datetime import date, timedelta
@@ -18,36 +18,35 @@ from pathlib import Path
 
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from matplotlib.axes import Axes
-from matplotlib.colors import to_rgb
+from matplotlib.colors import ListedColormap, LogNorm, to_rgb
 from matplotlib.figure import Figure
 from matplotlib.patches import Rectangle
+from matplotlib.text import Text
+from matplotlib.transforms import blended_transform_factory
 from PIL import Image
 
 from regions import REGIONS
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / 'site'
-WORLDMAP_JS = ROOT / 'site' / 'worldmap' / 'worldmap.js'
 
-# The world map's ramps, class breaks (per million people per week) and colour for zero; checked against worldmap.js on every run.
-RAMPS = {
-    'cases': ['#cde2fb', '#a5c9f5', '#7bafee', '#5095e7', '#2c7ad8', '#2062b3', '#164b8f', '#0d366b'],
-    'deaths': ['#fdd6c8', '#f6b49c', '#ed906e', '#e26a3c', '#cd4903', '#a83a00', '#832c02', '#611e01'],
-}
-BREAKS = {
-    'cases': [3, 10, 30, 100, 300, 1000, 3000],
-    'deaths': [0.3, 1, 3, 10, 30, 100, 300],
-}
-ZERO = '#e2e1dc'
+# plot_series.doHeatMaps' OrRd, without its palest fifth, so the lowest rate stays apart from the grey for 0.
+RAMP = ListedColormap(matplotlib.colormaps['OrRd'](np.linspace(0.2, 1.0, 256)))
+# Per million people per week: the ends of each measure's log scale, the same in every region.
+SCALES = {'cases': (1.0, 10_000.0), 'deaths': (0.1, 1_000.0)}
+NORMS = {measure: LogNorm(lo, hi, clip=True) for measure, (lo, hi) in SCALES.items()}
+ZERO = '#f1f0ed'
 HATCH = '#a9a7a0'
 
 INK = '#0b0b0b'
 INK_2 = '#52514e'
-MUTED = '#898781'
+MUTED = '#706f6a'  # 5.0:1 on white
 
 MIN_POPULATION = 100_000
+EDGE = 0.12  # inches of margin at the figure's left and right
 
 NAMES = {
     'United_States_of_America': 'United States',
@@ -59,6 +58,10 @@ NAMES = {
     'Brunei_Darussalam': 'Brunei',
     'Guinea_Bissau': 'Guinea-Bissau',
     'Central_African_Republic': 'Central African Rep.',
+    'Timor_Leste': 'Timor-Leste',
+    'Micronesia_(Federated_States_of)': 'Micronesia',
+    'United_States_Virgin_Islands': 'US Virgin Islands',
+    'Turks_and_Caicos_islands': 'Turks and Caicos Islands',
 }
 # On the phone figure's narrower label column.
 NARROW_NAMES = {
@@ -82,32 +85,15 @@ MEASURES = [Measure('cases', 'cases_weekly'), Measure('deaths', 'deaths_weekly')
 class Layout:
     suffix: str
     width: float  # inches; one inch is 100 CSS pixels at the size the page shows
-    label: float
     row: float
     dpi: int
     font: float
 
 
 LAYOUTS = [
-    Layout('', width=13.55, label=1.75, row=0.15, dpi=200, font=8.5),
-    Layout('_narrow', width=4.15, label=1.25, row=0.12, dpi=300, font=7),
+    Layout('', width=13.55, row=0.15, dpi=200, font=8.5),
+    Layout('_narrow', width=4.15, row=0.12, dpi=300, font=7),
 ]
-
-
-def check_worldmap() -> None:
-    """Stop if worldmap.js no longer uses these ramps and breaks, so the two cannot drift apart."""
-    js = WORLDMAP_JS.read_text(encoding='utf-8')
-    for name in ('cases', 'deaths'):
-        ramp = re.search(rf"\b{name}: \[([^\]]*)\]", js)
-        breaks = re.search(rf"'{name} weekly': \[([^\]]*)\]", js)
-        if ramp is None or breaks is None:
-            raise SystemExit(f'Cannot find the {name} ramp or breaks in {WORLDMAP_JS}')
-        if re.findall(r"'(#[0-9a-f]{6})'", ramp.group(1)) != RAMPS[name]:
-            raise SystemExit(f'The {name} ramp differs from {WORLDMAP_JS}')
-        if [float(v) for v in breaks.group(1).split(',')] != [float(v) for v in BREAKS[name]]:
-            raise SystemExit(f'The {name} breaks differ from {WORLDMAP_JS}')
-    if f"var ZERO = '{ZERO}'" not in js:
-        raise SystemExit(f'The colour for zero differs from {WORLDMAP_JS}')
 
 
 def monday(year_week: str) -> date:
@@ -134,7 +120,7 @@ def load() -> tuple[list[str], dict[str, Country]]:
     countries = {}
     for name, rows in df.groupby('countriesAndTerritories'):
         if rows['popData2019'].isna().to_numpy().any():
-            continue  # only 'Cases_on_an_international_conveyance_Japan', which is in no region
+            continue  # Wallis and Futuna and the cases on a ship off Japan, which regions.py keeps out of every region
         population = int(rows['popData2019'].iloc[0])
         by_week = rows.set_index('year_week')
         first = weeks.index(str(min(by_week.index)))
@@ -157,21 +143,26 @@ def display_name(country: str, narrow: bool = False) -> str:
     return NAMES.get(country, country.replace('_', ' '))
 
 
+def millions(population: int) -> str:
+    m = population / 1e6
+    return f'{m:,.0f} M' if m >= 10 else f'{m:.1f} M' if m >= 1 else f'{m:.2f} M'
+
+
 def colour(rate: float | None, measure: str) -> tuple[float, float, float]:
     if rate is None:
         return (1.0, 1.0, 1.0)
     if rate <= 0:
         return to_rgb(ZERO)
-    k = sum(rate >= b for b in BREAKS[measure])
-    return to_rgb(RAMPS[measure][k])
+    r, g, b, _ = RAMP(float(NORMS[measure](rate)))
+    return (r, g, b)
 
 
 def number(value: float) -> str:
     return f'{value:,.0f}' if value >= 1 else f'{value:g}'
 
 
-def heat(ax: Axes, rows: list[Country], measure: str, weeks: list[str], layout: Layout, labels: str) -> None:
-    """One heat map: a row per country, a column per week."""
+def heat(ax: Axes, rows: list[Country], measure: str, weeks: list[str], layout: Layout) -> None:
+    """One heat map: a row per place, a column per week."""
     grid = [[colour(rate, measure) for rate in c.rates[measure]] for c in rows]
     n, m = len(rows), len(weeks)
     ax.imshow(grid, aspect='auto', interpolation='nearest', extent=(0, m, n, 0))
@@ -184,13 +175,7 @@ def heat(ax: Axes, rows: list[Country], measure: str, weeks: list[str], layout: 
     ax.set_ylim(n, 0)
     for side in ax.spines.values():
         side.set_visible(False)
-    ax.set_yticks([i + 0.5 for i in range(n)])
-    ax.set_yticklabels([display_name(c.name, layout.suffix != '') for c in rows], fontsize=layout.font, color=INK)
-    ax.tick_params(axis='y', length=0, pad=4)
-    if labels == 'right':
-        ax.yaxis.tick_right()
-    elif labels == 'none':
-        ax.set_yticklabels([])
+    ax.set_yticks([])
 
     # Months: a short tick where each starts, the name under its middle.
     origin = monday(weeks[0])
@@ -214,26 +199,64 @@ def heat(ax: Axes, rows: list[Country], measure: str, weeks: list[str], layout: 
     ax.tick_params(axis='x', which='major', length=0, pad=3)
 
 
+def row_labels(fig: Figure, ax: Axes, rows: list[Country], name_x: float, pop_x: float,
+               layout: Layout) -> list[tuple[Text, Text]]:
+    """Each row's name, starting at name_x, and population, ending at pop_x (inches from the left), with a heading over the populations."""
+    width = fig.get_figwidth()
+    where = blended_transform_factory(fig.transFigure, ax.transData)
+    narrow = layout.suffix != ''
+    pairs = []
+    for i, c in enumerate(rows):
+        name = ax.text(name_x / width, i + 0.5, display_name(c.name, narrow), transform=where, ha='left',
+                       va='center', fontsize=layout.font, color=INK)
+        pop = ax.text(pop_x / width, i + 0.5, millions(c.population), transform=where, ha='right', va='center',
+                      fontsize=layout.font, color=INK_2)
+        pairs.append((name, pop))
+    ax.text(pop_x / width, -0.25, 'population', transform=where, ha='right', va='bottom',
+            fontsize=layout.font - 1, color=MUTED)
+    return pairs
+
+
 def legend(ax: Axes, measure: str, layout: Layout, any_missing: bool) -> None:
-    """The classes as one bar of swatches, each break written under the join it marks, and a swatch for 0."""
-    ax.set_xlim(0, 11 if any_missing else 9.4)
+    """A swatch for 0, then the colour scale as one bar on a log axis, labelled at every power of ten."""
+    lo, hi = SCALES[measure]
+    start, end = 1.0, 9.0
+    ax.imshow(np.linspace(0, 1, 256)[None, :], cmap=RAMP, aspect='auto', interpolation='bilinear',
+              extent=(start, end, 0.55, 0.95))
+    ax.set_xlim(0, 10.6 if any_missing else end + 0.5)  # room for half the last label
     ax.set_ylim(0, 1)
     ax.axis('off')
     ax.add_patch(Rectangle((0, 0.55), 0.8, 0.4, facecolor=ZERO, linewidth=0))
     ax.text(0.4, 0.4, '0', ha='center', va='top', fontsize=layout.font, color=INK_2)
-    for k, hex_colour in enumerate(RAMPS[measure]):
-        ax.add_patch(Rectangle((1.2 + k, 0.55), 1, 0.4, facecolor=hex_colour, linewidth=0))
-    for k, b in enumerate(BREAKS[measure]):
-        ax.text(2.2 + k, 0.4, number(b), ha='center', va='top', fontsize=layout.font, color=INK_2)
+    decades = round(math.log10(hi / lo))
+    for k in range(decades + 1):
+        x = start + (end - start) * k / decades
+        ax.plot([x, x], [0.47, 0.55], color=MUTED, linewidth=0.6)
+        ax.text(x, 0.4, number(lo * 10 ** k), ha='center', va='top', fontsize=layout.font, color=INK_2)
     if any_missing:
-        ax.add_patch(Rectangle((9.6, 0.55), 0.8, 0.4, facecolor='white', edgecolor=HATCH, hatch='////', linewidth=0))
-        ax.text(10, 0.4, 'no report', ha='center', va='top', fontsize=layout.font, color=INK_2)
+        ax.add_patch(Rectangle((9.2, 0.55), 0.8, 0.4, facecolor='white', edgecolor=HATCH, hatch='////', linewidth=0))
+        ax.text(9.6, 0.4, 'no report', ha='center', va='top', fontsize=layout.font, color=INK_2)
 
 
 def place(fig: Figure, left: float, top: float, width: float, height: float, size: tuple[float, float]) -> Axes:
     """An axes at a position given in inches from the figure's top left corner."""
     w, h = size
     return fig.add_axes((left / w, 1 - (top + height) / h, width / w, height / h))
+
+
+def text_height(text: str, size: float, spacing: float) -> float:
+    """Inches taken by a block of text of this many lines."""
+    return (text.count('\n') + 1) * size * spacing / 72
+
+
+def widest(fig: Figure, texts: list[str], size: float) -> float:
+    """The width in inches of the widest of these texts at this size."""
+    widths = []
+    for s in texts:
+        t = fig.text(0, 0, s, fontsize=size)
+        widths.append(t.get_window_extent().width / fig.dpi)
+        t.remove()
+    return max(widths)
 
 
 def draw(region: str, rows: list[Country], left_out: list[Country], weeks: list[str], layout: Layout) -> Path:
@@ -247,59 +270,83 @@ def draw(region: str, rows: list[Country], left_out: list[Country], weeks: list[
     left_names = ', '.join(display_name(c.name) for c in left_out)
     if narrow:
         title = f'Weekly COVID-19 cases and deaths\nper million people in {where}'
-        subtitle = (f'One row per country, one column per week,\n{monday(first):%-d %b %Y} to {last_day:%-d %b %Y}. '
-                    'Colours as on\nthe world map.')
-        paragraphs = ['Data: ECDC, weekly, populations of 2019. Before its first report a country counts as 0.']
+        subtitle = textwrap.fill(
+            f'One row per country or territory, largest population first, one column per week, '
+            f'{monday(first):%-d %b %Y} to {last_day:%-d %b %Y}. The colour scale is logarithmic and the same in '
+            'every region.', 52)
+        paragraphs = ['Data: ECDC, weekly, populations of 2019. Before its first report a place counts as 0.']
         if left_out:
             paragraphs.append(f'Left out, under 100,000 people: {left_names}.')
         paragraphs.append('Drawn October 2026.')
     else:
         title = f'Weekly COVID-19 cases and deaths per million people in {where}'
-        subtitle = (f'One row per country, one column per week, from {monday(first):%-d %B %Y} to {last_day:%-d %B %Y} '
-                    f'(ISO weeks {first} to {weeks[-1]}). The colours are those of the world map.')
+        subtitle = (f'One row per country or territory, largest population first, one column per week, from '
+                    f'{monday(first):%-d %B %Y} to {last_day:%-d %B %Y} (ISO weeks {first} to {weeks[-1]}).\n'
+                    'The colour scale is logarithmic and the same in every region.')
         paragraphs = [('Data: European Centre for Disease Prevention and Control (ECDC), weekly cases and deaths by '
-                       'country, per million people of 2019. A country counts as 0 in the weeks before its first report.'),
+                       'country, per million people of 2019. A place counts as 0 in the weeks before its first report.'),
                       (f'Left out, with fewer than 100,000 people: {left_names}. ' if left_out else '')
                       + 'Drawn October 2026.']
+    title_size, subtitle_size = (13, 9.5) if not narrow else (11.5, 8.5)
     source_size = 8 if not narrow else 7.5
     source = '\n'.join(textwrap.fill(p, 62 if narrow else 210) for p in paragraphs)
-    footer = 0.25 + (source.count('\n') + 1) * source_size * 1.35 / 72
+    subtitle_top = 0.12 + text_height(title, title_size, 1.2) + 0.12
+    header = subtitle_top + text_height(subtitle, subtitle_size, 1.35) + 0.12
+    footer = 0.3 + text_height(source, source_size, 1.35)
 
     title_h, axis_h, legend_h = 0.32, (0.42 if not narrow else 0.36), 0.42
-    header = 1.0 if not narrow else 1.55
     block = title_h + panel_h + axis_h + legend_h
-    if narrow:
-        panel_w = layout.width - layout.label - 0.1
-        height = header + 2 * block + 0.2 + footer
-    else:
-        panel_w = (layout.width - 2 * layout.label - 0.35) / 2
-        height = header + block + footer
+    height = header + (2 * block + 0.2 if narrow else block) + footer
     size = (layout.width, height)
     fig = plt.figure(figsize=size, dpi=100, facecolor='white')
 
+    # The label columns are as wide as this figure's longest name and population, and the maps take the rest.
+    names_w = widest(fig, [display_name(c.name, narrow) for c in rows], layout.font)
+    pops_w = max(widest(fig, [millions(c.population) for c in rows], layout.font),
+                 widest(fig, ['population'], layout.font - 1))
+    labels_w = names_w + 0.15 + pops_w
+    pad = 0.1
+    if narrow:
+        panel_x = EDGE + labels_w + 0.08
+        panel_w = layout.width - panel_x - EDGE
+        xs = [panel_x, panel_x]
+        tops = [header, header + block + 0.2]
+    else:
+        middle = pad + labels_w + pad
+        panel_w = (layout.width - 2 * EDGE - middle) / 2
+        xs = [EDGE, EDGE + panel_w + middle]
+        tops = [header, header]
+
+    pairs = []
     for k, measure in enumerate(MEASURES):
-        if narrow:
-            x, top, labels = layout.label, header + k * (block + 0.2), 'left'
-        else:
-            x = layout.label if k == 0 else layout.label + panel_w + 0.35
-            top, labels = header, ('left' if k == 0 else 'right')
+        x, top = xs[k], tops[k]
         ax = place(fig, x, top + title_h, panel_w, panel_h, size)
-        heat(ax, rows, measure.name, weeks, layout, labels)
-        fig.text(x / layout.width, 1 - (top + 0.05) / height, f'{measure.name.capitalize()} per million people, per week',
+        heat(ax, rows, measure.name, weeks, layout)
+        if narrow:
+            pairs += row_labels(fig, ax, rows, EDGE, x - 0.08, layout)
+        elif k == 0:
+            pairs += row_labels(fig, ax, rows, x + panel_w + pad, xs[1] - pad, layout)
+        fig.text((EDGE if narrow else x) / layout.width, 1 - (top + 0.05) / height,
+                 f'{measure.name.capitalize()} per million people, per week',
                  ha='left', va='top', fontsize=10 if not narrow else 8.5, fontweight='bold', color=INK)
-        key = place(fig, x, top + title_h + panel_h + axis_h, min(panel_w, 4.6), legend_h, size)
+        key_x, key_w = (EDGE, layout.width - 2 * EDGE) if narrow else (x, min(panel_w, 4.6))
+        key = place(fig, key_x, top + title_h + panel_h + axis_h, key_w, legend_h, size)
         legend(key, measure.name, layout, any_missing)
 
-    edge = 0.12 / layout.width
-    fig.text(edge, 1 - 0.12 / height, title, ha='left', va='top', fontsize=13 if not narrow else 11.5,
-             fontweight='bold', color=INK, linespacing=1.2)
-    fig.text(edge, 1 - (0.5 if not narrow else 0.68) / height, subtitle, ha='left', va='top',
-             fontsize=9.5 if not narrow else 8.5, color=INK_2, linespacing=1.35)
+    edge = EDGE / layout.width
+    fig.text(edge, 1 - 0.12 / height, title, ha='left', va='top', fontsize=title_size, fontweight='bold', color=INK,
+             linespacing=1.2)
+    fig.text(edge, 1 - subtitle_top / height, subtitle, ha='left', va='top', fontsize=subtitle_size, color=INK_2,
+             linespacing=1.35)
     fig.text(edge, 0.1 / height, source, ha='left', va='bottom', fontsize=source_size, color=MUTED, linespacing=1.35)
 
     clipped = escaping_text(fig)
     if clipped:
         raise SystemExit(f'heat_{region}{layout.suffix}: text runs off the figure: {clipped}')
+    crowded = [name.get_text() for name, pop in pairs
+               if name.get_window_extent().x1 + 4 > pop.get_window_extent().x0]
+    if crowded:
+        raise SystemExit(f'heat_{region}{layout.suffix}: names run into their populations: {crowded}')
     path = OUT / f'heat_{region}{layout.suffix}.png'
     fig.savefig(path, dpi=layout.dpi, facecolor='white')
     plt.close(fig)
@@ -343,9 +390,10 @@ def picture(region: str, rows: list[Country], weeks: list[str], paths: dict[str,
     w, h = css_size(paths[wide.suffix], wide.dpi)
     nw, nh = css_size(paths[narrow.suffix], narrow.dpi)
     alt = (f'Heat maps of weekly COVID-19 cases and deaths per million people in {TITLES.get(region, region)}, '
-           f'one row per country and one column per week from {monday(weeks[0]):%-d %B %Y} to January 2021. '
+           f'one row per country or territory, largest population first, and one column per week from '
+           f'{monday(weeks[0]):%-d %B %Y} to January 2021. '
            f'Highest weekly cases: {peak(rows, "cases", weeks)}. Highest weekly deaths: {peak(rows, "deaths", weeks)}. '
-           f'Countries: {", ".join(display_name(c.name) for c in rows)}.')
+           f'Rows: {", ".join(display_name(c.name) for c in rows)}.')
     return (f'<picture>\n'
             f'<source media="(max-width: 700px)" srcset="{paths[narrow.suffix].name}" width="{nw}" height="{nh}">\n'
             f'<img src="{paths[wide.suffix].name}" width="{w}" height="{h}" loading="lazy" alt="{alt}">\n'
@@ -356,19 +404,18 @@ def main() -> None:
     matplotlib.use('Agg')
     plt.rcParams['hatch.color'] = HATCH
     plt.rcParams['hatch.linewidth'] = 0.6
-    check_worldmap()
     weeks, countries = load()
-    print(f'ecdc.csv: {len(countries)} countries, ISO weeks {weeks[0]} to {weeks[-1]}. '
+    print(f'ecdc.csv: {len(countries)} places, ISO weeks {weeks[0]} to {weeks[-1]}. '
           f'Drawing {len(REGIONS) * len(LAYOUTS)} figures into {OUT.relative_to(ROOT)}/')
     pictures = []
     for region, names in REGIONS.items():
-        members = sorted((countries[c] for c in names), key=lambda c: display_name(c.name))
+        members = sorted((countries[c] for c in names), key=lambda c: -c.population)
         rows = [c for c in members if c.population >= MIN_POPULATION]
-        left_out = [c for c in members if c.population < MIN_POPULATION]
+        left_out = sorted((c for c in members if c.population < MIN_POPULATION), key=lambda c: display_name(c.name))
         paths = {layout.suffix: draw(region, rows, left_out, weeks, layout) for layout in LAYOUTS}
         sizes = ', '.join(f'{p.name} {css_size(p, lay.dpi)[0]}x{css_size(p, lay.dpi)[1]} CSS px'
                           for lay, p in zip(LAYOUTS, paths.values()))
-        print(f'  {region}: {len(rows)} countries, {len(left_out)} left out; {sizes}')
+        print(f'  {region}: {len(rows)} rows, {len(left_out)} left out; {sizes}')
         pictures.append(f'<!-- {region} -->\n' + picture(region, rows, weeks, paths))
     markup = ROOT / 'tmp' / 'plot_heat_markup.html'
     markup.parent.mkdir(exist_ok=True)
