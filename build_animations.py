@@ -99,14 +99,10 @@ def europe() -> Animation:
 
 
 # File name, the date in the first frame's title, and what it shows. Check the first date against a regenerated GIF's first frame: the labels are counted from it in weeks.
+# Not the ECDC world maps covid19_{cases,deaths}{cumulated,perweek}_*: the interactive world map (build_world_map.py, site/worldmap/) replaces them, as the weekly GIFs show seven-week totals and all four jump between frames.
 WORLD = [
-    ('covid19_casescumulated_OrRd_logTrue', date(2020, 1, 6),
-     'Cumulative COVID-19 cases per million, by country'),
-    ('covid19_deathscumulated_PuRd_logTrue', date(2020, 1, 6),
-     'Cumulative COVID-19 deaths per million, by country'),
     ('covid19_total_tests_per_thousand', date(2020, 1, 5),
      'Cumulative COVID-19 tests per thousand, by country'),
-    # Not covid19_{cases,deaths}perweek_*: those GIFs show seven-week totals, and the interactive world map (build_world_map.py) replaces them.
     ('covid19_weekly_tests_per_thousand', date(2020, 1, 5),
      'COVID-19 tests per thousand per week, by country'),
 ]
