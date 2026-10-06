@@ -16,7 +16,7 @@ Bugs:
 - B2. France, Sweden and Czechia have no table row: the January 2021 run wrote no table file for them, and its data are lost. Open: add rows from `ecdc.csv` marked one week earlier, or say on the page that they are missing.
 - B3. Reference links that land somewhere else or nowhere. Handled under C9.
 - B4. The weekly world maps showed seven-week totals. Covid19-91's interactive world map replaces them (see `todo.md`).
-- B5. `plot_series.py` still holds the causes of the continent bug and B1. Open: fixing it means cleaning the whole script under ruff, pycodestyle and pyright.
+- B5. `plot_series.py` still holds the causes of the continent bug and B1. Done, see below.
 - B6. Whether `sortable.js` sorts numbers as numbers. Open: the file exists only on the server, which stopped answering at about 04:45 on 6 October 2026.
 
 Content, from the three advisers (who suggested it, effort):
@@ -33,7 +33,7 @@ Content, from the three advisers (who suggested it, effort):
 - C10. Captions and alt text for every chart; one heading for the loose bubble, heat and scatter charts (structure, accuracy; medium).
 - C11. Credits for basemaps and data, licences, and how to cite the page (accuracy, reader; small).
 - C12. The population column uses `countryinfo`'s figures of about 2014, which puts per-capita columns 3 to 8% high (accuracy, medium). Done, see below: for a few countries the error was far larger.
-- C13. Give the press pages a title, a back link and an archive note, and check their links (accuracy, medium).
+- C13. Give the press pages a title, a back link and an archive note, and check their links (accuracy, medium). Restyled and their broken links repaired by covid19-f8 (international, 690cfed) and covid19-ac (Danish, e89e325); the title, back link and note wait for Tommy to approve their wording.
 
 One adviser claim was checked and rejected: the table's totals are higher than `ecdc.csv` (the USA 23,938,288 against 22,423,006) not because they are wrong, but because the table came from a download one week later, to 17 January 2021. The table's "most recent week" for the USA, 1,515,282, is exactly the difference.
 
@@ -235,3 +235,11 @@ The intro to "Other trackers" (C9) said that in October 2026 two links had been 
 The table divided by `countryinfo` 0.1.2's populations, of about 2014, while the world maps and the heat maps divide by ECDC's of 2019 in `ecdc.csv`, so the same country had two different rates per million on one page. The gap was not a few per cent everywhere. Over the 89 rows the per-million columns were a median 4.4% too high (a quarter of the rows by more than 8%), but `countryinfo` counted the whole island of Ireland (6.4 million against 4.9), and had Jordan at 6.7 million (10.1), the Maldives at 0.3 (0.53), Kuwait at 3.3 (4.2) and Bosnia and Herzegovina at 3.8 (3.3). Ireland's cases per million were 23% too low, Jordan's 52% and the Maldives' 56% too high.
 
 Each row now takes its population from `popData2019` in `ecdc.csv`, and the EU row the sum of its 26 countries (436.2 million), and cases and deaths per million are recomputed from the row's own totals. Nothing else in a row changes: the totals, the case fatality rate, the last week, and tests per thousand, which is Our World in Data's own figure on its own populations. The USA becomes 329.1 million and 72,746.4 cases per million (was 319.3 and 74,980.8). B1's reason for dividing the EU row by `countryinfo`'s populations, that every other row used them, no longer holds. The "How to read" line that said the table used populations from about 2014 now says 2019.
+
+## 2026-10-06: `plot_series.py` fixed where the EU, continent and population bugs were made (B5, covid19-67)
+
+The page's repairs (B1, the USA's continent, C12) corrected the published table, but the 2020 script still produced the old errors, and `redraw_charts.py` still calls it. It now takes its region lists from `regions.py` (Czechia spelt as ECDC spells it, the 24 places the 2020 lists missed, each place once), gives the USA the continent Americas, and divides by ECDC's populations of 2019 instead of `countryinfo`'s of about 2014 and a hand-written EU of 28. Run on `ecdc.csv`, its EU row has 27 countries and 446.8 million people.
+
+Fixed with it, because they stopped the script from running at all on the installed pandas 3 and matplotlib 3.11 or were plain mistakes: `DataFrame.append` and `Figure.set_tight_layout`, both since removed; a debug `exit()` at the top of the bar charts; an undefined name in `parseArgs`; columns the weekly data do not have. `main()` reads `ecdc.csv`, because ECDC's URL now serves another file. The whole file is clean under ruff, pycodestyle and pyright, as Tommy's rules require of a touched file.
+
+Not done: redrawing anything. The page's images are as before, and the January 2021 table stays as published apart from its repairs. A rerun of `redraw_charts.py` would add the 24 places to its charts' grey lines.

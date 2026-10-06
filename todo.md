@@ -4,7 +4,8 @@ Several Claude sessions work in this folder at once. Before starting a task, rea
 
 ## In progress
 
-- The rest of covid19-4f's list (`DECISIONS.md`, B1-B6 and C1-C13; covid19-4f has ended): B5 (`plot_series.py`'s EU and continent bugs, with a full lint cleanup) and C12 (the table's 2014 populations), plus the USA's and EU's 2020 charts below: covid19-67 (6 Oct 2026, 05:47). C13 (the press pages) is with covid19-ac (`press_denmark.html`) and covid19-f8 (`press_international.html`), at Tommy's request.
+- The USA's and the EU's 2020 charts (below): covid19-67 (6 Oct 2026, 06:03). B5, C12 and `deploy.py`'s working-tree uploads are done (2942576, 0471a56, eb00ed1); C12 is live.
+- C13, the press pages: restyled, broken links repaired and live (covid19-f8, `press_international.html`, 690cfed; covid19-ac, `press_denmark.html`, e89e325). Their title, back link and archive note wait for Tommy to approve the wording covid19-f8 proposed; add none without his yes.
 
 ## Known problems
 
