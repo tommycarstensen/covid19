@@ -7,16 +7,17 @@
   // Both axes, as log2 of the ratio to the earlier two weeks: from a quarter (-75%) to eight times (+700%). Values beyond are drawn at the edge.
   var LO = -2;
   var HI = 3;
-  // The test colour is fully blue at half the earlier tests and fully red at double.
+  // The test colour runs along viridis, as in plot_bubble.py, from its purple end at half the earlier tests to its yellow end at double.
   var TEST_SPAN = 1;
   // The countries with most deaths to date get a label, up to this many, where it fits.
   var LABELS = 10;
   var STEP_MS = 700;
 
   var INK = '#0b0b0b';
-  var BLUE = [42, 120, 214];
-  var GRAY = [168, 166, 160];
-  var RED = [227, 73, 72];
+  // Matplotlib's viridis at nine even steps; the colours between are mixed from the nearest two.
+  var VIRIDIS = [[68, 1, 84], [71, 45, 123], [59, 82, 139], [44, 114, 142], [33, 145, 140], [40, 174, 128], [94, 201, 98], [173, 220, 48], [253, 231, 37]];
+  // See-through bubbles with a thin dark edge, as in plot_bubble.py, so a big bubble does not hide the ones under it.
+  var FILL_OPACITY = 0.75;
 
   var CSS = [
     '.bubble{margin:16px 0 24px;max-width:860px;font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif;color:#333}',
@@ -30,8 +31,8 @@
     '.bubble .title{fill:#52514e;font-size:12px}',
     '.bubble .head{fill:#0b0b0b;font-size:13px;font-weight:600}',
     '.bubble g.b{cursor:pointer;transition:transform .45s ease}',
-    '.bubble g.b circle.dot{stroke:#fff;stroke-width:1.5;transition:r .45s ease,fill .45s ease}',
-    '.bubble g.b.hollow circle.dot{fill:#fff;stroke:#76746e;stroke-width:1.5}',
+    '.bubble g.b circle.dot{fill-opacity:' + FILL_OPACITY + ';stroke:rgba(0,0,0,.5);stroke-width:.75;transition:r .45s ease,fill .45s ease}',
+    '.bubble g.b.hollow circle.dot{fill:none;stroke:#76746e;stroke-width:1.5}',
     '.bubble g.b.on circle.dot{stroke:' + INK + ';stroke-width:2}',
     '.bubble g.lab{pointer-events:none;transition:transform .45s ease}',
     '.bubble g.lab text{fill:' + INK + ';stroke:#fff;stroke-width:3px;stroke-linejoin:round;paint-order:stroke}',
@@ -129,8 +130,9 @@
   }
 
   function testColour(z) {
-    var u = Math.max(-1, Math.min(1, z / TEST_SPAN));
-    return mix(GRAY, u < 0 ? BLUE : RED, Math.abs(u));
+    var u = (Math.max(-1, Math.min(1, z / TEST_SPAN)) + 1) / 2 * (VIRIDIS.length - 1);
+    var i = Math.min(Math.floor(u), VIRIDIS.length - 2);
+    return mix(VIRIDIS[i], VIRIDIS[i + 1], u - i);
   }
 
   // Every country's numbers for every week, and the weeks with anything to plot.
@@ -310,7 +312,8 @@
       var tests = html('span', '', legend);
       tests.appendChild(document.createTextNode('Tests halved'));
       var ramp = html('span', 'ramp', tests);
-      ramp.style.background = 'linear-gradient(to right,' + testColour(-1) + ',' + testColour(0) + ',' + testColour(1) + ')';
+      ramp.style.background = 'linear-gradient(to right,' + VIRIDIS.map(function (c) { return mix(c, c, 0); }).join(',') + ')';
+      ramp.style.opacity = FILL_OPACITY;
       tests.appendChild(document.createTextNode('doubled'));
 
       var none = html('span', '', legend);
