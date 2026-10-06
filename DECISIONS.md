@@ -301,3 +301,21 @@ covid19-67's panel, above, asked for the Dutch caveat, now in the 16-country fig
 Found and fixed on the way (31a5d2f, live since 06:19): `build_world_map.read_owid_tests` read only Our World in Data's running totals, so the world maps showed no tests at all for 8 places that have only daily counts, France, Sweden and Czechia among them.
 
 Not changed: the weekly tests world map keeps its 2020 GIF's range, 0.001 to 10 per thousand, so from autumn 2020 most of Europe and North America is its darkest blue.
+
+## 2026-10-06: the Danish press page restyled, its links repaired, and Tommy's corrections after ten advisers (covid19-ac)
+
+Tommy asked for `press_denmark.html` to look nice. It was raw 2020 HTML, like the international page, and was restyled the same way (e89e325), keeping every word: one `<article class="clip">` per entry, the international page's 720-pixel column, fonts and colours, the sections as h2 with ids. The nine ft.dk committee answers it framed at 827 by 1,169 pixels were blank, because ft.dk refuses to be framed, so each question's label links to its answer instead. The 2020 Nordic charts gave way to the main page's redrawn ones.
+
+Repairs, not decisions (6a414fa): the eight sst.dk pages and DR's Deadline episode, all 404, link to their 2020 Wayback copies, the original kept in `data-original-href`; two entries whose 2020 links were broken link to their articles again, found through the Wayback Machine's index. TV Avisen of 12 May 2020 is 404 with no copy and keeps its dead link (the advisers split 5 to 5 on unlinking it). The ft.dk links answer 403 to scripts (Cloudflare) and could not be checked. covid19-67 decided the tab title and the back link (above).
+
+Ten advisers (Sonnet sub-agents: an archivist, a Danish media historian, an accessibility specialist, a front-end engineer, an information designer, a fact-checker, an epidemiologist, a news copy editor, a first-time visitor and a privacy and media-law adviser) answered eight questions, and Tommy chose (0759d54, 965b908):
+
+- The two Berlingske entries whose 2020 link text was empty show their date and source, from the articles' metadata: 2020-05-07 and 2020-05-04 (10 of 10).
+- Two labels that contradicted their links are corrected: "2020-05-14 DR" on a Berlingske article, and the second "Spørgsmål nr. 796" on the answer to 794 (10 of 10).
+- The second, identical copy of "2020-05-12 Berlingske – Internt dokument…" is gone (8 of 10).
+- "2020-04-15 Dansk Journalistforbund", which embedded Journalisten's tweet of 16 April a second time, is gone (5 of 10; the others would have kept the page as published).
+- The Nordic aligned-cases figure at the top is gone; it stays in Visualisering (6 of 10).
+- The three Folketing clips of 29 April 2020 are MP4s (10 of 10): the server sent the .mov files as video/quicktime, which Firefox does not play. `build_press_videos.py` copies their streams unchanged into MP4s with the index first, with a poster each; the .mov stays as a second source. `deploy.py` now also uploads the files the linked pages use (83fc64d), which it did not before, so the international page's `press.css` idea above is no longer blocked by it.
+- Twitter's widgets.js is gone from both press pages (1 of 10, the privacy adviser: it sent every visitor's IP address to X and set X's cookies without consent). The tweets show as the styled quotes they fell back to, with no word changed (0759d54, edb77dd). One of them, DR2 Deadline's of 22 April 2020, had already been deleted.
+
+Tommy also asked for a backup of every image the pages take from other sites: `backup_external_images.py` saved 63 files to `external_images/` (343a91b), with a manifest; the deleted DR2 tweet's image came from the Wayback Machine's copy of the tweet.

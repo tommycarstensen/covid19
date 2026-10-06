@@ -4,7 +4,7 @@ Several Claude sessions work in this folder at once. Before starting a task, rea
 
 ## In progress
 
-- C13, the press pages: the international page is done and live (Tommy's choices, 832d99c). The Danish page's tab title "Press clippings, March to October 2020: Danish press" and the same "← COVID-19 tracker" link, decided after ten advisers (08be1d8, 86510df), are being added by covid19-ac with its dead-link repairs; no archive note or heading on either page.
+- C13, the press pages: done and live on both pages (DECISIONS.md). International: covid19-f8 (832d99c). Danish: covid19-ac, with covid19-67's title and back link and Tommy's corrections after ten advisers (6a414fa, 0759d54, 965b908); the tweets on both are quotes without Twitter's script. Unchecked: the Danish page's 14 ft.dk links, which answer 403 to scripts (Cloudflare).
 
 ## Known problems
 
