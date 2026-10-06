@@ -138,3 +138,14 @@ Whether "Charts by country" should stay at all is a separate question, taken up 
 ## 2026-10-06: the table comes right after the maps (C5, revised)
 
 C5 proposed leading with the aligned small multiples and grouping the maps by measure. By the time it came up, covid19-91's interactive world map had already grouped the world maps by measure, and a design review by covid19-b6 pointed out that the table, probably what most visitors come for, started about 21,500 pixels down, after every region chart. The sections now run: archive note, contents, how to read, maps, table, aligned time series (world and regions), charts by country, press, other trackers, about. The maps stay first because the interactive world map is the page's best overview and is short; the table follows because it is the page's reference; the long run of aligned charts comes after both. The contents list follows the same order.
+
+## 2026-10-06: France and Sweden get their table rows back (B2)
+
+France and Sweden had charts on the page but no row in the table: the January 2021 run drew their charts but wrote no `tables/table<Country>.txt`, perhaps because Our World in Data had no testing totals for either. Their rows are rebuilt from what survives of that run:
+
+- Totals to 17 January 2021 from the legends of the EU charts drawn on 27 January 2021 (`days100_{cases,deaths}_perCapitaFalse_EU.png`): France 2,910,989 cases and 70,283 deaths, Sweden 531,145 and 10,764. Check: with them, the table's 24 other EU countries sum exactly to the EU row (16,948,020 cases, 410,569 deaths).
+- The week of 11 to 17 January as the total minus `ecdc.csv`'s total to 10 January: France 127,733 cases and 2,533 deaths, Sweden 28,918 and 1,098. The same subtraction gives the table's own weekly figures exactly for 84 of its 86 rows; the other two differ because ECDC revised earlier weeks, so these two rows may be off by such a revision.
+- Populations from `countryinfo` like every other row (France 66.1 million, Sweden 9.7 million), and the case fatality rate and figures per million computed the same way. Tests per thousand: "–", because Our World in Data has none for either.
+- Charts: the 27 January 2021 charts already on the server.
+
+Czechia, the third country missing, is left out: no chart of it from 2021 survives, so its total to 17 January cannot be recovered, and a row to 10 January would not compare with the others.
