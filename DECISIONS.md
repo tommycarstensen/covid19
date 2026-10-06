@@ -168,3 +168,7 @@ From covid19-b6's design review of the table:
 - Cells with no data ("–": tests for France and Sweden) stay at the bottom whichever way a column is sorted; before this fix they came first when sorting high to low.
 
 Kept as it was: a first click sorts low to high, as the 2020 script did.
+
+## 2026-10-06: the archive note is removed, on Tommy's instruction (C1 and C2 superseded)
+
+C1 (reword the archive note at the top of the page) and C2 (a short "what happened after January 2021" with links to current data) were drafted but held back, because Tommy had not asked for the original note and was to approve any new wording first. Tommy then asked covid19-91 to remove the note altogether. No replacement goes in unless Tommy asks for one. Gone with the note: its sentence about the October 2026 repairs (the 63 redrawn countries) and the planned correction about the weekly world maps' seven-week totals. The page still says when its data end in the table's introduction ("up to 17 January 2021"), in the aligned charts' captions and in the browser title ("archive").
