@@ -226,9 +226,9 @@ d_regions = {
 def main():
 
     # ECDC's file, downloaded from https://opendata.ecdc.europa.eu/covid19/casedistribution/csv
-    df_ecdc = pd.read_csv('csv')
+    df_ecdc = pd.read_csv('data/csv')
 
-    df_owid = pd.read_csv('owid.csv')
+    df_owid = pd.read_csv('data/owid.csv')
 
     days = 14
     weeks = 2

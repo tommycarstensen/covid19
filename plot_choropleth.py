@@ -23,9 +23,8 @@ def main():
     df1, df2, df_owid = parse_data(args)
 
     df2['dateRep'] = pd.to_datetime(df2['dateRep'], format='%d/%m/%Y')
-    df0 = df2[[
-        'alpha3', 'dateRep', 'cases_weekly', 'deaths_weekly']].groupby([
-            'alpha3', 'dateRep']).sum()
+    df0 = pd.DataFrame(df2.groupby(['alpha3', 'dateRep'])[
+        ['cases_weekly', 'deaths_weekly']].sum())
 
     df1 = df1.rename(columns={'iso_a3': 'alpha3'})
 
@@ -353,11 +352,11 @@ def parse_data(
     url = (
         'https://raw.githubusercontent.com/owid/covid-19-data/master/'
         'public/data/owid-covid-data.csv')
-    path = 'owid.csv'
+    path = 'data/owid.csv'
     df_owid = download_and_read(url, path)
 
     url = 'https://opendata.ecdc.europa.eu/covid19/casedistribution/csv'
-    path = 'ecdc.csv'
+    path = 'data/ecdc.csv'
     # url = 'https://opendata.ecdc.europa.eu/covid19/casedistribution/json'
     # path = 'ecdc.json'
     df_ecdc = download_and_read(url, path)
@@ -377,7 +376,7 @@ def parse_data(
     # which removed gpd.datasets, so it flags an attribute that exists here.
     datasets = gpd.datasets  # pyright: ignore[reportAttributeAccessIssue]
     world = gpd.read_file(datasets.get_path('naturalearth_lowres'))
-    world = world[(world.pop_est > 0) & (world.name != "Antarctica")]
+    world = world.loc[(world.pop_est > 0) & (world.name != "Antarctica")]
     df1 = world
     # Fix error in dataset.
     # https://github.com/geopandas/geopandas/issues/1041
@@ -396,8 +395,8 @@ def parse_data(
     print(alpha3_ecdc - alpha3_geo)
     print(alpha3_geo - alpha3_ecdc)
     for x in alpha3_ecdc - alpha3_geo:
-        print(df_ecdc[df_ecdc['alpha3'] == x][
-            'countriesAndTerritories'].unique())
+        print(df_ecdc.loc[
+            df_ecdc['alpha3'] == x, 'countriesAndTerritories'].unique())
 
     # # Merge covid19 data with alpha3 codes on alpha2 codes.
     # df2 = pd.merge(df_covid19, df_iso3166, on=['alpha2'])

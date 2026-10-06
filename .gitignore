@@ -39,7 +39,7 @@
 # Downloaded or generated data: text, but 1-100 MB each and re-downloadable
 *.csv
 *.geojson
-/csv
+/data/csv
 /regional_maps/europe/subnationalcaseweekly.json
 /map/covid19map.html
 /map/obesity-trends.html

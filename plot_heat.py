@@ -140,7 +140,7 @@ def share_positive(cases: float | None, tests: float | None) -> float | None:
 
 
 def load() -> tuple[list[str], dict[str, Country]]:
-    df = pd.read_csv(ROOT / 'ecdc.csv')
+    df = pd.read_csv(ROOT / 'data' / 'ecdc.csv')
     weeks = sorted(str(week) for week in df['year_week'].unique())
     starts = [monday(week) for week in weeks]
     if any(b - a != timedelta(weeks=1) for a, b in pairwise(starts)):

@@ -38,7 +38,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parent
 SITE = ROOT / "site"
 ARCHIVE = ROOT / "archive"
-DATA = ROOT / "ecdc.csv"
+DATA = ROOT / "data" / "ecdc.csv"
 WORK = ROOT / "tmp" / "redraw"
 LOG = ROOT / "tmp" / "redraw_charts.log"
 ROW = re.compile(

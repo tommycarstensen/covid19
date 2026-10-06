@@ -201,7 +201,7 @@ PALETTE = palette()
 
 def load() -> pd.DataFrame:
     """ECDC weekly rows, with the EU added as the sum of its members."""
-    df = pd.read_csv(ROOT / 'ecdc.csv')
+    df = pd.read_csv(ROOT / 'data' / 'ecdc.csv')
     df['dateRep'] = pd.to_datetime(df['dateRep'], format='%d/%m/%Y')
     missing = sorted(set(EU) - set(df['countriesAndTerritories']))
     if missing:

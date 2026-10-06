@@ -36,8 +36,8 @@ def count(value: object) -> int | None:
 
 
 def main() -> None:
-    ecdc = pd.read_csv(ROOT / 'ecdc.csv')
-    owid = pd.read_csv(ROOT / 'owid.csv', usecols=['iso_code', 'location', 'date', 'new_tests_smoothed'])
+    ecdc = pd.read_csv(ROOT / 'data' / 'ecdc.csv')
+    owid = pd.read_csv(ROOT / 'data' / 'owid.csv', usecols=['iso_code', 'location', 'date', 'new_tests_smoothed'])
     print(f'ecdc.csv: {len(ecdc):,} rows; owid.csv: {len(owid):,} rows')
 
     weeks = sorted(str(week) for week in ecdc['year_week'].unique())

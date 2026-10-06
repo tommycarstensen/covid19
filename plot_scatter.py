@@ -105,7 +105,7 @@ DIRECTIONS = directions()
 
 
 def load() -> tuple[list[str], list[Country]]:
-    df = pd.read_csv(ROOT / 'ecdc.csv')
+    df = pd.read_csv(ROOT / 'data' / 'ecdc.csv')
     weeks = sorted(str(week) for week in df['year_week'].unique())
     eu = df.loc[df['countriesAndTerritories'].isin(REGIONS['EU'])]
     missing = sorted(set(REGIONS['EU']) - set(eu['countriesAndTerritories']))

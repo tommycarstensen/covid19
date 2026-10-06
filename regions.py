@@ -102,7 +102,7 @@ OUTSIDE = {'Wallis_and_Futuna', 'Cases_on_an_international_conveyance_Japan'}
 def main() -> None:
     import pandas as pd
 
-    ecdc = set(pd.read_csv(Path(__file__).resolve().parent / 'ecdc.csv', usecols=['countriesAndTerritories'])
+    ecdc = set(pd.read_csv(Path(__file__).resolve().parent / 'data' / 'ecdc.csv', usecols=['countriesAndTerritories'])
                ['countriesAndTerritories'])
     listed = {country for countries in PARTS.values() for country in countries}
     unknown = sorted(listed - ecdc)

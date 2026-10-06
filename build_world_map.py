@@ -14,8 +14,8 @@ import pandas as pd
 import shapefile
 
 ROOT = Path(__file__).resolve().parent
-ECDC = ROOT / 'ecdc.csv'
-OWID = ROOT / 'owid.csv'
+ECDC = ROOT / 'data' / 'ecdc.csv'
+OWID = ROOT / 'data' / 'owid.csv'
 COUNTRIES = ROOT / 'map' / 'data' / 'countries_110m' / 'ne_110m_admin_0_countries.zip'
 OUT = ROOT / 'site' / 'worldmap' / 'worldmap.json'
 MARKUP = ROOT / 'tmp' / 'build_world_map_markup.html'
