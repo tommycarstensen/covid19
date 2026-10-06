@@ -182,3 +182,13 @@ Tommy asked whether the `days100_cases_perCapitaFalse_AsiaWesternExIran.png` fig
 - Every aligned figure's y axis now ends at the next 1-2-5 step above its highest line, instead of the next whole decade, which had left the top quarter of each Western Asia panel (10M) and World1 panel (100M) empty. The World1/World2 figures were redrawn with it and nothing else changed.
 
 Considered instead: one figure per continent in place of the 2020 subregion pairs (covid19-b6's suggestion). Not taken here, because it restructures the page beyond what was asked; covid19-b6 is redrawing the other regional pairs one figure per pair.
+
+## 2026-10-06: the country table is folded away by default (covid19-b1)
+
+Tommy asked whether the table should show by default or open with a click, since its 89 rows of 12 columns were a long block of text on an otherwise visual page. It is now folded: the heading and the sentence introducing it stay where C5 put them, right after the maps, so the table is still found there, and the rows sit in a `<details>` labelled "Table of 88 countries and the EU", one click away. That takes the table off the path from the maps to the aligned charts, and it is a reference that people look things up in, not something they read from top to bottom.
+
+- It looks like the world map's own fold ("Table of all 213 countries and territories"): the browser's triangle and a plain label, with the same `cursor` and margin. A boxed "Show the table" / "Hide the table" button was tried first and dropped, so that the page has one style for one kind of control.
+- Outside links point to `#table` and to rows such as `#denmark`. A short inline script opens the fold when the URL's fragment is either, and on `hashchange`; Chrome opens it for a row by itself. Chrome and Edge also open it when Ctrl+F finds a match inside; not every browser does.
+- Without JavaScript the fold still opens and closes; only the opening on a link needs the script.
+
+Considered instead: showing the ten largest rows with a "show all" control, which would need `sortable.js` to sort the hidden rows too, for little gain over a fold.
