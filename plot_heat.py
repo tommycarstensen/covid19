@@ -91,6 +91,7 @@ class Measure:
     lo: float  # the ends of its log scale, the same in every region
     hi: float
     label: Callable[[float], str] = number
+    missing: str = 'no report'  # under its key's hatched swatch
 
     @cached_property
     def norm(self) -> LogNorm:
@@ -99,8 +100,8 @@ class Measure:
 
 CASES = Measure('cases', 'Cases per million people, per week', RAMP, 1.0, 10_000.0)
 DEATHS = Measure('deaths', 'Deaths per million people, per week', RAMP, 0.1, 1_000.0)
-TESTS = Measure('tests', 'Tests per thousand people, per week', BLUES, 0.01, 100.0)
-POSITIVE = Measure('positive', 'Share of tests positive', RAMP, 0.001, 1.0, percent)
+TESTS = Measure('tests', 'Tests per thousand people, per week', BLUES, 0.01, 100.0, missing='no test count')
+POSITIVE = Measure('positive', 'Share of tests positive', RAMP, 0.001, 1.0, percent, 'no usable share')
 
 
 @dataclass(frozen=True)
@@ -132,8 +133,8 @@ class Country:
 
 
 def share_positive(cases: float | None, tests: float | None) -> float | None:
-    """A week's cases per million people over its tests per thousand people, as a share."""
-    if cases is None or tests is None or tests <= 0:
+    """A week's cases per million people over its tests per thousand people, as a share; none where there are no tests, or more cases than tests, which happens in 20 weeks of 2020 in Peru, Brazil and Ecuador, whose case and test counts evidently do not cover the same tests."""
+    if cases is None or tests is None or tests <= 0 or cases > tests * 1000:
         return None
     return cases / (tests * 1000)
 
@@ -201,7 +202,7 @@ class Texts:
 class Chart:
     prefix: str  # of its file names
     measures: tuple[Measure, Measure]
-    missing: str  # under the hatched swatch
+    key_start: float  # where the colour bar starts on the key, after the swatch for 0
     missing_x: float  # where the hatched swatch starts on the key, which ends at key_end
     key_end: float
     texts: Callable[[bool, str, list[str], str, str], Texts]  # narrow, where, weeks, places left out, places without a test count
@@ -231,8 +232,10 @@ def cases_texts(narrow: bool, where: str, weeks: list[str], left_names: str, _wi
 def tests_texts(narrow: bool, where: str, weeks: list[str], left_names: str, without: str) -> Texts:
     first, last_day = monday(weeks[0]), monday(weeks[-1]) + timedelta(days=6)
     if narrow:
-        paragraphs = [('Data: Our World in Data, tests; ECDC, weekly cases. Countries count tests differently, so the '
-                       'shares compare better along a row than between rows.')]
+        paragraphs = [('Data: Our World in Data, tests; ECDC, weekly cases. The two may not count the same things '
+                       '(tests or people, rapid antigen tests from late 2020), so the share positive is approximate and '
+                       'compares better along a row than between rows. It is unreliable from few tests, and left blank '
+                       'where cases exceed tests.')]
         if without:
             paragraphs.append(f'No test count: {without}.')
         if left_names:
@@ -249,16 +252,19 @@ def tests_texts(narrow: bool, where: str, weeks: list[str], left_names: str, wit
                  'same in every region.',
                  [('Data: Our World in Data, tests, from running totals interpolated between the days a country reported '
                    'them, or from daily counts where it has no running total; European Centre for Disease Prevention and '
-                   'Control (ECDC), weekly cases. Countries count tests differently (tests performed, people tested, '
-                   'samples), so the shares compare better along a row than between rows.'),
+                   'Control (ECDC), weekly cases. Cases and tests come from different sources and may not count the '
+                   'same things: countries counted tests performed, people tested or samples, some counted rapid antigen '
+                   'tests as cases from late 2020, and who was tested changed over the year, so the share positive is '
+                   'approximate and compares better along a row than between rows. A share from few tests is unreliable, '
+                   'and one is left blank where a country confirmed more cases than tests were counted.'),
                   (f'No test count: {without}. ' if without else '')
                   + (f'Left out, with fewer than 100,000 people: {left_names}. ' if left_names else '')
                   + 'Drawn October 2026.'])
 
 
 CHARTS = [
-    Chart('heat', (CASES, DEATHS), 'no report', 9.2, 10.6, cases_texts),
-    Chart('heat_tests', (TESTS, POSITIVE), 'no test count', 10.4, 12.2, tests_texts),
+    Chart('heat', (CASES, DEATHS), 1.0, 9.2, 10.6, cases_texts),
+    Chart('heat_tests', (TESTS, POSITIVE), 1.6, 11.0, 13.4, tests_texts),
 ]
 
 
@@ -320,7 +326,7 @@ def row_labels(fig: Figure, ax: Axes, rows: list[Country], name_x: float, pop_x:
 
 def legend(ax: Axes, measure: Measure, chart: Chart, layout: Layout, any_missing: bool) -> None:
     """A swatch for 0, then the colour scale as one bar on a log axis, labelled at every power of ten."""
-    start, end = 1.0, 9.0
+    start, end = chart.key_start, 9.0
     ax.imshow(np.linspace(0, 1, 256)[None, :], cmap=measure.ramp, aspect='auto', interpolation='bilinear',
               extent=(start, end, 0.55, 0.95))
     ax.set_xlim(0, chart.key_end if any_missing else end + 0.5)  # room for half the last label
@@ -336,7 +342,7 @@ def legend(ax: Axes, measure: Measure, chart: Chart, layout: Layout, any_missing
     if any_missing:
         x = chart.missing_x
         ax.add_patch(Rectangle((x, 0.55), 0.8, 0.4, facecolor='white', edgecolor=HATCH, hatch='////', linewidth=0))
-        ax.text(x + 0.4, 0.4, chart.missing, ha='center', va='top', fontsize=layout.font, color=INK_2)
+        ax.text(x + 0.4, 0.4, measure.missing, ha='center', va='top', fontsize=layout.font, color=INK_2)
 
 
 def place(fig: Figure, left: float, top: float, width: float, height: float, size: tuple[float, float]) -> Axes:
@@ -401,6 +407,7 @@ def draw(chart: Chart, region: str, rows: list[Country], left_out: list[Country]
         tops = [header, header]
 
     pairs = []
+    keys = []
     for k, measure in enumerate(chart.measures):
         x, top = xs[k], tops[k]
         ax = place(fig, x, top + title_h, panel_w, panel_h, size)
@@ -414,6 +421,7 @@ def draw(chart: Chart, region: str, rows: list[Country], left_out: list[Country]
         key_x, key_w = (EDGE, layout.width - 2 * EDGE) if narrow else (x, min(panel_w, 4.6))
         key = place(fig, key_x, top + title_h + panel_h + axis_h, key_w, legend_h, size)
         legend(key, measure, chart, layout, any_missing)
+        keys.append(key)
 
     edge = EDGE / layout.width
     fig.text(edge, 1 - 0.12 / height, title, ha='left', va='top', fontsize=title_size, fontweight='bold', color=INK,
@@ -430,6 +438,11 @@ def draw(chart: Chart, region: str, rows: list[Country], left_out: list[Country]
                if label.get_window_extent().x1 + 4 > pop.get_window_extent().x0]
     if crowded:
         raise SystemExit(f'{name}: names run into their populations: {crowded}')
+    for key in keys:
+        labels = sorted((t.get_window_extent() for t in key.texts), key=lambda e: e.x0)
+        close = [f'{a.x1:.0f}-{b.x0:.0f}' for a, b in pairwise(labels) if b.x0 - a.x1 < 4]
+        if close:
+            raise SystemExit(f'{name}: labels in a key run into each other at pixels {close}')
     path = OUT / f'{name}.png'
     fig.savefig(path, dpi=layout.dpi, facecolor='white')
     plt.close(fig)
@@ -477,9 +490,16 @@ def alt(chart: Chart, region: str, rows: list[Country], without: list[Country], 
                 f'Highest weekly cases: {peak(rows, CASES, weeks)}. Highest weekly deaths: {peak(rows, DEATHS, weeks)}. '
                 f'Rows: {names}.')
     missing = f' No test count: {", ".join(display_name(c.name) for c in without)}.' if without else ''
+    tests, j, top = max(((t, j, c) for c in rows for j, t in enumerate(c.rates[TESTS.name]) if t is not None),
+                        key=lambda x: x[0])
     return (f'Heat maps of weekly COVID-19 tests per thousand people, and of the share of tests that were positive, '
             f'in {where}, one row per country or territory with a test count, largest population first, and one '
-            f'column per week from {monday(weeks[0]):%-d %B %Y} to January 2021. Rows: {names}.{missing}')
+            f'column per week from {monday(weeks[0]):%-d %B %Y} to January 2021; a darker colour means more tests, '
+            f'or a larger share positive. Most tests in a week: '
+            f'{display_name(top.name)}, {tests:,.0f} per thousand people in the week of {monday(weeks[j]):%-d %B %Y}. '
+            f'The share positive is approximate, because cases and tests come from different sources, and compares '
+            f'poorly between countries. '
+            f'Rows: {names}.{missing}')
 
 
 def picture(chart: Chart, region: str, rows: list[Country], without: list[Country], weeks: list[str],
