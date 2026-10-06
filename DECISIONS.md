@@ -217,3 +217,7 @@ Chosen: the other eleven 2020 pairs (the EU, Europe, the Americas, North America
 Considered instead: one figure per continent, dropping the five subregion pairs, which would have made the page shorter. Not done, because covid19-cd had just been asked for the Western Asia figure, so the subregions were evidently wanted. Also considered: dropping the region line charts altogether in favour of the bubble charts and heat maps; not done, because the aligned charts are what the section is named for.
 
 Left as they were: the USA's own pair of 2020 charts under its heading, and the EU's two scatter plots.
+
+## 2026-10-06: search results and link previews say "archive, no longer updated" (from the search specialist's advice)
+
+Search engines and social sites show a page's meta description and Open Graph tags, often before anyone opens it. The description now begins "An archive, no longer updated" and ends "from ECDC data to 17 January 2021", and the Twitter description, which had said only "to January 2021", is the same text. Facebook and LinkedIn read Open Graph tags, which the page lacked; it now has `og:type`, `og:url`, `og:title`, `og:description` and `og:image`, with the image's size and a text alternative. The preview image is the World1 small multiples of cumulative cases (`aligned_cases_World1.png`, 2,710 by 1,454 pixels) instead of the 2020 EU line chart with 26 lines in 10 colours. The Twitter title uses an en dash, like the page's title.
