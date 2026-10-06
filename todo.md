@@ -18,6 +18,6 @@ Several Claude sessions work in this folder at once. Before starting a task, rea
 
 ## Known problems
 
-- Left from covid19-b6's design review of 6 Oct 2026, whose six items have landed (the region small multiples 95611d4 and 7dd3ccf, the heat maps 7dd3ccf, the table and 'Charts by country' by covid19-4f): the USA's own pair of 2020 charts and the EU's two 2020 scatter plots are still in the old style, and on a 390 px phone the page scrolls sideways by 10 px because of the world map's week label (`span.wm-week`), reported to covid19-52 at 05:33.
+- Left from covid19-b6's design review of 6 Oct 2026, whose six items have landed (the region small multiples 95611d4 and 7dd3ccf, the heat maps 7dd3ccf, the table and 'Charts by country' by covid19-4f): the USA's own pair of 2020 charts and the EU's two 2020 scatter plots are still in the old style. All of it is live (deploys up to 05:35, covid19-52's 'live and identical').
 - The live host stopped answering at about 04:45 on 6 October 2026 (see `CLAUDE.md`). Check that it is back before a `deploy.py` run.
 - `deploy.py` sends pages (`*.html`) as committed at HEAD, but every other file it uploads (scripts, styles, JSON, images) as it is in the working tree. A deploy while another session is mid-edit in, say, `site/worldmap/worldmap.js` publishes the unfinished file, or a script that does not match the page. Until that is fixed, run `git status --short site/` before deploying, and ask the owner of anything modified or newly committed whether it is ready to go live: covid19-4f (6 Oct 2026, 05:31).
