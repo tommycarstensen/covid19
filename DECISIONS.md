@@ -155,3 +155,16 @@ Czechia, the third country missing, is left out: no chart of it from 2021 surviv
 The section showed two full-size charts each for 23 of the table's 89 countries, in alphabetical order, about 10,000 pixels or a quarter of the page. Every one of those charts is also linked from its country's row in the table, which covers all 89, so the section added length but no charts. Covid19-b6's design review proposed dropping it, and C6's subpage would only have moved the same repetition elsewhere.
 
 The section's 23 anchors (`#denmark`, `#united-kingdom` and so on, added by covid19-82 earlier the same day) now sit on the matching table rows, so any link to them still works: it scrolls the row a third of the way down the screen and highlights it. Tested in headless Chrome at 1,440 and 390 pixels. Lost with the section: the headings' links to the Wikipedia articles on the pandemic in eight of those countries, and the countries' names in their own languages (Danmark, Deutschland, 日本 and so on). The contents list no longer has the section or its 23 entries.
+
+## 2026-10-06: the table is easier to read: separators, right-aligned numbers, largest first, a sort arrow
+
+From covid19-b6's design review of the table:
+
+- Thousands separators (23,938,288; 74,980.8), with `sortable.js` ignoring commas when it compares.
+- Numbers right-aligned in tabular figures (population and columns 4 to 11), so digits line up.
+- The rows start in order of total cases, largest first (the USA, then the EU without Czechia, India, Brazil). They had been in the order the 2021 run happened to write them (EU, USA, Germany, Spain, Bahrain...).
+- The sorted column's header shows ▲ or ▼, from an `aria-sort` attribute that `sortable.js` sets, which screen readers also announce. "Total cases" starts with ▼.
+- Cell padding 8 by 12 pixels instead of 16 (covid19-82's phone padding, 6 by 8, is unchanged): 19 rows fit on a 900-pixel screen instead of 13.
+- Cells with no data ("–": tests for France and Sweden) stay at the bottom whichever way a column is sorted; before this fix they came first when sorting high to low.
+
+Kept as it was: a first click sorts low to high, as the 2020 script did.
