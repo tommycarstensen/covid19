@@ -9,7 +9,7 @@ charts behind them were left from 18 April 2020.
 
 This draws both charts and both thumbnails for each such country with
 plot_series.doLinePlots, the function that drew the others, into site/. A
-country needs them when upload.py never moved its thumbnail into archive/
+country needs them when upload.py never moved its thumbnail into 2020/archive/
 (upload.py moved every file it uploaded there). The data is ecdc.csv, the
 ECDC weekly file of 14 January 2021, which runs to the week of 4 to 10
 January 2021: the file of 27 January that the other charts came from was
@@ -37,7 +37,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
-ARCHIVE = ROOT / "archive"
+ARCHIVE = ROOT / "2020" / "archive"
 DATA = ROOT / "data" / "ecdc.csv"
 WORK = ROOT / "tmp" / "redraw"
 LOG = ROOT / "tmp" / "redraw_charts.log"
