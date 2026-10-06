@@ -32,7 +32,7 @@ Content, from the three advisers (who suggested it, effort):
 - C9. Cut the References to what still works (all three, small).
 - C10. Captions and alt text for every chart; one heading for the loose bubble, heat and scatter charts (structure, accuracy; medium).
 - C11. Credits for basemaps and data, licences, and how to cite the page (accuracy, reader; small).
-- C12. The population column uses `countryinfo`'s figures of about 2014, which puts per-capita columns 3 to 8% high (accuracy, medium).
+- C12. The population column uses `countryinfo`'s figures of about 2014, which puts per-capita columns 3 to 8% high (accuracy, medium). Done, see below: for a few countries the error was far larger.
 - C13. Give the press pages a title, a back link and an archive note, and check their links (accuracy, medium).
 
 One adviser claim was checked and rejected: the table's totals are higher than `ecdc.csv` (the USA 23,938,288 against 22,423,006) not because they are wrong, but because the table came from a download one week later, to 17 January 2021. The table's "most recent week" for the USA, 1,515,282, is exactly the difference.
@@ -229,3 +229,9 @@ The epidemiologist among the ten advisers wanted the top line to warn that the E
 ## 2026-10-06: no repair history on the page
 
 The intro to "Other trackers" (C9) said that in October 2026 two links had been replaced and two removed. Tommy wants no year of the repairs on the page, and all ten advisers on the top line argued against an account of repairs anywhere a reader meets it. The sentence is gone; this file keeps the record. The page now contains no "2026".
+
+## 2026-10-06: the table's populations are ECDC's of 2019 (C12, covid19-67)
+
+The table divided by `countryinfo` 0.1.2's populations, of about 2014, while the world maps and the heat maps divide by ECDC's of 2019 in `ecdc.csv`, so the same country had two different rates per million on one page. The gap was not a few per cent everywhere. Over the 89 rows the per-million columns were a median 4.4% too high (a quarter of the rows by more than 8%), but `countryinfo` counted the whole island of Ireland (6.4 million against 4.9), and had Jordan at 6.7 million (10.1), the Maldives at 0.3 (0.53), Kuwait at 3.3 (4.2) and Bosnia and Herzegovina at 3.8 (3.3). Ireland's cases per million were 23% too low, Jordan's 52% and the Maldives' 56% too high.
+
+Each row now takes its population from `popData2019` in `ecdc.csv`, and the EU row the sum of its 26 countries (436.2 million), and cases and deaths per million are recomputed from the row's own totals. Nothing else in a row changes: the totals, the case fatality rate, the last week, and tests per thousand, which is Our World in Data's own figure on its own populations. The USA becomes 329.1 million and 72,746.4 cases per million (was 319.3 and 74,980.8). B1's reason for dividing the EU row by `countryinfo`'s populations, that every other row used them, no longer holds. The "How to read" line that said the table used populations from about 2014 now says 2019.
