@@ -149,3 +149,9 @@ France and Sweden had charts on the page but no row in the table: the January 20
 - Charts: the 27 January 2021 charts already on the server.
 
 Czechia, the third country missing, is left out: no chart of it from 2021 survives, so its total to 17 January cannot be recovered, and a row to 10 January would not compare with the others.
+
+## 2026-10-06: "Charts by country" is removed; its anchors point at the table rows
+
+The section showed two full-size charts each for 23 of the table's 89 countries, in alphabetical order, about 10,000 pixels or a quarter of the page. Every one of those charts is also linked from its country's row in the table, which covers all 89, so the section added length but no charts. Covid19-b6's design review proposed dropping it, and C6's subpage would only have moved the same repetition elsewhere.
+
+The section's 23 anchors (`#denmark`, `#united-kingdom` and so on, added by covid19-82 earlier the same day) now sit on the matching table rows, so any link to them still works: it scrolls the row a third of the way down the screen and highlights it. Tested in headless Chrome at 1,440 and 390 pixels. Lost with the section: the headings' links to the Wikipedia articles on the pandemic in eight of those countries, and the countries' names in their own languages (Danmark, Deutschland, 日本 and so on). The contents list no longer has the section or its 23 entries.

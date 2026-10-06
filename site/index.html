@@ -84,6 +84,14 @@ img.flag {
   white-space: nowrap;
 }
 
+#myTable2 tr:target {
+  scroll-margin-top: 30vh;
+}
+
+#myTable2 tr:target > td {
+  background: #fff3c4;
+}
+
 .reading {
   max-width: 60em;
 }
@@ -253,33 +261,6 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <li><a href="#nordic">Nordic countries</a></li>
 </ul>
 </li>
-<li><a href="#countries">Charts by country</a>
-<ul>
-<li><a href="#australia">Australia</a></li>
-<li><a href="#austria">Austria</a></li>
-<li><a href="#belgium">Belgium</a></li>
-<li><a href="#brazil">Brazil</a></li>
-<li><a href="#canada">Canada</a></li>
-<li><a href="#denmark">Denmark</a></li>
-<li><a href="#france">France</a></li>
-<li><a href="#germany">Germany</a></li>
-<li><a href="#india">India</a></li>
-<li><a href="#indonesia">Indonesia</a></li>
-<li><a href="#italy">Italy</a></li>
-<li><a href="#japan">Japan</a></li>
-<li><a href="#mexico">Mexico</a></li>
-<li><a href="#netherlands">Netherlands</a></li>
-<li><a href="#new-zealand">New Zealand</a></li>
-<li><a href="#norway">Norway</a></li>
-<li><a href="#portugal">Portugal</a></li>
-<li><a href="#south-korea">South Korea</a></li>
-<li><a href="#spain">Spain</a></li>
-<li><a href="#sweden">Sweden</a></li>
-<li><a href="#switzerland">Switzerland</a></li>
-<li><a href="#taiwan">Taiwan</a></li>
-<li><a href="#united-kingdom">United Kingdom</a></li>
-</ul>
-</li>
 <li><a href="#press">Press clippings, 2020</a></li>
 <li><a href="#references">Other trackers</a></li>
 <li><a href="#about">About this page</a></li>
@@ -350,15 +331,15 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 
 <tr><td>EU without Czechia</td><td>434.9</td><td>Europe</td><td>16948020</td><td>410569</td><td>2.4</td><td>908606</td><td>21928</td><td>38974.0</td><td>944.2</td><td>489.9</td><td><a href="days100_cases_perCapitaFalse_EU.png">cases</a> · <a href="days100_deaths_perCapitaFalse_EU.png">deaths</a> · <a href="plot_bar_EU.png">weekly</a></td></tr>
 <tr><td>United States of America</td><td>319.3</td><td>Americas</td><td>23938288</td><td>397611</td><td>1.7</td><td>1515282</td><td>23169</td><td>74980.8</td><td>1245.4</td><td>856.6</td><td><a href="days100_cases_perCapitaFalse_United_States_of_America.png">cases</a> · <a href="days100_deaths_perCapitaFalse_United_States_of_America.png">deaths</a> · <a href="plot_bar_United_States_of_America.png">weekly</a></td></tr>
-<tr><td>Germany</td><td>80.8</td><td>Europe</td><td>2040659</td><td>46633</td><td>2.3</td><td>119635</td><td>5947</td><td>25261.0</td><td>577.3</td><td>446.2</td><td><a href="days100_cases_perCapitaFalse_Germany.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Germany.png">deaths</a> · <a href="plot_bar_Germany.png">weekly</a></td></tr>
-<tr><td>Spain</td><td>46.5</td><td>Europe</td><td>2336451</td><td>53769</td><td>2.3</td><td>224669</td><td>1494</td><td>50237.9</td><td>1156.1</td><td>565.4</td><td><a href="days100_cases_perCapitaFalse_Spain.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Spain.png">deaths</a> · <a href="plot_bar_Spain.png">weekly</a></td></tr>
-<tr><td>France</td><td>66.1</td><td>Europe</td><td>2910989</td><td>70283</td><td>2.4</td><td>127733</td><td>2533</td><td>44053.8</td><td>1063.6</td><td>–</td><td><a href="days100_cases_perCapitaFalse_France.png">cases</a> · <a href="days100_deaths_perCapitaFalse_France.png">deaths</a> · <a href="plot_bar_France.png">weekly</a></td></tr>
-<tr><td>Sweden</td><td>9.7</td><td>Europe</td><td>531145</td><td>10764</td><td>2.0</td><td>28918</td><td>1098</td><td>54546.2</td><td>1105.4</td><td>–</td><td><a href="days100_cases_perCapitaFalse_Sweden.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Sweden.png">deaths</a> · <a href="plot_bar_Sweden.png">weekly</a></td></tr>
+<tr id="germany"><td>Germany</td><td>80.8</td><td>Europe</td><td>2040659</td><td>46633</td><td>2.3</td><td>119635</td><td>5947</td><td>25261.0</td><td>577.3</td><td>446.2</td><td><a href="days100_cases_perCapitaFalse_Germany.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Germany.png">deaths</a> · <a href="plot_bar_Germany.png">weekly</a></td></tr>
+<tr id="spain"><td>Spain</td><td>46.5</td><td>Europe</td><td>2336451</td><td>53769</td><td>2.3</td><td>224669</td><td>1494</td><td>50237.9</td><td>1156.1</td><td>565.4</td><td><a href="days100_cases_perCapitaFalse_Spain.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Spain.png">deaths</a> · <a href="plot_bar_Spain.png">weekly</a></td></tr>
+<tr id="france"><td>France</td><td>66.1</td><td>Europe</td><td>2910989</td><td>70283</td><td>2.4</td><td>127733</td><td>2533</td><td>44053.8</td><td>1063.6</td><td>–</td><td><a href="days100_cases_perCapitaFalse_France.png">cases</a> · <a href="days100_deaths_perCapitaFalse_France.png">deaths</a> · <a href="plot_bar_France.png">weekly</a></td></tr>
+<tr id="sweden"><td>Sweden</td><td>9.7</td><td>Europe</td><td>531145</td><td>10764</td><td>2.0</td><td>28918</td><td>1098</td><td>54546.2</td><td>1105.4</td><td>–</td><td><a href="days100_cases_perCapitaFalse_Sweden.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Sweden.png">deaths</a> · <a href="plot_bar_Sweden.png">weekly</a></td></tr>
 <tr><td>Bahrain</td><td>1.3</td><td>Asia</td><td>97607</td><td>360</td><td>0.4</td><td>2049</td><td>4</td><td>74141.3</td><td>273.5</td><td>1550.2</td><td><a href="days100_cases_perCapitaFalse_Bahrain.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Bahrain.png">deaths</a> · <a href="plot_bar_Bahrain.png">weekly</a></td></tr>
 <tr><td>United Arab Emirates</td><td>9.4</td><td>Asia</td><td>253261</td><td>745</td><td>0.3</td><td>20279</td><td>34</td><td>26811.5</td><td>78.9</td><td>2514.8</td><td><a href="days100_cases_perCapitaFalse_United_Arab_Emirates.png">cases</a> · <a href="days100_deaths_perCapitaFalse_United_Arab_Emirates.png">deaths</a> · <a href="plot_bar_United_Arab_Emirates.png">weekly</a></td></tr>
-<tr><td>Mexico</td><td>119.7</td><td>Americas</td><td>1649502</td><td>141248</td><td>8.6</td><td>107869</td><td>6880</td><td>13778.8</td><td>1179.9</td><td>31.5</td><td><a href="days100_cases_perCapitaFalse_Mexico.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Mexico.png">deaths</a> · <a href="plot_bar_Mexico.png">weekly</a></td></tr>
-<tr><td>Norway</td><td>5.2</td><td>Europe</td><td>58651</td><td>521</td><td>0.9</td><td>3178</td><td>43</td><td>11374.3</td><td>101.0</td><td>610.6</td><td><a href="days100_cases_perCapitaFalse_Norway.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Norway.png">deaths</a> · <a href="plot_bar_Norway.png">weekly</a></td></tr>
-<tr><td>Austria</td><td>8.5</td><td>Europe</td><td>391113</td><td>7014</td><td>1.8</td><td>11406</td><td>383</td><td>45866.4</td><td>822.5</td><td>942.5</td><td><a href="days100_cases_perCapitaFalse_Austria.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Austria.png">deaths</a> · <a href="plot_bar_Austria.png">weekly</a></td></tr>
+<tr id="mexico"><td>Mexico</td><td>119.7</td><td>Americas</td><td>1649502</td><td>141248</td><td>8.6</td><td>107869</td><td>6880</td><td>13778.8</td><td>1179.9</td><td>31.5</td><td><a href="days100_cases_perCapitaFalse_Mexico.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Mexico.png">deaths</a> · <a href="plot_bar_Mexico.png">weekly</a></td></tr>
+<tr id="norway"><td>Norway</td><td>5.2</td><td>Europe</td><td>58651</td><td>521</td><td>0.9</td><td>3178</td><td>43</td><td>11374.3</td><td>101.0</td><td>610.6</td><td><a href="days100_cases_perCapitaFalse_Norway.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Norway.png">deaths</a> · <a href="plot_bar_Norway.png">weekly</a></td></tr>
+<tr id="austria"><td>Austria</td><td>8.5</td><td>Europe</td><td>391113</td><td>7014</td><td>1.8</td><td>11406</td><td>383</td><td>45866.4</td><td>822.5</td><td>942.5</td><td><a href="days100_cases_perCapitaFalse_Austria.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Austria.png">deaths</a> · <a href="plot_bar_Austria.png">weekly</a></td></tr>
 <tr><td>Qatar</td><td>2.3</td><td>Asia</td><td>147504</td><td>248</td><td>0.2</td><td>1436</td><td>2</td><td>64989.1</td><td>109.3</td><td>473.0</td><td><a href="days100_cases_perCapitaFalse_Qatar.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Qatar.png">deaths</a> · <a href="plot_bar_Qatar.png">weekly</a></td></tr>
 <tr><td>Peru</td><td>30.8</td><td>Americas</td><td>1068802</td><td>38931</td><td>3.6</td><td>31452</td><td>596</td><td>34685.4</td><td>1263.4</td><td>62.4</td><td><a href="days100_cases_perCapitaFalse_Peru.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Peru.png">deaths</a> · <a href="plot_bar_Peru.png">weekly</a></td></tr>
 <tr><td>Colombia</td><td>47.9</td><td>Americas</td><td>1923132</td><td>49004</td><td>2.5</td><td>121229</td><td>2553</td><td>40142.4</td><td>1022.9</td><td>138.9</td><td><a href="days100_cases_perCapitaFalse_Colombia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Colombia.png">deaths</a> · <a href="plot_bar_Colombia.png">weekly</a></td></tr>
@@ -372,32 +353,32 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <tr><td>Belarus</td><td>9.5</td><td>Europe</td><td>227360</td><td>1591</td><td>0.7</td><td>13367</td><td>65</td><td>23995.5</td><td>167.9</td><td>463.0</td><td><a href="days100_cases_perCapitaFalse_Belarus.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Belarus.png">deaths</a> · <a href="plot_bar_Belarus.png">weekly</a></td></tr>
 <tr><td>Sri Lanka</td><td>20.3</td><td>Asia</td><td>53062</td><td>264</td><td>0.5</td><td>4682</td><td>32</td><td>2616.8</td><td>13.0</td><td>76.6</td><td><a href="days100_cases_perCapitaFalse_Sri_Lanka.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Sri_Lanka.png">deaths</a> · <a href="plot_bar_Sri_Lanka.png">weekly</a></td></tr>
 <tr><td>North Macedonia</td><td>2.1</td><td>Europe</td><td>88938</td><td>2702</td><td>3.0</td><td>2444</td><td>80</td><td>43204.4</td><td>1312.6</td><td>215.0</td><td><a href="days100_cases_perCapitaFalse_North_Macedonia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_North_Macedonia.png">deaths</a> · <a href="plot_bar_North_Macedonia.png">weekly</a></td></tr>
-<tr><td>Japan</td><td>127.1</td><td>Asia</td><td>328294</td><td>4501</td><td>1.4</td><td>41542</td><td>457</td><td>2583.4</td><td>35.4</td><td>48.0</td><td><a href="days100_cases_perCapitaFalse_Japan.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Japan.png">deaths</a> · <a href="plot_bar_Japan.png">weekly</a></td></tr>
-<tr><td>Denmark</td><td>5.7</td><td>Europe</td><td>189895</td><td>1805</td><td>1.0</td><td>7170</td><td>208</td><td>33575.6</td><td>319.1</td><td>2200.4</td><td><a href="days100_cases_perCapitaFalse_Denmark.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Denmark.png">deaths</a> · <a href="plot_bar_Denmark.png">weekly</a></td></tr>
-<tr><td>Netherlands</td><td>16.9</td><td>Europe</td><td>916186</td><td>13042</td><td>1.4</td><td>38967</td><td>645</td><td>54273.2</td><td>772.6</td><td>345.6</td><td><a href="days100_cases_perCapitaFalse_Netherlands.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Netherlands.png">deaths</a> · <a href="plot_bar_Netherlands.png">weekly</a></td></tr>
+<tr id="japan"><td>Japan</td><td>127.1</td><td>Asia</td><td>328294</td><td>4501</td><td>1.4</td><td>41542</td><td>457</td><td>2583.4</td><td>35.4</td><td>48.0</td><td><a href="days100_cases_perCapitaFalse_Japan.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Japan.png">deaths</a> · <a href="plot_bar_Japan.png">weekly</a></td></tr>
+<tr id="denmark"><td>Denmark</td><td>5.7</td><td>Europe</td><td>189895</td><td>1805</td><td>1.0</td><td>7170</td><td>208</td><td>33575.6</td><td>319.1</td><td>2200.4</td><td><a href="days100_cases_perCapitaFalse_Denmark.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Denmark.png">deaths</a> · <a href="plot_bar_Denmark.png">weekly</a></td></tr>
+<tr id="netherlands"><td>Netherlands</td><td>16.9</td><td>Europe</td><td>916186</td><td>13042</td><td>1.4</td><td>38967</td><td>645</td><td>54273.2</td><td>772.6</td><td>345.6</td><td><a href="days100_cases_perCapitaFalse_Netherlands.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Netherlands.png">deaths</a> · <a href="plot_bar_Netherlands.png">weekly</a></td></tr>
 <tr><td>South Africa</td><td>54.0</td><td>Africa</td><td>1337926</td><td>37105</td><td>2.8</td><td>106329</td><td>3942</td><td>24775.5</td><td>687.1</td><td>135.9</td><td><a href="days100_cases_perCapitaFalse_South_Africa.png">cases</a> · <a href="days100_deaths_perCapitaFalse_South_Africa.png">deaths</a> · <a href="plot_bar_South_Africa.png">weekly</a></td></tr>
-<tr><td>Canada</td><td>35.5</td><td>Americas</td><td>715072</td><td>18120</td><td>2.5</td><td>46891</td><td>1034</td><td>20120.0</td><td>509.8</td><td>453.6</td><td><a href="days100_cases_perCapitaFalse_Canada.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Canada.png">deaths</a> · <a href="plot_bar_Canada.png">weekly</a></td></tr>
+<tr id="canada"><td>Canada</td><td>35.5</td><td>Americas</td><td>715072</td><td>18120</td><td>2.5</td><td>46891</td><td>1034</td><td>20120.0</td><td>509.8</td><td>453.6</td><td><a href="days100_cases_perCapitaFalse_Canada.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Canada.png">deaths</a> · <a href="plot_bar_Canada.png">weekly</a></td></tr>
 <tr><td>Finland</td><td>5.5</td><td>Europe</td><td>40337</td><td>621</td><td>1.5</td><td>1747</td><td>24</td><td>7373.6</td><td>113.5</td><td>500.6</td><td><a href="days100_cases_perCapitaFalse_Finland.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Finland.png">deaths</a> · <a href="plot_bar_Finland.png">weekly</a></td></tr>
 <tr><td>Ireland</td><td>6.4</td><td>Europe</td><td>172726</td><td>2608</td><td>1.5</td><td>25113</td><td>264</td><td>27081.5</td><td>408.9</td><td>602.2</td><td><a href="days100_cases_perCapitaFalse_Ireland.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Ireland.png">deaths</a> · <a href="plot_bar_Ireland.png">weekly</a></td></tr>
-<tr><td>Indonesia</td><td>252.2</td><td>Asia</td><td>907929</td><td>25987</td><td>2.9</td><td>79903</td><td>1858</td><td>3600.5</td><td>103.1</td><td>21.7</td><td><a href="days100_cases_perCapitaFalse_Indonesia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Indonesia.png">deaths</a> · <a href="plot_bar_Indonesia.png">weekly</a></td></tr>
+<tr id="indonesia"><td>Indonesia</td><td>252.2</td><td>Asia</td><td>907929</td><td>25987</td><td>2.9</td><td>79903</td><td>1858</td><td>3600.5</td><td>103.1</td><td>21.7</td><td><a href="days100_cases_perCapitaFalse_Indonesia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Indonesia.png">deaths</a> · <a href="plot_bar_Indonesia.png">weekly</a></td></tr>
 <tr><td>Lithuania</td><td>2.9</td><td>Europe</td><td>167992</td><td>2469</td><td>1.5</td><td>7546</td><td>237</td><td>57387.8</td><td>843.4</td><td>694.5</td><td><a href="days100_cases_perCapitaFalse_Lithuania.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Lithuania.png">deaths</a> · <a href="plot_bar_Lithuania.png">weekly</a></td></tr>
 <tr><td>Vietnam</td><td>89.7</td><td>Asia</td><td>1539</td><td>35</td><td>2.3</td><td>25</td><td>0</td><td>17.2</td><td>0.4</td><td>15.1</td><td><a href="days100_cases_perCapitaFalse_Vietnam.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Vietnam.png">deaths</a> · <a href="plot_bar_Vietnam.png">weekly</a></td></tr>
 <tr><td>Morocco</td><td>33.5</td><td>Africa</td><td>459671</td><td>7942</td><td>1.7</td><td>7139</td><td>199</td><td>13735.9</td><td>237.3</td><td>131.1</td><td><a href="days100_cases_perCapitaFalse_Morocco.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Morocco.png">deaths</a> · <a href="plot_bar_Morocco.png">weekly</a></td></tr>
 <tr><td>Kuwait</td><td>3.3</td><td>Asia</td><td>157777</td><td>947</td><td>0.6</td><td>3463</td><td>4</td><td>48273.0</td><td>289.7</td><td>346.4</td><td><a href="days100_cases_perCapitaFalse_Kuwait.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Kuwait.png">deaths</a> · <a href="plot_bar_Kuwait.png">weekly</a></td></tr>
-<tr><td>Italy</td><td>60.8</td><td>Europe</td><td>2381277</td><td>82177</td><td>3.5</td><td>104786</td><td>3422</td><td>39185.7</td><td>1352.3</td><td>518.0</td><td><a href="days100_cases_perCapitaFalse_Italy.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Italy.png">deaths</a> · <a href="plot_bar_Italy.png">weekly</a></td></tr>
+<tr id="italy"><td>Italy</td><td>60.8</td><td>Europe</td><td>2381277</td><td>82177</td><td>3.5</td><td>104786</td><td>3422</td><td>39185.7</td><td>1352.3</td><td>518.0</td><td><a href="days100_cases_perCapitaFalse_Italy.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Italy.png">deaths</a> · <a href="plot_bar_Italy.png">weekly</a></td></tr>
 <tr><td>Serbia</td><td>7.2</td><td>Europe</td><td>372533</td><td>3750</td><td>1.0</td><td>12844</td><td>168</td><td>51835.3</td><td>521.8</td><td>377.2</td><td><a href="days100_cases_perCapitaFalse_Serbia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Serbia.png">deaths</a> · <a href="plot_bar_Serbia.png">weekly</a></td></tr>
 <tr><td>Romania</td><td>19.9</td><td>Europe</td><td>695153</td><td>17271</td><td>2.5</td><td>21882</td><td>546</td><td>34857.6</td><td>866.0</td><td>277.0</td><td><a href="days100_cases_perCapitaFalse_Romania.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Romania.png">deaths</a> · <a href="plot_bar_Romania.png">weekly</a></td></tr>
 <tr><td>Latvia</td><td>2.0</td><td>Europe</td><td>55664</td><td>978</td><td>1.8</td><td>6096</td><td>129</td><td>27946.6</td><td>491.0</td><td>595.8</td><td><a href="days100_cases_perCapitaFalse_Latvia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Latvia.png">deaths</a> · <a href="plot_bar_Latvia.png">weekly</a></td></tr>
 <tr><td>Israel</td><td>8.3</td><td>Asia</td><td>551689</td><td>4005</td><td>0.7</td><td>56626</td><td>316</td><td>66722.6</td><td>484.4</td><td>1254.4</td><td><a href="days100_cases_perCapitaFalse_Israel.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Israel.png">deaths</a> · <a href="plot_bar_Israel.png">weekly</a></td></tr>
 <tr><td>Togo</td><td>7.0</td><td>Africa</td><td>4302</td><td>73</td><td>1.7</td><td>345</td><td>1</td><td>615.2</td><td>10.4</td><td>24.6</td><td><a href="days100_cases_perCapitaFalse_Togo.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Togo.png">deaths</a> · <a href="plot_bar_Togo.png">weekly</a></td></tr>
-<tr><td>India</td><td>1263.9</td><td>Asia</td><td>10571773</td><td>152419</td><td>1.4</td><td>105178</td><td>1259</td><td>8364.2</td><td>120.6</td><td>139.4</td><td><a href="days100_cases_perCapitaFalse_India.png">cases</a> · <a href="days100_deaths_perCapitaFalse_India.png">deaths</a> · <a href="plot_bar_India.png">weekly</a></td></tr>
+<tr id="india"><td>India</td><td>1263.9</td><td>Asia</td><td>10571773</td><td>152419</td><td>1.4</td><td>105178</td><td>1259</td><td>8364.2</td><td>120.6</td><td>139.4</td><td><a href="days100_cases_perCapitaFalse_India.png">cases</a> · <a href="days100_deaths_perCapitaFalse_India.png">deaths</a> · <a href="plot_bar_India.png">weekly</a></td></tr>
 <tr><td>Croatia</td><td>4.3</td><td>Europe</td><td>225128</td><td>4655</td><td>2.1</td><td>4905</td><td>252</td><td>52753.4</td><td>1090.8</td><td>283.2</td><td><a href="days100_cases_perCapitaFalse_Croatia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Croatia.png">deaths</a> · <a href="plot_bar_Croatia.png">weekly</a></td></tr>
 <tr><td>Jamaica</td><td>2.7</td><td>Americas</td><td>14274</td><td>326</td><td>2.3</td><td>637</td><td>13</td><td>5251.7</td><td>119.9</td><td>54.2</td><td><a href="days100_cases_perCapitaFalse_Jamaica.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Jamaica.png">deaths</a> · <a href="plot_bar_Jamaica.png">weekly</a></td></tr>
 <tr><td>Thailand</td><td>64.9</td><td>Asia</td><td>12423</td><td>70</td><td>0.6</td><td>1876</td><td>3</td><td>191.5</td><td>1.1</td><td>23.3</td><td><a href="days100_cases_perCapitaFalse_Thailand.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Thailand.png">deaths</a> · <a href="plot_bar_Thailand.png">weekly</a></td></tr>
-<tr><td>Portugal</td><td>10.5</td><td>Europe</td><td>556503</td><td>9028</td><td>1.6</td><td>67210</td><td>1103</td><td>53112.6</td><td>861.6</td><td>682.3</td><td><a href="days100_cases_perCapitaFalse_Portugal.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Portugal.png">deaths</a> · <a href="plot_bar_Portugal.png">weekly</a></td></tr>
+<tr id="portugal"><td>Portugal</td><td>10.5</td><td>Europe</td><td>556503</td><td>9028</td><td>1.6</td><td>67210</td><td>1103</td><td>53112.6</td><td>861.6</td><td>682.3</td><td><a href="days100_cases_perCapitaFalse_Portugal.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Portugal.png">deaths</a> · <a href="plot_bar_Portugal.png">weekly</a></td></tr>
 <tr><td>Greece</td><td>11.0</td><td>Europe</td><td>148607</td><td>5469</td><td>3.7</td><td>3869</td><td>206</td><td>13518.8</td><td>497.5</td><td>385.6</td><td><a href="days100_cases_perCapitaFalse_Greece.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Greece.png">deaths</a> · <a href="plot_bar_Greece.png">weekly</a></td></tr>
 <tr><td>Mongolia</td><td>3.0</td><td>Asia</td><td>1526</td><td>0</td><td>0.0</td><td>84</td><td>0</td><td>510.8</td><td>0.0</td><td>295.8</td><td><a href="days100_cases_perCapitaFalse_Mongolia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Mongolia.png">deaths</a> · <a href="plot_bar_Mongolia.png">weekly</a></td></tr>
-<tr><td>Brazil</td><td>203.6</td><td>Americas</td><td>8511770</td><td>210299</td><td>2.5</td><td>380158</td><td>6719</td><td>41809.2</td><td>1033.0</td><td>30.2</td><td><a href="days100_cases_perCapitaFalse_Brazil.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Brazil.png">deaths</a> · <a href="plot_bar_Brazil.png">weekly</a></td></tr>
+<tr id="brazil"><td>Brazil</td><td>203.6</td><td>Americas</td><td>8511770</td><td>210299</td><td>2.5</td><td>380158</td><td>6719</td><td>41809.2</td><td>1033.0</td><td>30.2</td><td><a href="days100_cases_perCapitaFalse_Brazil.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Brazil.png">deaths</a> · <a href="plot_bar_Brazil.png">weekly</a></td></tr>
 <tr><td>Paraguay</td><td>6.9</td><td>Americas</td><td>122160</td><td>2505</td><td>2.1</td><td>6427</td><td>100</td><td>17720.5</td><td>363.4</td><td>88.8</td><td><a href="days100_cases_perCapitaFalse_Paraguay.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Paraguay.png">deaths</a> · <a href="plot_bar_Paraguay.png">weekly</a></td></tr>
 <tr><td>Costa Rica</td><td>4.7</td><td>Americas</td><td>186016</td><td>2458</td><td>1.3</td><td>5955</td><td>105</td><td>39467.3</td><td>521.5</td><td>47.6</td><td><a href="days100_cases_perCapitaFalse_Costa_Rica.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Costa_Rica.png">deaths</a> · <a href="plot_bar_Costa_Rica.png">weekly</a></td></tr>
 <tr><td>Turkey</td><td>76.7</td><td>Asia</td><td>1572763</td><td>23997</td><td>1.5</td><td>60845</td><td>1190</td><td>20514.0</td><td>313.0</td><td>341.8</td><td><a href="days100_cases_perCapitaFalse_Turkey.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Turkey.png">deaths</a> · <a href="plot_bar_Turkey.png">weekly</a></td></tr>
@@ -407,33 +388,33 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <tr><td>Hungary</td><td>9.9</td><td>Europe</td><td>352703</td><td>11409</td><td>3.2</td><td>9047</td><td>684</td><td>35702.3</td><td>1154.9</td><td>270.9</td><td><a href="days100_cases_perCapitaFalse_Hungary.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Hungary.png">deaths</a> · <a href="plot_bar_Hungary.png">weekly</a></td></tr>
 <tr><td>Trinidad and Tobago</td><td>1.3</td><td>Americas</td><td>7393</td><td>132</td><td>1.8</td><td>128</td><td>4</td><td>5566.9</td><td>99.4</td><td>58.7</td><td><a href="days100_cases_perCapitaFalse_Trinidad_and_Tobago.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Trinidad_and_Tobago.png">deaths</a> · <a href="plot_bar_Trinidad_and_Tobago.png">weekly</a></td></tr>
 <tr><td>Iceland</td><td>0.3</td><td>Europe</td><td>5970</td><td>29</td><td>0.5</td><td>72</td><td>0</td><td>18191.8</td><td>88.4</td><td>761.8</td><td><a href="days100_cases_perCapitaFalse_Iceland.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Iceland.png">deaths</a> · <a href="plot_bar_Iceland.png">weekly</a></td></tr>
-<tr><td>South Korea</td><td>50.4</td><td>Asia</td><td>72729</td><td>1264</td><td>1.7</td><td>3615</td><td>124</td><td>1442.4</td><td>25.1</td><td>103.1</td><td><a href="days100_cases_perCapitaFalse_South_Korea.png">cases</a> · <a href="days100_deaths_perCapitaFalse_South_Korea.png">deaths</a> · <a href="plot_bar_South_Korea.png">weekly</a></td></tr>
+<tr id="south-korea"><td>South Korea</td><td>50.4</td><td>Asia</td><td>72729</td><td>1264</td><td>1.7</td><td>3615</td><td>124</td><td>1442.4</td><td>25.1</td><td>103.1</td><td><a href="days100_cases_perCapitaFalse_South_Korea.png">cases</a> · <a href="days100_deaths_perCapitaFalse_South_Korea.png">deaths</a> · <a href="plot_bar_South_Korea.png">weekly</a></td></tr>
 <tr><td>Panama</td><td>3.7</td><td>Americas</td><td>298019</td><td>4787</td><td>1.6</td><td>18823</td><td>332</td><td>80256.9</td><td>1289.1</td><td>376.9</td><td><a href="days100_cases_perCapitaFalse_Panama.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Panama.png">deaths</a> · <a href="plot_bar_Panama.png">weekly</a></td></tr>
 <tr><td>Bosnia and Herzegovina</td><td>3.8</td><td>Europe</td><td>118083</td><td>4486</td><td>3.8</td><td>2325</td><td>128</td><td>31143.1</td><td>1183.1</td><td>156.8</td><td><a href="days100_cases_perCapitaFalse_Bosnia_and_Herzegovina.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Bosnia_and_Herzegovina.png">deaths</a> · <a href="plot_bar_Bosnia_and_Herzegovina.png">weekly</a></td></tr>
 <tr><td>Ghana</td><td>27.0</td><td>Africa</td><td>57714</td><td>346</td><td>0.6</td><td>1484</td><td>8</td><td>2134.1</td><td>12.8</td><td>24.0</td><td><a href="days100_cases_perCapitaFalse_Ghana.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Ghana.png">deaths</a> · <a href="plot_bar_Ghana.png">weekly</a></td></tr>
 <tr><td>Pakistan</td><td>188.4</td><td>Asia</td><td>521211</td><td>10997</td><td>2.1</td><td>16918</td><td>321</td><td>2766.4</td><td>58.4</td><td>35.0</td><td><a href="days100_cases_perCapitaFalse_Pakistan.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Pakistan.png">deaths</a> · <a href="plot_bar_Pakistan.png">weekly</a></td></tr>
-<tr><td>New Zealand</td><td>4.5</td><td>Oceania</td><td>1906</td><td>25</td><td>1.3</td><td>40</td><td>0</td><td>419.1</td><td>5.5</td><td>309.7</td><td><a href="days100_cases_perCapitaFalse_New_Zealand.png">cases</a> · <a href="days100_deaths_perCapitaFalse_New_Zealand.png">deaths</a> · <a href="plot_bar_New_Zealand.png">weekly</a></td></tr>
+<tr id="new-zealand"><td>New Zealand</td><td>4.5</td><td>Oceania</td><td>1906</td><td>25</td><td>1.3</td><td>40</td><td>0</td><td>419.1</td><td>5.5</td><td>309.7</td><td><a href="days100_cases_perCapitaFalse_New_Zealand.png">cases</a> · <a href="days100_deaths_perCapitaFalse_New_Zealand.png">deaths</a> · <a href="plot_bar_New_Zealand.png">weekly</a></td></tr>
 <tr><td>Bulgaria</td><td>7.2</td><td>Europe</td><td>211813</td><td>8483</td><td>4.0</td><td>3302</td><td>357</td><td>29233.0</td><td>1170.8</td><td>191.4</td><td><a href="days100_cases_perCapitaFalse_Bulgaria.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Bulgaria.png">deaths</a> · <a href="plot_bar_Bulgaria.png">weekly</a></td></tr>
 <tr><td>Ukraine</td><td>43.0</td><td>Europe</td><td>1163716</td><td>20869</td><td>1.8</td><td>44402</td><td>1034</td><td>27079.7</td><td>485.6</td><td>140.1</td><td><a href="days100_cases_perCapitaFalse_Ukraine.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Ukraine.png">deaths</a> · <a href="plot_bar_Ukraine.png">weekly</a></td></tr>
 <tr><td>Cyprus</td><td>0.9</td><td>Europe</td><td>28968</td><td>170</td><td>0.6</td><td>1618</td><td>22</td><td>33762.2</td><td>198.1</td><td>1497.6</td><td><a href="days100_cases_perCapitaFalse_Cyprus.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Cyprus.png">deaths</a> · <a href="plot_bar_Cyprus.png">weekly</a></td></tr>
 <tr><td>Tunisia</td><td>11.0</td><td>Africa</td><td>181885</td><td>5750</td><td>3.2</td><td>19535</td><td>466</td><td>16561.0</td><td>523.5</td><td>19.0</td><td><a href="days100_cases_perCapitaFalse_Tunisia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Tunisia.png">deaths</a> · <a href="plot_bar_Tunisia.png">weekly</a></td></tr>
 <tr><td>Estonia</td><td>1.3</td><td>Europe</td><td>37344</td><td>333</td><td>0.9</td><td>3539</td><td>46</td><td>28380.8</td><td>253.1</td><td>569.1</td><td><a href="days100_cases_perCapitaFalse_Estonia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Estonia.png">deaths</a> · <a href="plot_bar_Estonia.png">weekly</a></td></tr>
 <tr><td>Luxembourg</td><td>0.5</td><td>Europe</td><td>48852</td><td>552</td><td>1.1</td><td>868</td><td>19</td><td>88870.3</td><td>1004.2</td><td>2961.6</td><td><a href="days100_cases_perCapitaFalse_Luxembourg.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Luxembourg.png">deaths</a> · <a href="plot_bar_Luxembourg.png">weekly</a></td></tr>
-<tr><td>Belgium</td><td>11.2</td><td>Europe</td><td>680040</td><td>20491</td><td>3.0</td><td>13749</td><td>335</td><td>60580.1</td><td>1825.4</td><td>687.8</td><td><a href="days100_cases_perCapitaFalse_Belgium.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Belgium.png">deaths</a> · <a href="plot_bar_Belgium.png">weekly</a></td></tr>
+<tr id="belgium"><td>Belgium</td><td>11.2</td><td>Europe</td><td>680040</td><td>20491</td><td>3.0</td><td>13749</td><td>335</td><td>60580.1</td><td>1825.4</td><td>687.8</td><td><a href="days100_cases_perCapitaFalse_Belgium.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Belgium.png">deaths</a> · <a href="plot_bar_Belgium.png">weekly</a></td></tr>
 <tr><td>Slovenia</td><td>2.1</td><td>Europe</td><td>149434</td><td>3371</td><td>2.3</td><td>9721</td><td>224</td><td>72366.3</td><td>1632.5</td><td>479.5</td><td><a href="days100_cases_perCapitaFalse_Slovenia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Slovenia.png">deaths</a> · <a href="plot_bar_Slovenia.png">weekly</a></td></tr>
 <tr><td>Slovakia</td><td>5.4</td><td>Europe</td><td>224385</td><td>3526</td><td>1.6</td><td>15316</td><td>519</td><td>41430.4</td><td>651.0</td><td>315.8</td><td><a href="days100_cases_perCapitaFalse_Slovakia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Slovakia.png">deaths</a> · <a href="plot_bar_Slovakia.png">weekly</a></td></tr>
 <tr><td>Cuba</td><td>11.2</td><td>Americas</td><td>18443</td><td>173</td><td>0.9</td><td>3436</td><td>20</td><td>1645.2</td><td>15.4</td><td>159.7</td><td><a href="days100_cases_perCapitaFalse_Cuba.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Cuba.png">deaths</a> · <a href="plot_bar_Cuba.png">weekly</a></td></tr>
 <tr><td>Bangladesh</td><td>157.5</td><td>Asia</td><td>527632</td><td>7906</td><td>1.5</td><td>5179</td><td>125</td><td>3350.3</td><td>50.2</td><td>21.8</td><td><a href="days100_cases_perCapitaFalse_Bangladesh.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Bangladesh.png">deaths</a> · <a href="plot_bar_Bangladesh.png">weekly</a></td></tr>
 <tr><td>Russia</td><td>146.2</td><td>Europe</td><td>3591066</td><td>66037</td><td>1.8</td><td>165797</td><td>3764</td><td>24557.2</td><td>451.6</td><td>687.7</td><td><a href="days100_cases_perCapitaFalse_Russia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Russia.png">deaths</a> · <a href="plot_bar_Russia.png">weekly</a></td></tr>
-<tr><td>United Kingdom</td><td>64.1</td><td>Europe</td><td>3395959</td><td>89261</td><td>2.6</td><td>323610</td><td>7830</td><td>52974.4</td><td>1392.4</td><td>978.4</td><td><a href="days100_cases_perCapitaFalse_United_Kingdom.png">cases</a> · <a href="days100_deaths_perCapitaFalse_United_Kingdom.png">deaths</a> · <a href="plot_bar_United_Kingdom.png">weekly</a></td></tr>
-<tr><td>Australia</td><td>23.7</td><td>Oceania</td><td>28708</td><td>909</td><td>3.2</td><td>94</td><td>0</td><td>1211.5</td><td>38.4</td><td>501.1</td><td><a href="days100_cases_perCapitaFalse_Australia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Australia.png">deaths</a> · <a href="plot_bar_Australia.png">weekly</a></td></tr>
+<tr id="united-kingdom"><td>United Kingdom</td><td>64.1</td><td>Europe</td><td>3395959</td><td>89261</td><td>2.6</td><td>323610</td><td>7830</td><td>52974.4</td><td>1392.4</td><td>978.4</td><td><a href="days100_cases_perCapitaFalse_United_Kingdom.png">cases</a> · <a href="days100_deaths_perCapitaFalse_United_Kingdom.png">deaths</a> · <a href="plot_bar_United_Kingdom.png">weekly</a></td></tr>
+<tr id="australia"><td>Australia</td><td>23.7</td><td>Oceania</td><td>28708</td><td>909</td><td>3.2</td><td>94</td><td>0</td><td>1211.5</td><td>38.4</td><td>501.1</td><td><a href="days100_cases_perCapitaFalse_Australia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Australia.png">deaths</a> · <a href="plot_bar_Australia.png">weekly</a></td></tr>
 <tr><td>Poland</td><td>38.5</td><td>Europe</td><td>1438914</td><td>33407</td><td>2.3</td><td>48529</td><td>2143</td><td>37378.3</td><td>867.8</td><td>215.1</td><td><a href="days100_cases_perCapitaFalse_Poland.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Poland.png">deaths</a> · <a href="plot_bar_Poland.png">weekly</a></td></tr>
 <tr><td>Nepal</td><td>27.6</td><td>Asia</td><td>267322</td><td>1959</td><td>0.7</td><td>2542</td><td>42</td><td>9669.4</td><td>70.9</td><td>70.5</td><td><a href="days100_cases_perCapitaFalse_Nepal.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Nepal.png">deaths</a> · <a href="plot_bar_Nepal.png">weekly</a></td></tr>
 <tr><td>Senegal</td><td>13.5</td><td>Africa</td><td>23224</td><td>526</td><td>2.3</td><td>1691</td><td>57</td><td>1719.2</td><td>38.9</td><td>19.5</td><td><a href="days100_cases_perCapitaFalse_Senegal.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Senegal.png">deaths</a> · <a href="plot_bar_Senegal.png">weekly</a></td></tr>
 <tr><td>Nigeria</td><td>178.5</td><td>Africa</td><td>110387</td><td>1435</td><td>1.3</td><td>10300</td><td>77</td><td>618.4</td><td>8.0</td><td>6.2</td><td><a href="days100_cases_perCapitaFalse_Nigeria.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Nigeria.png">deaths</a> · <a href="plot_bar_Nigeria.png">weekly</a></td></tr>
-<tr><td>Taiwan</td><td>23.4</td><td>Asia</td><td>862</td><td>7</td><td>0.8</td><td>28</td><td>0</td><td>36.8</td><td>0.3</td><td>6.2</td><td><a href="days100_cases_perCapitaFalse_Taiwan.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Taiwan.png">deaths</a> · <a href="plot_bar_Taiwan.png">weekly</a></td></tr>
+<tr id="taiwan"><td>Taiwan</td><td>23.4</td><td>Asia</td><td>862</td><td>7</td><td>0.8</td><td>28</td><td>0</td><td>36.8</td><td>0.3</td><td>6.2</td><td><a href="days100_cases_perCapitaFalse_Taiwan.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Taiwan.png">deaths</a> · <a href="plot_bar_Taiwan.png">weekly</a></td></tr>
 <tr><td>Saudi Arabia</td><td>30.8</td><td>Asia</td><td>364929</td><td>6323</td><td>1.7</td><td>1120</td><td>32</td><td>11859.8</td><td>205.5</td><td>348.4</td><td><a href="days100_cases_perCapitaFalse_Saudi_Arabia.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Saudi_Arabia.png">deaths</a> · <a href="plot_bar_Saudi_Arabia.png">weekly</a></td></tr>
-<tr><td>Switzerland</td><td>8.2</td><td>Europe</td><td>497472</td><td>8047</td><td>1.6</td><td>15378</td><td>392</td><td>60787.4</td><td>983.3</td><td>428.7</td><td><a href="days100_cases_perCapitaFalse_Switzerland.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Switzerland.png">deaths</a> · <a href="plot_bar_Switzerland.png">weekly</a></td></tr>
+<tr id="switzerland"><td>Switzerland</td><td>8.2</td><td>Europe</td><td>497472</td><td>8047</td><td>1.6</td><td>15378</td><td>392</td><td>60787.4</td><td>983.3</td><td>428.7</td><td><a href="days100_cases_perCapitaFalse_Switzerland.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Switzerland.png">deaths</a> · <a href="plot_bar_Switzerland.png">weekly</a></td></tr>
 <tr><td>Ecuador</td><td>15.9</td><td>Americas</td><td>231644</td><td>14322</td><td>6.2</td><td>10138</td><td>138</td><td>14579.0</td><td>901.4</td><td>45.5</td><td><a href="days100_cases_perCapitaFalse_Ecuador.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Ecuador.png">deaths</a> · <a href="plot_bar_Ecuador.png">weekly</a></td></tr>
 <tr><td>Iran</td><td>78.0</td><td>Asia</td><td>1330411</td><td>56803</td><td>4.3</td><td>44005</td><td>632</td><td>17063.9</td><td>728.6</td><td>107.3</td><td><a href="days100_cases_perCapitaFalse_Iran.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Iran.png">deaths</a> · <a href="plot_bar_Iran.png">weekly</a></td></tr>
 <tr><td>Dominican Republic</td><td>10.4</td><td>Americas</td><td>194966</td><td>2448</td><td>1.3</td><td>11684</td><td>21</td><td>18786.0</td><td>235.9</td><td>92.5</td><td><a href="days100_cases_perCapitaFalse_Dominican_Republic.png">cases</a> · <a href="days100_deaths_perCapitaFalse_Dominican_Republic.png">deaths</a> · <a href="plot_bar_Dominican_Republic.png">weekly</a></td></tr>
@@ -573,154 +554,6 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <br>
 <img width="480" height="360" src="plot_heat_cases_Nordic.png" alt="Heat map of weekly COVID-19 cases per million in the Nordic countries, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
 <img width="480" height="360" src="plot_heat_deaths_Nordic.png" alt="Heat map of weekly COVID-19 deaths per million in the Nordic countries, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
-
-<h2 id="countries">Charts by country&nbsp;<a class="anchor" href="#countries" aria-label="Link to this section: Charts by country">#</a></h2>
-
-<p class="reading">Two charts for each country: its cumulative confirmed cases from the week it first passed 1,000 cases, and its cumulative deaths from the week it first passed 100 deaths, both on log scales. The country is the red line, with its total in the legend; the other countries of its continent are dark grey and the rest of the world light grey. Fifteen countries&#39; charts were drawn on 27 January 2021; the other eight, whose charts on the server dated from April 2020, were redrawn in October 2026 from the data to 10 January 2021.</p>
-
-<h3 id="australia"><img src="img/Flag_of_Australia_(converted).svg.png" height="30" alt="" class="flag"> Australia&nbsp;<a class="anchor" href="#australia" aria-label="Link to this section: Australia">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Australia.png" alt="Cumulative confirmed COVID-19 cases in Australia (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Australia.png" alt="Cumulative COVID-19 deaths in Australia (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="austria"><img src="img/Flag_of_Austria.svg.png" height="30" alt="" class="flag"> Austria&nbsp;<a class="anchor" href="#austria" aria-label="Link to this section: Austria">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Austria.png" alt="Cumulative confirmed COVID-19 cases in Austria (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Austria.png" alt="Cumulative COVID-19 deaths in Austria (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="belgium"><img src="img/Flag_of_Belgium_(civil).svg.png" height="30" alt="" class="flag"> Belgium / Belgique&nbsp;<a class="anchor" href="#belgium" aria-label="Link to this section: Belgium">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Belgium.png" alt="Cumulative confirmed COVID-19 cases in Belgium (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Belgium.png" alt="Cumulative COVID-19 deaths in Belgium (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="brazil"><img src="img/Flag_of_Brazil.svg.png" height="30" alt="" class="flag"> Brazil / Brasil&nbsp;<a class="anchor" href="#brazil" aria-label="Link to this section: Brazil">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Brazil.png" alt="Cumulative confirmed COVID-19 cases in Brazil (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Brazil.png" alt="Cumulative COVID-19 deaths in Brazil (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="canada"><img src="img/Flag_of_Canada_(Pantone).svg.png" height="30" alt="" class="flag"> Canada / Canada&nbsp;<a class="anchor" href="#canada" aria-label="Link to this section: Canada">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Canada.png" alt="Cumulative confirmed COVID-19 cases in Canada (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Canada.png" alt="Cumulative COVID-19 deaths in Canada (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="denmark"><img src="img/Flag_of_Denmark.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Denmark">Denmark</a> / Danmark<a class="anchor" href="#denmark" aria-label="Link to this section: Denmark">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Denmark.png" alt="Cumulative confirmed COVID-19 cases in Denmark (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Denmark.png" alt="Cumulative COVID-19 deaths in Denmark (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="france"><img src="img/Flag_of_France.svg.png" height="30" alt="" class="flag"> France / La France&nbsp;<a class="anchor" href="#france" aria-label="Link to this section: France">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_France.png" alt="Cumulative confirmed COVID-19 cases in France (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_France.png" alt="Cumulative COVID-19 deaths in France (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="germany"><img src="img/Flag_of_Germany.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Germany">Germany</a> / <a href="https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland">Deutschland</a>&nbsp;<a class="anchor" href="#germany" aria-label="Link to this section: Germany">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Germany.png" alt="Cumulative confirmed COVID-19 cases in Germany (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Germany.png" alt="Cumulative COVID-19 deaths in Germany (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="india"><img src="img/Flag_of_India.svg.png" height="30" alt="" class="flag"> India / भारत&nbsp;<a class="anchor" href="#india" aria-label="Link to this section: India">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_India.png" alt="Cumulative confirmed COVID-19 cases in India (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_India.png" alt="Cumulative COVID-19 deaths in India (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="indonesia"><img src="img/Flag_of_Indonesia.svg.png" height="30" alt="" class="flag"> Indonesia / Republik Indonesia&nbsp;<a class="anchor" href="#indonesia" aria-label="Link to this section: Indonesia">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Indonesia.png" alt="Cumulative confirmed COVID-19 cases in Indonesia (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Indonesia.png" alt="Cumulative COVID-19 deaths in Indonesia (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="italy"><img src="img/Flag_of_Italy.svg.png" height="30" alt="" class="flag"> Italy / Italia&nbsp;<a class="anchor" href="#italy" aria-label="Link to this section: Italy">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Italy.png" alt="Cumulative confirmed COVID-19 cases in Italy (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Italy.png" alt="Cumulative COVID-19 deaths in Italy (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="japan"><img src="img/Flag_of_Japan.svg.png" height="30" alt="" class="flag"> Japan / 日本&nbsp;<a class="anchor" href="#japan" aria-label="Link to this section: Japan">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Japan.png" alt="Cumulative confirmed COVID-19 cases in Japan (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Japan.png" alt="Cumulative COVID-19 deaths in Japan (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="mexico">
-    <img src="img/Flag_of_Mexico.svg.png" height="30" alt="" class="flag">
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Mexico">Mexico</a> / <a href="https://es.wikipedia.org/wiki/Pandemia_de_enfermedad_por_coronavirus_de_2020_en_M%C3%A9xico">México</a>&nbsp;<a class="anchor" href="#mexico" aria-label="Link to this section: Mexico">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Mexico.png" alt="Cumulative confirmed COVID-19 cases in Mexico (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Mexico.png" alt="Cumulative COVID-19 deaths in Mexico (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="netherlands"><img src="img/Flag_of_the_Netherlands.svg.png" height="30" alt="" class="flag"> Netherlands / Nederland&nbsp;<a class="anchor" href="#netherlands" aria-label="Link to this section: Netherlands">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Netherlands.png" alt="Cumulative confirmed COVID-19 cases in Netherlands (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Netherlands.png" alt="Cumulative COVID-19 deaths in Netherlands (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="new-zealand"><img src="img/Flag_of_New_Zealand.svg.png" height="30" alt="" class="flag"> New Zealand / New Zealand&nbsp;<a class="anchor" href="#new-zealand" aria-label="Link to this section: New Zealand">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_New_Zealand.png" alt="Cumulative confirmed COVID-19 cases in New Zealand (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_New_Zealand.png" alt="Cumulative COVID-19 deaths in New Zealand (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="norway"><img src="img/Flag_of_Norway.svg.png" height="30" alt="" class="flag"> Norway / <a href="https://no.wikipedia.org/wiki/Norge_under_koronaviruspandemien_i_2020">Norge</a>&nbsp;<a class="anchor" href="#norway" aria-label="Link to this section: Norway">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Norway.png" alt="Cumulative confirmed COVID-19 cases in Norway (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Norway.png" alt="Cumulative COVID-19 deaths in Norway (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="portugal">
-    <img src="img/Flag_of_Portugal.svg.png" height="30" alt="" class="flag">
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Portugal">Portugal</a>
-    /
-    <a href="https://pt.wikipedia.org/wiki/Pandemia_de_COVID-19_em_Portugal">Portugal</a>&nbsp;<a class="anchor" href="#portugal" aria-label="Link to this section: Portugal">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Portugal.png" alt="Cumulative confirmed COVID-19 cases in Portugal (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Portugal.png" alt="Cumulative COVID-19 deaths in Portugal (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="south-korea"><img src="img/Flag_of_South_Korea.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_South_Korea">South Korea</a> / 한국/韓國&nbsp;<a class="anchor" href="#south-korea" aria-label="Link to this section: South Korea">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_South_Korea.png" alt="Cumulative confirmed COVID-19 cases in South Korea (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_South_Korea.png" alt="Cumulative COVID-19 deaths in South Korea (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="spain"><img src="img/Flag_of_Spain.svg.png" height="30" alt="" class="flag"> Spain / España&nbsp;<a class="anchor" href="#spain" aria-label="Link to this section: Spain">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Spain.png" alt="Cumulative confirmed COVID-19 cases in Spain (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Spain.png" alt="Cumulative COVID-19 deaths in Spain (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="sweden"><img src="img/Flag_of_Sweden.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Sweden">Sweden</a> / Sverige&nbsp;<a class="anchor" href="#sweden" aria-label="Link to this section: Sweden">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Sweden.png" alt="Cumulative confirmed COVID-19 cases in Sweden (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Sweden.png" alt="Cumulative COVID-19 deaths in Sweden (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="switzerland"><img src="img/Flag_of_Switzerland.svg.png" height="30" alt="" class="flag"> Switzerland / Schweiz&nbsp;<a class="anchor" href="#switzerland" aria-label="Link to this section: Switzerland">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Switzerland.png" alt="Cumulative confirmed COVID-19 cases in Switzerland (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Switzerland.png" alt="Cumulative COVID-19 deaths in Switzerland (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="taiwan"><img src="img/Flag_of_the_Republic_of_China.svg.png" height="30" alt="" class="flag"> Taiwan / 台灣&nbsp;<a class="anchor" href="#taiwan" aria-label="Link to this section: Taiwan">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Taiwan.png" alt="Cumulative confirmed COVID-19 cases in Taiwan (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Taiwan.png" alt="Cumulative COVID-19 deaths in Taiwan (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
-
-<h3 id="united-kingdom"><img src="img/Flag_of_the_United_Kingdom.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_Kingdom">United Kingdom</a> (Great Britain; <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_England">England</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Scotland">Scotland</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Wales">Wales</a>, Northern Ireland)&nbsp;<a class="anchor" href="#united-kingdom" aria-label="Link to this section: United Kingdom">#</a></h3>
-
-<img width="480" height="360" src="days100_cases_perCapitaFalse_United_Kingdom.png" alt="Cumulative confirmed COVID-19 cases in United Kingdom (red), by week since it first passed 1,000 cases, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_United_Kingdom.png" alt="Cumulative COVID-19 deaths in United Kingdom (red), by week since it first passed 100 deaths, with the other countries of its continent in dark grey and the rest of the world in light grey; log scale" loading="lazy">
-<br>
 
 <hr>
 
