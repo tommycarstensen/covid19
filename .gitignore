@@ -62,6 +62,9 @@
 # FTP password read by upload.py
 .password
 
+# Copies of other sites' images, saved by backup_external_images.py; its manifest.json and the tweets' JSON are committed
+/external_images/**/*.svg
+
 # Logs and scratch work
 /tmp/
 
