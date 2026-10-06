@@ -525,7 +525,7 @@
       while (tableWrap.firstChild) tableWrap.removeChild(tableWrap.firstChild);
       var table = html('table', '', tableWrap);
       var head = html('tr', '', table);
-      ['Country', 'Cases', 'Change', 'Deaths', 'Change', 'Tests, change', 'Deaths to date'].forEach(function (h) {
+      ['Country', 'Cases, two weeks', 'Change', 'Deaths, two weeks', 'Change', 'Tests, change', 'Deaths to date'].forEach(function (h) {
         html('th', '', head).textContent = h;
       });
       model.countries.slice().sort(function (a, b) { return b.frames[frame].deaths - a.frames[frame].deaths; }).forEach(function (c) {
