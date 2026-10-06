@@ -1,6 +1,6 @@
 # covid19
 
-Source for https://tommycarstensen.com/covid19/, a COVID-19 dashboard Tommy ran from March 2020 to January 2021, copied from the 2019 MacBook Pro onto the archive disk. The page is now an archive and nothing updates it. Its data stop in January 2021: the table's counts run to mid-January 2021, the world GIFs date from 14 January and `europe.gif` from 24 January 2021. The last upload, on 6 November 2021, re-sent the page with those January data; a note at the top of the page says so.
+Source for https://tommycarstensen.com/covid19/, a COVID-19 dashboard Tommy ran from March 2020 to January 2021, copied from the 2019 MacBook Pro onto the archive disk. The page is now an archive and nothing updates it. Its data stop in January 2021: the table's counts run to mid-January 2021, the world GIFs date from 14 January and `europe.gif` from 24 January 2021. The last upload, on 6 November 2021, re-sent the page with those January data; a note at the top of the page says so. A server listing on 6 October 2026 confirms it: before the October 2026 deploys, the newest files in `/www/covid19/` were the January 2021 images and `press_denmark.html` (6 November 2021). The page's two Our World in Data testing charts run to 23 June 2022, but they are live iframes served by OWID, which stopped updating its testing data that day, not files of this site.
 
 ## What is live, and what is not
 
