@@ -49,15 +49,15 @@
 
 # Separate git repositories with their own history
 /repos/
-/deepti/pyhdf_github/
+/other/deepti/pyhdf_github/
 
 # Third-party downloads and builds (HDF4, pyhdf, Miniconda)
-/deepti/hdf-4.2.15/
-/deepti/hdf-4.2.5-mac-intel-x86_64/
-/deepti/pyhdf-0.10.2/
-/deepti/pyhdf.egg-info/
-/deepti/h4toh5
-/deepti/Miniconda3-latest-MacOSX-x86_64.sh
+/other/deepti/hdf-4.2.15/
+/other/deepti/hdf-4.2.5-mac-intel-x86_64/
+/other/deepti/pyhdf-0.10.2/
+/other/deepti/pyhdf.egg-info/
+/other/deepti/h4toh5
+/other/deepti/Miniconda3-latest-MacOSX-x86_64.sh
 
 # FTP password read by upload.py
 .password
