@@ -1,8 +1,9 @@
 """Redraw the table's missing line charts for tommycarstensen.com/covid19/.
 
-Every row of the table on the page shows two thumbnails, of cumulated weekly
-cases and deaths of one country against the rest of the world, each linking
-its full-size chart. The run of plot_series.py on 27 January 2021 drew these
+Every row of the table on the page links two charts, of cumulated weekly
+cases and deaths of one country against the rest of the world (until
+27797c4 it showed their thumbnails, which this still draws but the page no
+longer uses). The run of plot_series.py on 27 January 2021 drew these
 charts only for the countries in its 'website' list, so for 63 of the 87
 rows the page asked for thumbnails that were never made, and the full-size
 charts behind them were left from 18 April 2020.
@@ -41,8 +42,9 @@ ARCHIVE = ROOT / "2020" / "archive"
 DATA = ROOT / "data" / "ecdc.csv"
 WORK = ROOT / "tmp" / "redraw"
 LOG = ROOT / "tmp" / "redraw_charts.log"
+# A table row: its country and the file affix of the cases chart it links to. Since 27797c4 the row links the full-size charts instead of showing thumbnails, and since the rows got ids some open with <tr id="...">.
 ROW = re.compile(
-    r'<tr><td>([^<]+)</td>.*?days100_cases_perCapitaFalse_([^"]+)_thumb\.png'
+    r'<tr[^>]*><td>([^<]+)</td>.*?days100_cases_perCapitaFalse_([^"]+?)\.png"'
 )
 REGIONS = (
     "Europe",
