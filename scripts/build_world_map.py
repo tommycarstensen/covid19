@@ -16,7 +16,7 @@ import shapefile
 ROOT = Path(__file__).resolve().parents[1]
 ECDC = ROOT / 'data' / 'ecdc.csv'
 OWID = ROOT / 'data' / 'owid.csv'
-COUNTRIES = ROOT / 'map' / 'data' / 'countries_110m' / 'ne_110m_admin_0_countries.zip'
+COUNTRIES = ROOT / 'data' / 'natural_earth' / 'ne_110m_admin_0_countries.zip'
 OUT = ROOT / 'site' / 'worldmap' / 'worldmap.json'
 MARKUP = ROOT / 'tmp' / 'build_world_map_markup.html'
 

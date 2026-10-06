@@ -4,9 +4,10 @@ The page showed its flags and continent maps straight from
 upload.wikimedia.org at widths such as 45 and 440 pixels. Wikimedia now
 serves thumbnails only at standard widths and answers HTTP 400 to the rest,
 so 66 of the page's 74 Wikimedia images had gone blank by 2026. This saves
-each file in wikimedia_images.txt at 120 pixels wide (shown at 45) as
+each file in data/wikimedia_images.txt at 120 pixels wide (shown at 45) as
 site/img/<file name>.png, and writes its author and licence, read from the
-file's description page, to image_credits.json for the page's credit line.
+file's description page, to data/image_credits.json for the page's credit
+line.
 
     python3 scripts/fetch_images.py
 """
@@ -22,9 +23,9 @@ from pathlib import Path
 import requests
 
 ROOT = Path(__file__).resolve().parents[1]
-LIST = ROOT / "wikimedia_images.txt"
+LIST = ROOT / "data" / "wikimedia_images.txt"
 OUT = ROOT / "site" / "img"
-CREDITS = ROOT / "image_credits.json"
+CREDITS = ROOT / "data" / "image_credits.json"
 WIDTH = 120
 API = {
     "commons": "https://commons.wikimedia.org/w/api.php",
