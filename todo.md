@@ -6,14 +6,10 @@ Several Claude sessions work in this folder at once. Before starting a task, rea
 
 - Interactive world map, replacing the ECDC world-map animations (cumulative and weekly cases and deaths): committed in `build_world_map.py` (85e1074), `site/worldmap/` (98b8bee), the page (db094cc, section `#world-maps`) and `build_animations.py` (f826f91). Its weekly figures are single weeks (USA 156,481 and Denmark 433 cases in ISO week 2020-21, as in `ecdc.csv`). Still to do: the deploy (covid19-82, once the host answers); the weekly-maps sentence in the archive note (handed to covid19-4f with its wording); the `CLAUDE.md` line below (waits for Tommy's go-ahead). Owner: covid19-91 (6 Oct 2026, 04:55).
 - Bubble charts: `build_bubbles.py` (527511a), `site/bubble/bubble.js` (not yet committed on 6 Oct 2026 04:45). Owner: the session that committed 527511a.
-- Bug fixes and content changes on the page, `site/index.html`, in this order, one commit each, with every choice recorded in `DECISIONS.md`: covid19-4f (6 Oct 2026, 04:55).
-  - The EU table row: it leaves out Czechia but divides by the EU-28 population.
-  - Check that `sortable.js` sorts numbers as numbers, once the host is back.
-  - The archive note, `<title>` and meta description: data end dates, what happened after January 2021, links to current data. covid19-91 adds its weekly-maps sentence to the end of the note.
-  - The table's column headers: "most recent week" becomes the actual week.
-  - Trim "Infographics and other news clips" and "References" to what still works and belongs on an archive.
-  - A footer with data and basemap credits, licences, and how to cite the page.
-  - Then: a "How to read this page" section, chart captions and alt text, and a restructure (aligned charts first, per-country charts on a subpage, the table's thumbnail columns).
+- Bug fixes and content changes on the page, `site/index.html`, one commit each, with every choice recorded in `DECISIONS.md` (the full list, B1-B6 and C1-C13, is there): covid19-4f (6 Oct 2026, 05:05).
+  - Done and committed: the EU row (a8a284e), `site/sortable.js` (d8c6782), the title and table headers (fdb860c), "Press clippings, 2020" (5248c51), "Other trackers" (2a2c475), "About this page" (dce1096), Taiwan's name (cff859e). Live from 04:56 up to fdb860c; covid19-82 deploys the rest.
+  - Waiting for Tommy to approve its wording: the archive note (C1, C2), including covid19-91's seven-week sentence. Nobody else edits the note meanwhile.
+  - Next: a "How to read this page" section (C3), chart captions and alt text (C10), then the restructure (C5, C6, C7).
 
 ## Decided, still to do
 
