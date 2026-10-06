@@ -8,7 +8,7 @@ Source for https://tommycarstensen.com/covid19/, a COVID-19 dashboard run from M
 - `archive/`: every image the 2020-2021 pipeline uploaded (about 37,000 PNGs plus the GIFs), moved here by `upload.py` after each upload.
 - `regional_maps/`: the Europe, Denmark and Peru map animations, each folder with its script, the files it reads and its MP4. Run a script from inside its folder.
 - `map/`: an earlier world-map animation and other map experiments from 2020. `map/data/countries_110m/` holds the Natural Earth countries that `build_world_map.py` reads.
-- `tables/`: the table rows `plot_series.py` wrote for `upload.py` to fill into `index.html`.
+- `pipeline_2020/`: the 2020-2021 daily pipeline, as it last ran from the root: `wrapper.sh`, `countries.txt`, `upload.py`, the page template `index.html`, the table rows in `tables/` and the press pages. It is no longer run, and must not be: it uploads by FTP.
 - `tmp/`: logs, markup snippets and deploy backups; not committed.
 - `notes/`: links collected in 2020 for the press pages.
 - `trash/`: discarded scripts and images.
@@ -20,5 +20,4 @@ Source for https://tommycarstensen.com/covid19/, a COVID-19 dashboard run from M
 
 - The scripts: `plot_*.py` and `build_*.py` draw the charts and maps into `site/`, `deploy.py` uploads the page, `regions.py` lists the regions, `redraw_charts.py` and `fetch_images.py` fill gaps in `site/`.
 - The data they read: `ecdc.csv` (ECDC weekly cases and deaths to January 2021), `owid.csv` (Our World in Data), `bsg.csv` (the Oxford policy tracker) and `csv` (ECDC's frozen daily file).
-- The 2020-2021 daily pipeline: `wrapper.sh`, `countries.txt`, `upload.py`, the page template `index.html` and the press pages. It is no longer run.
 - `CLAUDE.md` (how everything works), `DECISIONS.md` (why), `todo.md` (what is open).
