@@ -85,3 +85,14 @@ Each of the 18 links was opened in headless Chrome on 6 October 2026 (`tmp/bugfi
 - Kept without checking, because their sites refuse automated browsers (a robot check or an HTTP 403): Bloomberg, the South China Morning Post, The Guardian, the New York Times (two links), the Washington Post and The Economist. They are major publishers that keep their 2020 pages.
 
 The links are now a list grouped by kind (data sources, news trackers, excess deaths, mobility, reopening) instead of lines broken by `<br>`. The heading says what the section is ("Other trackers"; the anchor stays `#references`). The two OWID testing charts that C8 took out of the page are linked here. The invitation to e-mail suggestions to covid19@tommycarstensen.com is gone, because it implied someone still maintains the page.
+
+## 2026-10-06: an "About this page" section with authorship, sources, licences and how to cite (C11)
+
+The page credited only its flags and continent icons. It now ends with a section, also listed in the contents, that says who made the page and when, where the code is (github.com/tommycarstensen/covid19, public), and how to cite it, then credits the data and the map outlines:
+
+- ECDC for cases, deaths and the European regional rates. ECDC's copyright notice allows reproduction provided the source is acknowledged.
+- Our World in Data for tests, under CC BY 4.0, which requires the credit.
+- Natural Earth (public domain) for the world maps: `plot_choropleth.py` used geopandas' `naturalearth_lowres`, and `build_world_map.py` uses Natural Earth's 1:110m countries.
+- For the European map (`plot_choropleth_europe.py`): Eurostat GISCO's NUTS 2021 boundaries, whose terms require "© EuroGeographics for the administrative boundaries", and the NHS health boards of Scotland (Scottish Government, 2019) and Wales (ONS, December 2016), both under the Open Government Licence v3.0 with Ordnance Survey data.
+
+The existing flag credits moved into the same section, unchanged. The sentence about the October 2026 repairs is to move here from the archive note, in the same commit as the new note (C1), so that it is never on the page twice.
