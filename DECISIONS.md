@@ -337,3 +337,15 @@ The draft's wording changed where most of the advisers agreed:
 - 93,681 became 93,700, three significant figures like the other numbers (three advisers flagged mixed precision).
 
 Left out: WHO's later total of about 7 million deaths and the excess-death estimates (only the hiring manager wanted a clause; the others said a second source turns the paragraph into commentary); a link to "How to read" (two advisers); a note that the table runs a week later (the archive line already says so). The 214 does not count the Diamond Princess, which `ecdc.csv` lists as a 215th place. The world totals were never on the page in 2020, which the archivist raised; they are sums of the same ECDC file the charts and maps were drawn from.
+
+## 2026-10-06: the folders reorganised (covid19-0b)
+
+Tommy asked for a complete reorganisation of the folders and files. The root held sixteen scripts beside the docs, and folders of three kinds side by side: what the page is built from, what the 2020 dashboard left behind, and things not about COVID-19. The layout now follows those kinds:
+
+- `scripts/`: all sixteen scripts, `deploy.py` included, because `build_press_videos.py` imports from it and the October 2026 scripts import one another (`regions`, `plot_heat`, `build_world_map`, `plot_bubble`, `plot_series`). Keeping `deploy.py`, the one command run by hand, at the root was considered, but would have split those imports across two folders. Each script's `ROOT` is now `parents[1]`, still the repo root, and `ruff.toml` tells ruff's import sorting that `scripts/` holds the project's own modules.
+- `data/`: gains Natural Earth's countries (from `map/data/countries_110m/`; `build_world_map.py` writes `worldmap.json` from them byte for byte as before) and the Wikimedia list and credits that `fetch_images.py` reads and writes.
+- `2020/`: what the 2020-2021 dashboard left: its pipeline, regional maps, world-map animation, notes, and `archive/`, every image it uploaded. `archive/` keeps the name `upload.py` and `wrapper.sh` use. The scripts in `2020/` are kept as they last ran, so their paths still name the old root folders.
+- `other/` gains `map/`'s obesity, alcohol, Texas and Bokeh experiments (`other/maps/`) and `deepti/`; `repos/` holds the four separate repositories.
+- Unchanged: `site/`, whose paths are the page's URLs, `external_images/`, `trash/`, `tmp/` and the docs at the root.
+
+Left alone: what git tracks. The untracked 2020 files (`upload.py`, `countries.txt`, the press pages' 2020 working copies, `tables/`, `notes/`, `map/`) moved without being added, and the nested repositories' lost `.git/HEAD` was not restored.
