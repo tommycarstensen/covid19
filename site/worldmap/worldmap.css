@@ -1,0 +1,40 @@
+/* Interactive world map (worldmap.js). Light only, like the page it sits in. */
+.worldmap {
+  --wm-ink: #0b0b0b;
+  --wm-ink-2: #52514e;
+  --wm-line: #d3d2cc;
+  --wm-surface: #ffffff;
+  color: var(--wm-ink);
+  max-width: 1000px;
+  margin: 0 0 24px;
+}
+.worldmap button { font: inherit; }
+.wm-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin-bottom: 8px; }
+.wm-seg { display: inline-flex; border: 1px solid var(--wm-line); border-radius: 6px; overflow: hidden; }
+.wm-seg button { border: 0; background: var(--wm-surface); color: var(--wm-ink-2); padding: 6px 12px; cursor: pointer; }
+.wm-seg button + button { border-left: 1px solid var(--wm-line); }
+.wm-seg button[aria-pressed="true"] { background: var(--wm-ink); color: #ffffff; }
+.wm-player { display: flex; align-items: center; gap: 12px; flex: 1 1 280px; }
+.wm-play { border: 1px solid var(--wm-line); border-radius: 6px; background: var(--wm-surface); color: var(--wm-ink); padding: 6px 12px; cursor: pointer; min-width: 6.5em; }
+.wm-slider { flex: 1; min-width: 120px; accent-color: var(--wm-ink); }
+.wm-caption { font-weight: 600; margin: 4px 0 8px; }
+.wm-figure { position: relative; }
+.wm-map { display: block; width: 100%; height: auto; }
+.wm-map path { stroke: var(--wm-surface); stroke-width: 0.6px; vector-effect: non-scaling-stroke; stroke-linejoin: round; fill-rule: evenodd; }
+.wm-map path.wm-hover { stroke: var(--wm-ink); stroke-width: 1.5px; }
+.wm-tip { position: absolute; z-index: 1; pointer-events: none; background: var(--wm-surface); border: 1px solid var(--wm-line); border-radius: 6px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); padding: 6px 10px; font-size: 14px; line-height: 1.4; max-width: 260px; }
+.wm-tip strong { display: block; font-size: 16px; }
+.wm-tip span { display: block; color: var(--wm-ink-2); }
+.wm-tip .wm-tip-name { color: var(--wm-ink); }
+.wm-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin: 10px 0 4px; font-size: 13px; color: var(--wm-ink-2); }
+.wm-legend-title { width: 100%; color: var(--wm-ink); }
+.wm-key { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.wm-swatch { display: inline-block; width: 18px; height: 12px; border-radius: 2px; }
+.wm-swatch.wm-nodata { background: repeating-linear-gradient(45deg, #ffffff 0 2px, #a9a7a0 2px 3.5px); box-shadow: inset 0 0 0 1px var(--wm-line); }
+.wm-source { font-size: 13px; color: var(--wm-ink-2); margin: 4px 0; }
+.wm-table summary { cursor: pointer; margin: 8px 0; }
+.wm-table-scroll { overflow-x: auto; }
+.worldmap .wm-table table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.worldmap .wm-table th, .worldmap .wm-table td { padding: 4px 8px; text-align: left; }
+.worldmap .wm-table .wm-num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.worldmap .wm-table .wm-note td { color: var(--wm-ink-2); font-size: 13px; }
