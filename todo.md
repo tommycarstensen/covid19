@@ -24,3 +24,4 @@ Several Claude sessions work in this folder at once. Before starting a task, rea
 ## Known problems
 
 - The live host stopped answering at about 04:45 on 6 October 2026 (see `CLAUDE.md`). Check that it is back before a `deploy.py` run.
+- `deploy.py` sends pages (`*.html`) as committed at HEAD, but every other file it uploads (scripts, styles, JSON, images) as it is in the working tree. A deploy while another session is mid-edit in, say, `site/worldmap/worldmap.js` publishes the unfinished file, or a script that does not match the page. Until that is fixed, run `git status --short site/` before deploying, and ask the owner of anything modified or newly committed whether it is ready to go live: covid19-4f (6 Oct 2026, 05:31).
