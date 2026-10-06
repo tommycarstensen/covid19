@@ -73,3 +73,15 @@ All three advisers proposed trimming this section, for different reasons: it was
 - The 2018 Washington Post article on the White House pandemic office, the 2015 Vox and TED videos of Bill Gates, and Visual Capitalist's history of pandemics. They were background reading from the first weeks of 2020, not about the data on this page, and the two YouTube embeds were the page's heaviest third-party content.
 
 Kept: the links to the two pages of press clippings Tommy collected in 2020 (`press_international.html`, `press_denmark.html`), with one sentence saying what they are. The section's anchor is now `#press` (`#infographics` was hours old and had never been linked to). One of the two `<hr>` before the section went, as did the two CSS rules for iframes, which nothing used any more. Everything removed is in the git history of `site/index.html` before this commit.
+
+## 2026-10-06: "References" becomes "Other trackers", checked link by link (C9)
+
+Each of the 18 links was opened in headless Chrome on 6 October 2026 (`tmp/bugfix/linkcheck.json`, unversioned):
+
+- Replaced, because they now open an ArcGIS sign-in page: the WHO's 2020 dashboard, by the WHO COVID-19 dashboard at data.who.int; the Johns Hopkins ArcGIS dashboard, by the Johns Hopkins Coronavirus Resource Center map (Cloudflare blocks automated requests to it, so that link was not checked automatically).
+- Removed: uscovid-19map.org, which now redirects to a notice that the site was decommissioned on 28 February 2023; Apple's Mobility Trends Reports, which say Apple stopped providing them on 14 April 2022.
+- Updated to where they had moved: Our World in Data (the coronavirus page rather than the old data page, which redirected), Datawrapper's blog post, Reuters' US tracker.
+- Kept as they were, with what they are now: Worldometer ("not updated since 13 April 2024", from its own notice), the CDC excess deaths page ("archived by the CDC", its own banner), Google's mobility reports, covidexitstrategy.org.
+- Kept without checking, because their sites refuse automated browsers (a robot check or an HTTP 403): Bloomberg, the South China Morning Post, The Guardian, the New York Times (two links), the Washington Post and The Economist. They are major publishers that keep their 2020 pages.
+
+The links are now a list grouped by kind (data sources, news trackers, excess deaths, mobility, reopening) instead of lines broken by `<br>`. The heading says what the section is ("Other trackers"; the anchor stays `#references`). The two OWID testing charts that C8 took out of the page are linked here. The invitation to e-mail suggestions to covid19@tommycarstensen.com is gone, because it implied someone still maintains the page.
