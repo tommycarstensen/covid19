@@ -192,3 +192,13 @@ Tommy asked whether the table should show by default or open with a click, since
 - Without JavaScript the fold still opens and closes; only the opening on a link needs the script.
 
 Considered instead: showing the ten largest rows with a "show all" control, which would need `sortable.js` to sort the hidden rows too, for little gain over a fold.
+
+## 2026-10-06: one line under the heading says the page is an archive and when its data end
+
+After the archive note was removed, nothing near the top said that the page is frozen or when its data end. Tommy asked ten advisers (Sonnet sub-agents) with different roles what to put there, with one constraint: no year of the repairs. The roles: a member of the public arriving from a search engine, a journalist who linked to the page in 2020, an epidemiologist, a web archivist, a UX writer, a newspaper graphics editor, an accessibility specialist, a search specialist, a hiring manager looking at Tommy's work, and a fact-checker worried about screenshots shared as if current.
+
+All ten wanted a line, and all ten wanted it as a plain paragraph straight under the heading, with no coloured box, banner or alert, and no account of repairs. Nine wanted both end dates (table 17 January, charts and maps 10 January), eight wanted ECDC named, and several wanted the first words in bold so they survive a cropped screenshot. Tommy asked for the good advice to be acted on, and the line is that consensus:
+
+> **This page is an archive and is no longer updated.** Its data, from the European Centre for Disease Prevention and Control (ECDC), end in January 2021: the table's counts run to 17 January and the charts and maps to 10 January.
+
+Left out, because the advisers split or the page already does it: the worldwide totals (89.8 million cases, 1.94 million deaths; three for, three against as a number easy to quote out of context); a link to current data (two for, one against because such links date; "Other trackers" already links the WHO and Our World in Data); first-person wording ("a dashboard I ran", one adviser), because the page speaks in the third person elsewhere. The line uses a new class, `standfirst`, styled only with the page's text width; the yellow-box CSS of the removed `archive-note` went with it.
