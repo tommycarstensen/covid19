@@ -272,6 +272,7 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <li><a href="#weekly">Weekly</a></li>
 </ul>
 </li>
+<li><a href="#testing">Tests, cases and deaths</a></li>
 <li><a href="#table">Table by country</a></li>
 <li><a href="#aligned">Aligned time series</a>
 <ul>
@@ -296,7 +297,7 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <h2 id="reading">How to read this page&nbsp;<a class="anchor" href="#reading" aria-label="Link to this section: How to read this page">#</a></h2>
 
 <ul class="reading">
-<li><b>Cases and deaths</b> are those confirmed and reported to ECDC each week. How many infections were confirmed depended on how much a country tested, so case counts compare poorly between countries, and both cases and deaths undercount the real toll.</li>
+<li><b>Cases and deaths</b> are those confirmed and reported to ECDC each week. How many infections were confirmed depended on <a href="#testing">how much a country tested</a>, so case counts compare poorly between countries, and both cases and deaths undercount the real toll.</li>
 <li><b>Aligned charts</b> start each country's line in the week it first passed 1,000 confirmed cases, or 100 deaths, so that countries hit at different times can be compared from the same starting point.</li>
 <li><b>Log scales.</b> The line charts, the scatter plots, the heat maps' colours and several maps use a logarithmic scale, on which each labelled step is ten times the one before. A straight line means steady growth, and equal slopes mean equal rates of growth.</li>
 <li><b>Case fatality rate</b>, in the table, is deaths divided by confirmed cases. It is not the chance of dying from an infection, because many infections were never confirmed.</li>
@@ -327,6 +328,14 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <script src="worldmap/worldmap.js" defer></script>
 
 <script src="anim/scrubber.js" defer></script>
+
+<h2 id="testing">Tests, cases and deaths&nbsp;<a class="anchor" href="#testing" aria-label="Link to this section: Tests, cases and deaths">#</a></h2>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="tests_cases_deaths_narrow.png" width="415" height="2042">
+<img src="tests_cases_deaths.png" width="1355" height="1168" loading="lazy" alt="Weekly COVID-19 tests, cases and deaths per million people in 16 countries, one panel each, on one log scale, from 30 December 2019 to 10 January 2021. The gap between tests and cases is the share of tests positive, which is approximate, because cases and tests come from different sources, and compares poorly between countries; the Dutch share is likely too high, because its tests are people tested. Gaps in a line are weeks with none reported. Share positive in the week each country's cases peaked: Denmark 3%, Sweden 15%, United Kingdom 12%, Germany 10%, France 18%, Italy 16%, Spain 15%, Netherlands 34%, Belgium 23%, Poland 46%, Czechia 20%, United States 14%, Canada 8%, South Korea 3%, Japan 9%, South Africa 30%.">
+</picture>
+</div>
 
 <h2 id="table">Table by country&nbsp;<a class="anchor" href="#table" aria-label="Link to this section: Table by country">#</a></h2>
 
@@ -492,7 +501,7 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <script src="bubble/bubble.js" defer></script>
 <figure class="bubble" data-region="G7"><noscript><img src="plot_bubble_G7.png" width="800" alt="Change in COVID-19 cases and deaths by country, G7, January 2021"></noscript></figure>
 
-<p class="reading">The United States and the regions below have up to four kinds of chart. <b>Aligned charts</b>: cumulative cases and deaths from the week each country first passed 1,000 cases or 100 deaths, one panel per country. <b>Bubble charts</b>: how each country&#39;s cases and deaths in two weeks compared with the two weeks before, week by week, with a play button. <b>Heat maps</b>: weekly cases and deaths per million, one row per country, week by week from the start of 2020 to January 2021. The EU also has two <b>scatter plots</b>.</p>
+<p class="reading">The United States and the regions below have up to four kinds of chart. <b>Aligned charts</b>: cumulative cases and deaths from the week each country first passed 1,000 cases or 100 deaths, one panel per country. <b>Bubble charts</b>: how each country&#39;s cases and deaths in two weeks compared with the two weeks before, week by week, with a play button. <b>Heat maps</b>: weekly cases and deaths per million, and weekly tests and the share of them that were positive, one row per country, week by week from the start of 2020 to January 2021. The EU also has two <b>scatter plots</b>.</p>
 
 <h3 id="united-states"><a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_States"><img src="img/Flag_of_the_United_States.svg.png" height="30" alt="" class="flag"> United States of America (USA)</a>&nbsp;<a class="anchor" href="#united-states" aria-label="Link to this section: United States">#</a></h3>
 
@@ -527,6 +536,10 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <source media="(max-width: 700px)" srcset="heat_EU_narrow.png" width="415" height="1098">
 <img src="heat_EU.png" width="1355" height="674" loading="lazy" alt="Heat maps of weekly COVID-19 cases and deaths per million people in the EU, one row per country or territory, largest population first, and one column per week from 30 December 2019 to January 2021. Highest weekly cases: Ireland, 9,324 per million in the week of 4 January 2021. Highest weekly deaths: Slovenia, 458 per million in the week of 7 December 2020. Rows: Germany, France, Italy, Spain, Poland, Romania, Netherlands, Belgium, Greece, Czechia, Portugal, Sweden, Hungary, Austria, Bulgaria, Denmark, Finland, Slovakia, Ireland, Croatia, Lithuania, Slovenia, Latvia, Estonia, Cyprus, Luxembourg, Malta.">
 </picture>
+<picture>
+<source media="(max-width: 700px)" srcset="heat_tests_EU_narrow.png" width="415" height="1170">
+<img src="heat_tests_EU.png" width="1355" height="719" loading="lazy" alt="Heat maps of weekly COVID-19 tests per thousand people, and of the share of tests that were positive, in the EU, one row per country or territory with a test count, largest population first, and one column per week from 30 December 2019 to January 2021; a darker colour means more tests, or a larger share positive. Most tests in a week: Denmark, 154 per thousand people in the week of 14 December 2020. The share positive is approximate, because cases and tests come from different sources, and compares poorly between countries. Rows: Germany, France, Italy, Spain, Poland, Romania, Netherlands, Belgium, Greece, Czechia, Portugal, Sweden, Hungary, Austria, Bulgaria, Denmark, Finland, Slovakia, Ireland, Croatia, Lithuania, Slovenia, Latvia, Estonia, Cyprus, Luxembourg, Malta.">
+</picture>
 </div>
 
 <h3 id="europe"><img src="img/Europe_orthographic_Caucasus_Urals_boundary.svg.png" width="45" alt="" class="flag"> Europe&nbsp;<a class="anchor" href="#europe" aria-label="Link to this section: Europe">#</a></h3>
@@ -546,6 +559,10 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <source media="(max-width: 700px)" srcset="heat_Europe_narrow.png" width="415" height="1572">
 <img src="heat_Europe.png" width="1355" height="944" loading="lazy" alt="Heat maps of weekly COVID-19 cases and deaths per million people in Europe, one row per country or territory, largest population first, and one column per week from 30 December 2019 to January 2021. Highest weekly cases: Ireland, 9,324 per million in the week of 4 January 2021. Highest weekly deaths: Slovenia, 458 per million in the week of 7 December 2020. Rows: Russia, Germany, France, United Kingdom, Italy, Spain, Ukraine, Poland, Romania, Netherlands, Belgium, Greece, Czechia, Portugal, Sweden, Azerbaijan, Hungary, Belarus, Austria, Switzerland, Bulgaria, Serbia, Denmark, Finland, Slovakia, Norway, Ireland, Croatia, Moldova, Georgia, Bosnia and Herzegovina, Armenia, Albania, Lithuania, Slovenia, North Macedonia, Latvia, Kosovo, Estonia, Cyprus, Montenegro, Luxembourg, Malta, Iceland, Jersey.">
 </picture>
+<picture>
+<source media="(max-width: 700px)" srcset="heat_tests_Europe_narrow.png" width="415" height="1529">
+<img src="heat_tests_Europe.png" width="1355" height="914" loading="lazy" alt="Heat maps of weekly COVID-19 tests per thousand people, and of the share of tests that were positive, in Europe, one row per country or territory with a test count, largest population first, and one column per week from 30 December 2019 to January 2021; a darker colour means more tests, or a larger share positive. Most tests in a week: Denmark, 154 per thousand people in the week of 14 December 2020. The share positive is approximate, because cases and tests come from different sources, and compares poorly between countries. Rows: Russia, Germany, France, United Kingdom, Italy, Spain, Ukraine, Poland, Romania, Netherlands, Belgium, Greece, Czechia, Portugal, Sweden, Hungary, Belarus, Austria, Switzerland, Bulgaria, Serbia, Denmark, Finland, Slovakia, Norway, Ireland, Croatia, Bosnia and Herzegovina, Armenia, Albania, Lithuania, Slovenia, North Macedonia, Latvia, Estonia, Cyprus, Luxembourg, Malta, Iceland. No test count: Azerbaijan, Georgia, Jersey, Kosovo, Moldova, Montenegro.">
+</picture>
 </div>
 
 <h3 id="americas"><img src="img/Americas_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Americas&nbsp;<a class="anchor" href="#americas" aria-label="Link to this section: Americas">#</a></h3>
@@ -564,6 +581,10 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <picture>
 <source media="(max-width: 700px)" srcset="heat_Americas_narrow.png" width="415" height="1384">
 <img src="heat_Americas.png" width="1355" height="824" loading="lazy" alt="Heat maps of weekly COVID-19 cases and deaths per million people in the Americas, one row per country or territory, largest population first, and one column per week from 30 December 2019 to January 2021. Highest weekly cases: Panama, 5,996 per million in the week of 4 January 2021. Highest weekly deaths: Ecuador, 228 per million in the week of 31 August 2020. Rows: United States, Brazil, Mexico, Colombia, Argentina, Canada, Peru, Venezuela, Chile, Guatemala, Ecuador, Bolivia, Cuba, Haiti, Dominican Republic, Honduras, Paraguay, Nicaragua, El Salvador, Costa Rica, Panama, Uruguay, Jamaica, Puerto Rico, Trinidad and Tobago, Guyana, Suriname, Belize, Bahamas, Barbados, Saint Lucia, Curaçao, Grenada, St Vincent & Grenadines, Aruba, US Virgin Islands.">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="heat_tests_Americas_narrow.png" width="415" height="1129">
+<img src="heat_tests_Americas.png" width="1355" height="644" loading="lazy" alt="Heat maps of weekly COVID-19 tests per thousand people, and of the share of tests that were positive, in the Americas, one row per country or territory with a test count, largest population first, and one column per week from 30 December 2019 to January 2021; a darker colour means more tests, or a larger share positive. Most tests in a week: United States, 39 per thousand people in the week of 16 November 2020. The share positive is approximate, because cases and tests come from different sources, and compares poorly between countries. Rows: United States, Brazil, Mexico, Colombia, Argentina, Canada, Peru, Chile, Guatemala, Ecuador, Bolivia, Cuba, Dominican Republic, Paraguay, El Salvador, Costa Rica, Panama, Uruguay, Jamaica, Trinidad and Tobago. No test count: Aruba, Bahamas, Barbados, Belize, Curaçao, Grenada, Guyana, Haiti, Honduras, Nicaragua, Puerto Rico, Saint Lucia, St Vincent & Grenadines, Suriname, US Virgin Islands, Venezuela.">
 </picture>
 </div>
 <div class="aligned">
@@ -604,6 +625,10 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <picture>
 <source media="(max-width: 700px)" srcset="heat_Asia_narrow.png" width="415" height="1578">
 <img src="heat_Asia.png" width="1355" height="974" loading="lazy" alt="Heat maps of weekly COVID-19 cases and deaths per million people in Asia, one row per country or territory, largest population first, and one column per week from 30 December 2019 to January 2021. Highest weekly cases: Georgia, 7,354 per million in the week of 30 November 2020. Highest weekly deaths: Kyrgyzstan, 139 per million in the week of 13 July 2020. Rows: China, India, Indonesia, Pakistan, Bangladesh, Japan, Philippines, Egypt, Vietnam, Iran, Turkey, Thailand, Myanmar, South Korea, Iraq, Afghanistan, Saudi Arabia, Uzbekistan, Malaysia, Yemen, Nepal, Taiwan, Sri Lanka, Kazakhstan, Syria, Cambodia, Jordan, Azerbaijan, United Arab Emirates, Tajikistan, Israel, Laos, Lebanon, Kyrgyzstan, Singapore, Palestine, Oman, Kuwait, Georgia, Mongolia, Armenia, Qatar, Bahrain, Timor-Leste, Bhutan, Maldives, Brunei.">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="heat_tests_Asia_narrow.png" width="415" height="1356">
+<img src="heat_tests_Asia.png" width="1355" height="809" loading="lazy" alt="Heat maps of weekly COVID-19 tests per thousand people, and of the share of tests that were positive, in Asia, one row per country or territory with a test count, largest population first, and one column per week from 30 December 2019 to January 2021; a darker colour means more tests, or a larger share positive. Most tests in a week: United Arab Emirates, 110 per thousand people in the week of 4 January 2021. The share positive is approximate, because cases and tests come from different sources, and compares poorly between countries. Rows: China, India, Indonesia, Pakistan, Bangladesh, Japan, Philippines, Vietnam, Iran, Turkey, Thailand, Myanmar, South Korea, Iraq, Saudi Arabia, Malaysia, Nepal, Taiwan, Sri Lanka, Kazakhstan, Jordan, United Arab Emirates, Israel, Singapore, Palestine, Oman, Kuwait, Mongolia, Armenia, Qatar, Bahrain, Bhutan, Maldives. No test count: Afghanistan, Azerbaijan, Brunei, Cambodia, Egypt, Georgia, Kyrgyzstan, Laos, Lebanon, Syria, Tajikistan, Timor-Leste, Uzbekistan, Yemen.">
 </picture>
 </div>
 
@@ -658,6 +683,10 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <source media="(max-width: 700px)" srcset="heat_Africa_narrow.png" width="415" height="1760">
 <img src="heat_Africa.png" width="1355" height="1079" loading="lazy" alt="Heat maps of weekly COVID-19 cases and deaths per million people in Africa, one row per country or territory, largest population first, and one column per week from 30 December 2019 to January 2021. Highest weekly cases: South Africa, 2,235 per million in the week of 4 January 2021. Highest weekly deaths: South Africa, 61 per million in the week of 4 January 2021. Rows: Nigeria, Ethiopia, Egypt, DR Congo, South Africa, Tanzania, Kenya, Uganda, Algeria, Sudan, Morocco, Angola, Ghana, Mozambique, Madagascar, Cameroon, Côte d'Ivoire, Niger, Burkina Faso, Mali, Malawi, Zambia, Senegal, Chad, Somalia, Zimbabwe, Guinea, Rwanda, Benin, Tunisia, Burundi, South Sudan, Togo, Sierra Leone, Libya, Congo, Liberia, Central African Rep., Mauritania, Eritrea, Namibia, Gambia, Botswana, Gabon, Lesotho, Guinea-Bissau, Equatorial Guinea, Mauritius, Eswatini, Djibouti, Comoros, Western Sahara, Cape Verde, São Tomé and Príncipe.">
 </picture>
+<picture>
+<source media="(max-width: 700px)" srcset="heat_tests_Africa_narrow.png" width="415" height="1173">
+<img src="heat_tests_Africa.png" width="1355" height="674" loading="lazy" alt="Heat maps of weekly COVID-19 tests per thousand people, and of the share of tests that were positive, in Africa, one row per country or territory with a test count, largest population first, and one column per week from 30 December 2019 to January 2021; a darker colour means more tests, or a larger share positive. Most tests in a week: Botswana, 14 per thousand people in the week of 16 November 2020. The share positive is approximate, because cases and tests come from different sources, and compares poorly between countries. Rows: Nigeria, Ethiopia, DR Congo, South Africa, Kenya, Uganda, Morocco, Ghana, Mozambique, Madagascar, Côte d'Ivoire, Malawi, Zambia, Senegal, Zimbabwe, Rwanda, South Sudan, Togo, Libya, Mauritania, Namibia, Botswana, Cape Verde. No test count: Algeria, Angola, Benin, Burkina Faso, Burundi, Cameroon, Central African Rep., Chad, Comoros, Congo, Djibouti, Egypt, Equatorial Guinea, Eritrea, Eswatini, Gabon, Gambia, Guinea, Guinea-Bissau, Lesotho, Liberia, Mali, Mauritius, Niger, Sierra Leone, Somalia, Sudan, São Tomé and Príncipe, Tanzania, Tunisia, Western Sahara.">
+</picture>
 </div>
 
 <h3 id="oceania"><img src="img/Oceania_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Oceania&nbsp;<a class="anchor" href="#oceania" aria-label="Link to this section: Oceania">#</a></h3>
@@ -678,6 +707,10 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <source media="(max-width: 700px)" srcset="heat_Oceania_narrow.png" width="415" height="718">
 <img src="heat_Oceania.png" width="1355" height="419" loading="lazy" alt="Heat maps of weekly COVID-19 cases and deaths per million people in Oceania, one row per country or territory, largest population first, and one column per week from 30 December 2019 to January 2021. Highest weekly cases: French Polynesia, 9,786 per million in the week of 2 November 2020. Highest weekly deaths: Guam, 66 per million in the week of 7 September 2020. Rows: Australia, Papua New Guinea, New Zealand, Fiji, Solomon Islands, Vanuatu, New Caledonia, French Polynesia, Guam, Micronesia.">
 </picture>
+<picture>
+<source media="(max-width: 700px)" srcset="heat_tests_Oceania_narrow.png" width="415" height="651">
+<img src="heat_tests_Oceania.png" width="1355" height="374" loading="lazy" alt="Heat maps of weekly COVID-19 tests per thousand people, and of the share of tests that were positive, in Oceania, one row per country or territory with a test count, largest population first, and one column per week from 30 December 2019 to January 2021; a darker colour means more tests, or a larger share positive. Most tests in a week: Australia, 22 per thousand people in the week of 4 January 2021. The share positive is approximate, because cases and tests come from different sources, and compares poorly between countries. Rows: Australia, New Zealand, Fiji. No test count: French Polynesia, Guam, Micronesia, New Caledonia, Papua New Guinea, Solomon Islands, Vanuatu.">
+</picture>
 </div>
 
 <h3 id="nordic"><img src="img/Nordic_countries_orthographic.svg.png" width="45" alt="" class="flag">Northern Europe (Nordic countries)&nbsp;<a class="anchor" href="#nordic" aria-label="Link to this section: Nordic countries">#</a></h3>
@@ -697,6 +730,10 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <picture>
 <source media="(max-width: 700px)" srcset="heat_Nordic_narrow.png" width="415" height="584">
 <img src="heat_Nordic.png" width="1355" height="344" loading="lazy" alt="Heat maps of weekly COVID-19 cases and deaths per million people in the Nordic countries, one row per country or territory, largest population first, and one column per week from 30 December 2019 to January 2021. Highest weekly cases: Sweden, 4,516 per million in the week of 14 December 2020. Highest weekly deaths: Sweden, 65 per million in the week of 6 April 2020. Rows: Sweden, Denmark, Finland, Norway, Iceland.">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="heat_tests_Nordic_narrow.png" width="415" height="656">
+<img src="heat_tests_Nordic.png" width="1355" height="389" loading="lazy" alt="Heat maps of weekly COVID-19 tests per thousand people, and of the share of tests that were positive, in the Nordic countries, one row per country or territory with a test count, largest population first, and one column per week from 30 December 2019 to January 2021; a darker colour means more tests, or a larger share positive. Most tests in a week: Denmark, 154 per thousand people in the week of 14 December 2020. The share positive is approximate, because cases and tests come from different sources, and compares poorly between countries. Rows: Sweden, Denmark, Finland, Norway, Iceland.">
 </picture>
 </div>
 
