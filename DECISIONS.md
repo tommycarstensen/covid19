@@ -50,3 +50,9 @@ Chosen: keep the counts as published, label the row "EU without Czechia", and di
 Considered and rejected: adding Czechia's cases, because the January 2021 download behind the table (one week later than `ecdc.csv`) is lost and Czechia's figure for that week cannot be recovered exactly; dividing by ECDC's 2019 populations (436.2 million), because the rest of the table uses `countryinfo`'s older figures and the row would no longer be comparable with them (that question is C12).
 
 The EU charts under the European Union heading plot each member country's line from the same list, so they also lack Czechia. The aligned small multiples drawn in October 2026 (`plot_days100_world.py`) include it.
+
+## 2026-10-06: the page title and the table's headers say what they hold (C4)
+
+The browser title was "COVID-19 / 2019-nCoV", a name the WHO retired in February 2020; it now matches the page heading and the Twitter title: "COVID-19 tracker, 2020–2021 (archive)". The meta description already said "archive" and is unchanged.
+
+The table's headers said "most recent week", which in 2026 reads as now. The week is 11 to 17 January 2021 (ISO week 2021-02): the USA's total in the table minus its ECDC total to 10 January is exactly its "most recent week", 1,515,282. "Cumulated ... (n)" became "Total", "Fatalities" became "Deaths" (the word the rest of the page uses), "plot" became "chart", and "Weekly bar plot (n)" became "Weekly cases and deaths chart", which is what those charts show (weekly bars of both, with a deaths-to-cases line). The sentence above the table now says where the numbers come from and when they end, and is a paragraph instead of loose text and a `<br>`.
