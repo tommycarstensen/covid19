@@ -139,8 +139,10 @@
       return period === 'weekly' ? 'in the week ' + weekText(start) : 'in total up to ' + dayText(day(start, 6), true);
     }
 
+    // The controls go under the first heading, so that they do not run on from the player above the section.
     var controls = el('div', 'wm-controls');
-    root.insertBefore(controls, root.firstChild);
+    var firstRow = root.querySelector('.wm-row[data-period]');
+    root.insertBefore(controls, firstRow || root.firstChild);
     var play = el('button', 'wm-play', controls, '▶ Play');
     play.type = 'button';
     var slider = el('input', 'wm-slider', controls);
@@ -209,6 +211,8 @@
       var scale = SCALES[period][measure];
       var cell = el('figure', 'wm-cell', row);
       var caption = el('figcaption', 'wm-caption', cell);
+      el('span', 'wm-title', caption, TITLES[measure]);
+      var when = el('span', 'wm-when', caption);
       var figure = el('div', 'wm-figure', cell);
       var svg = svgEl('svg', { viewBox: data.viewBox.join(' '), class: 'wm-map', role: 'img' }, figure);
       var hatch = id + '-hatch' + n;
@@ -230,7 +234,7 @@
       for (var power = scale.min; power <= scale.max; power++) {
         el('span', '', ticks, tickText(power)).style.left = (100 * (power - scale.min) / (scale.max - scale.min)) + '%';
       }
-      var map = { period: period, measure: measure, scale: scale, caption: caption, figure: figure, svg: svg, group: group, paths: paths, byCode: byCode, hatch: hatch };
+      var map = { period: period, measure: measure, scale: scale, when: when, figure: figure, svg: svg, group: group, paths: paths, byCode: byCode, hatch: hatch };
       svg.addEventListener('pointermove', function (event) {
         var path = event.target.closest ? event.target.closest('path') : null;
         if (path && path.dataset.code) showTip(map, path, event);
@@ -246,7 +250,7 @@
           var r = rate(path.dataset.code, map.period, map.measure);
           path.setAttribute('fill', r === null ? 'url(#' + map.hatch + ')' : r <= 0 ? ZERO : colour(map.scale, r));
         });
-        map.caption.textContent = TITLES[map.measure] + ' ' + periodText(map.period);
+        map.when.textContent = periodText(map.period);
         map.svg.setAttribute('aria-label', 'World map of ' + TITLES[map.measure].toLowerCase() + ' ' + periodText(map.period) + '. The table below the maps lists every value.');
       });
       slider.value = String(state.week);

@@ -15,13 +15,17 @@
 .wm-week { min-width: 9.5em; font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .wm-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 24px; }
 @media (max-width: 900px) { .wm-row { grid-template-columns: minmax(0, 1fr); } }
-.wm-cell { margin: 0; min-width: 0; }
-.wm-caption { font-weight: 600; margin: 0 0 6px; font-size: 15px; }
+/* The caption grows to the row's tallest, so the six maps line up even when one caption wraps. */
+.wm-cell { margin: 0; min-width: 0; display: flex; flex-direction: column; }
+.wm-caption { flex: 1 0 auto; margin: 0 0 6px; font-size: 15px; }
+.wm-title { display: block; font-weight: 600; }
+.wm-when { display: block; color: var(--wm-ink-2); font-size: 14px; }
 .wm-figure { position: relative; }
 .wm-map { display: block; width: 100%; height: auto; }
 .wm-map path { stroke: #000000; stroke-width: 0.3px; vector-effect: non-scaling-stroke; stroke-linejoin: round; fill-rule: evenodd; }
 .wm-map path.wm-hover { stroke: var(--wm-ink); stroke-width: 1.5px; }
-.wm-bar { margin: 6px 1.6em 0; font-size: 12px; color: var(--wm-ink-2); }
+.wm-bar { margin: 6px 1.6em 0; font-size: 12px; color: var(--wm-ink-2); container-type: inline-size; }
+@container (max-width: 280px) { .wm-ticks span:nth-child(even) { display: none; } }
 .wm-ramp { height: 10px; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.25); }
 .wm-ticks { position: relative; height: 1.5em; }
 .wm-ticks span { position: absolute; top: 2px; transform: translateX(-50%); white-space: nowrap; font-variant-numeric: tabular-nums; }
