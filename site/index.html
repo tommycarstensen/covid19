@@ -76,6 +76,12 @@ img.flag {
   max-width: 60em;
 }
 
+/* The country table is folded like the world map's table; a link to the table or to a row opens it. */
+.table-fold > summary {
+  cursor: pointer;
+  margin: 8px 0;
+}
+
 .table-wrap {
   overflow-x: auto;
 }
@@ -325,6 +331,8 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <h2 id="table">Table by country&nbsp;<a class="anchor" href="#table" aria-label="Link to this section: Table by country">#</a></h2>
 
 <p>Cases and deaths reported to ECDC up to 17 January 2021, and tests from Our World in Data. Click a column header to sort by it.</p>
+<details class="table-fold" id="table-fold">
+<summary>Table of 88 countries and the EU</summary>
 <div class="table-wrap">
 <table id="myTable2">
     <tr>
@@ -434,6 +442,23 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 
 </table>
 </div>
+</details>
+<script>
+// A link to the table (#table) or to a country's row (#denmark) opens the folded table.
+(function () {
+  var fold = document.getElementById("table-fold");
+  function openForHash() {
+    var id = decodeURIComponent(location.hash.slice(1));
+    var target = id && document.getElementById(id);
+    if (target && !fold.open && (id === "table" || fold.contains(target))) {
+      fold.open = true;
+      target.scrollIntoView();
+    }
+  }
+  openForHash();
+  window.addEventListener("hashchange", openForHash);
+})();
+</script>
 <br>
 
 <hr>
