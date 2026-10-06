@@ -202,3 +202,18 @@ All ten wanted a line, and all ten wanted it as a plain paragraph straight under
 > **This page is an archive and is no longer updated.** Its data, from the European Centre for Disease Prevention and Control (ECDC), end in January 2021: the table's counts run to 17 January and the charts and maps to 10 January.
 
 Left out, because the advisers split or the page already does it: the worldwide totals (89.8 million cases, 1.94 million deaths; three for, three against as a number easy to quote out of context); a link to current data (two for, one against because such links date; "Other trackers" already links the WHO and Our World in Data); first-person wording ("a dashboard I ran", one adviser), because the page speaks in the third person elsewhere. The line uses a new class, `standfirst`, styled only with the page's text width; the yellow-box CSS of the removed `archive-note` went with it.
+
+## 2026-10-06: every region's line charts become small multiples, in the 2020 charts' red (covid19-b6)
+
+Tommy asked covid19-b6 for a design review of the whole page and then to work through it. Its first finding was that the region sections still showed `plot_series.doLinePlots`' 2020 charts: 4 to 55 countries on one 480x360 plot with a 10-colour cycle, so countries shared colours, and a legend too small to read that in Europe ran over the x-axis label. The World figures had already been redrawn as small multiples (`plot_days100_world.py`), and covid19-cd had done Western Asia except Iran (8b8b4b7).
+
+Chosen: the other eleven 2020 pairs (the EU, Europe, the Americas, North America, South America except Venezuela, Asia except China, South-East Asia, East Asia except China, Africa, Oceania, the Nordic countries) redrawn one for one by the same script, so each section keeps its own figure and the page's headings and anchors stay as they were. The country lists are `plot_series.py`'s, moved to `regions.py` under ECDC's names, which also brings Czechia back into the EU and Europe.
+
+- A set of more than 20 countries gets eight columns, three on phones, instead of three rows, which at 55 countries would have meant 19 columns. On the phone's three columns a name and its total do not fit on one line, so the total goes under the name.
+- In those large sets, the countries that never passed 1,000 cases (100 deaths) are named under the figure with their totals, instead of each taking an empty panel: Africa has 21 such countries for deaths.
+- The country's line is red, `#e41a1c`, over grey, as in `plot_series.doLinePlots`' own comparison charts, following the rule that a redrawn chart takes Tommy's 2020 colours (the project memory "palette-from-original-scripts"). This replaced the dataviz blue the World figures had used, so they changed colour too; nothing else in them changed.
+- The script stops if a panel's name runs into its total or any text runs off a figure, which caught Bosnia and Herzegovina, North Macedonia and Liechtenstein on the first phone draw.
+
+Considered instead: one figure per continent, dropping the five subregion pairs, which would have made the page shorter. Not done, because covid19-cd had just been asked for the Western Asia figure, so the subregions were evidently wanted. Also considered: dropping the region line charts altogether in favour of the bubble charts and heat maps; not done, because the aligned charts are what the section is named for.
+
+Left as they were: the USA's own pair of 2020 charts under its heading, and the EU's two scatter plots.
