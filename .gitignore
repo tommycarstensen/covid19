@@ -40,7 +40,7 @@
 *.csv
 *.geojson
 /csv
-/subnationalcaseweekly.json
+/regional_maps/europe/subnationalcaseweekly.json
 /map/covid19map.html
 /map/obesity-trends.html
 
