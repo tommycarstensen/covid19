@@ -128,3 +128,9 @@ The table had three columns of 45-pixel-high thumbnails (total cases, total deat
 The thumbnail files stay on the server (`deploy.py` never deletes), and `redraw_charts.py` still draws them; nothing on the page uses them any more. Their alt texts from C10 went with them.
 
 Considered and rejected: keeping one thumbnail column as a sparkline. The thumbnails are scaled-down full charts, with the country's red line among 80 grey ones, not sparklines; at 45 pixels the red line is barely visible.
+
+## 2026-10-06: the charts load as the reader reaches them, instead of a subpage for the per-country charts (C6, revised)
+
+C6 proposed moving the per-country charts to a subpage, to take about 175 full-size images off the page. A count found 46 (23 countries), and the table's 261 thumbnails, the real weight, went in C7. What remained was that every image loaded at once, and that 88 charts had no width or height, so the page jumped as they arrived. Every chart outside a `<noscript>` (94) now has `loading="lazy"` and its real width and height, read from the copy the server serves (`site/`, else the newest in `archive/`), with a CSS rule (`img[loading="lazy"] { height: auto; }`) so that a phone scales them in proportion. Tested in headless Chrome with every image served locally: none broken or distorted at 1,440 or 390 pixels, about 40 of the 125 images load before the reader scrolls, and a link to `#countries` lands on its heading.
+
+Whether "Charts by country" should stay at all is a separate question, taken up below.
