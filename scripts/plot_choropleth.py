@@ -15,6 +15,9 @@ import pandas as pd
 import requests
 from matplotlib.colors import Normalize
 
+# The repo's data/, found from this file, so that a run from another folder reads the right files and cannot download into the wrong place. The maps are still written to the working directory, as in 2020.
+DATA = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
+
 
 def main():
 
@@ -352,11 +355,11 @@ def parse_data(
     url = (
         'https://raw.githubusercontent.com/owid/covid-19-data/master/'
         'public/data/owid-covid-data.csv')
-    path = 'data/owid.csv'
+    path = os.path.join(DATA, 'owid.csv')
     df_owid = download_and_read(url, path)
 
     url = 'https://opendata.ecdc.europa.eu/covid19/casedistribution/csv'
-    path = 'data/ecdc.csv'
+    path = os.path.join(DATA, 'ecdc.csv')
     # url = 'https://opendata.ecdc.europa.eu/covid19/casedistribution/json'
     # path = 'ecdc.json'
     df_ecdc = download_and_read(url, path)

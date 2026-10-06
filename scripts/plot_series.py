@@ -19,8 +19,11 @@ from scipy.optimize import curve_fit
 
 import regions
 
+# The repo's data/, found from this file, so that a run from another folder reads the right files and cannot download into the wrong place. Charts and table rows are still written to the working directory, as in 2020: redraw_charts.py relies on it.
+DATA = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
+
 # ECDC's weekly cases and deaths, up to ISO week 2021-01. ECDC has withdrawn the URL this came from (https://opendata.ecdc.europa.eu/covid19/casedistribution/csv/), which now serves another file, so this local copy is read instead.
-ECDC = 'data/ecdc.csv'
+ECDC = os.path.join(DATA, 'ecdc.csv')
 
 # Whether to fit a logistic curve to each country's cumulative counts. Off since the epidemics' long tails made the fits meaningless.
 FIT = False
@@ -130,7 +133,7 @@ def doBarPlots(args, df0):
 def doHeatMapsBSG(args):
 
     url = 'https://github.com/OxCGRT/covid-policy-tracker/raw/master/data/OxCGRT_latest.csv'
-    path = 'data/bsg.csv'
+    path = os.path.join(DATA, 'bsg.csv')
     df0 = download_and_read(url, path, pd.read_csv)
 
     for region in args.d_region2countries:
@@ -539,7 +542,7 @@ def plot_per_country(args, df, k, colors):
             pass
 
         # https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv
-        df_owid = pd.read_csv('data/owid.csv')
+        df_owid = pd.read_csv(os.path.join(DATA, 'owid.csv'))
         if args.title == 'United States of America':
             location = 'United States'
             v = df_owid[df_owid['location'] == location]['total_tests_per_thousand'].max()

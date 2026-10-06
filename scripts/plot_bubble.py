@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
+import os
 from datetime import datetime
 
 import matplotlib.patheffects as path_effects
 import matplotlib.pyplot as plt
 import pandas as pd
 from adjustText import adjust_text
+
+# The repo's data/, found from this file, so that a run from another folder reads the right files. The charts are still written to the working directory, as in 2020.
+DATA = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data')
 
 eu27 = [
     'AUT',
@@ -226,9 +230,9 @@ d_regions = {
 def main():
 
     # ECDC's file, downloaded from https://opendata.ecdc.europa.eu/covid19/casedistribution/csv
-    df_ecdc = pd.read_csv('data/csv')
+    df_ecdc = pd.read_csv(os.path.join(DATA, 'csv'))
 
-    df_owid = pd.read_csv('data/owid.csv')
+    df_owid = pd.read_csv(os.path.join(DATA, 'owid.csv'))
 
     days = 14
     weeks = 2
