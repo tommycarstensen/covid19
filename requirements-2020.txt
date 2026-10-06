@@ -1,0 +1,9 @@
+# What scripts/plot_choropleth.py and the regional maps in 2020/regional_maps/ need, in an environment of their own, because they conflict with requirements.txt: on pandas 1.5 plot_choropleth.py's transform(pd.DataFrame.interpolate) fails, from pandas 2.0 its groupby().resample() drops the alpha3 column, and geopandas 1.0 removed the gpd.datasets it reads its world map from. pandas<1.5 needs Python 3.10 or older. Not run since 2021, so untested.
+# lxml is for the Peru map's pd.read_html of Wikipedia's population table.
+geopandas<1.0
+imageio
+lxml
+matplotlib
+numpy
+pandas<1.5
+requests

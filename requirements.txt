@@ -1,11 +1,12 @@
-# What plot_series.py, redraw_charts.py, build_bubbles.py, build_world_map.py and deploy.py import (build_bubbles.py takes its regions from plot_bubble.py, which imports adjustText; pyshp is build_world_map.py's shapefile reader).
+# What the scripts in scripts/ import, at the versions the October 2026 figures were drawn with, on Python 3.14 (build_bubbles.py takes its regions from plot_bubble.py, which imports adjustText; pyshp is build_world_map.py's shapefile reader; Pillow is PIL). build_animations.py and build_press_videos.py also need ffmpeg. plot_choropleth.py and the 2020 regional maps need older libraries than these: requirements-2020.txt.
 # countryinfo 1.x removed CountryInfo().all(), which plot_series.py calls.
-adjustText
+adjustText==1.4.0
 countryinfo==0.1.2
-matplotlib
-numpy
-pandas
-paramiko
-pyshp
-requests
-scipy
+matplotlib==3.11.0
+numpy==2.5.3
+pandas==3.0.6
+paramiko==5.0.0
+Pillow==12.3.0
+pyshp==3.1.6
+requests==2.34.2
+scipy==1.18.1
