@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="twitter:dnt" content="on">
 <title>Press clippings, January to May 2020: international and US press</title>
 <style>
 body {
@@ -131,8 +130,9 @@ body {
   border: 0;
 }
 
-/* Until Twitter's script draws them, and without JavaScript, tweets show as quotes. */
+/* Tweets are shown as quotes: Twitter's script, which would draw them as X's cards, is left out, so the page sends nothing to X. */
 blockquote.twitter-tweet {
+  overflow-wrap: anywhere;
   margin: 0;
   padding: 12px 16px;
   max-width: 550px;
@@ -143,10 +143,6 @@ blockquote.twitter-tweet {
 
 blockquote.twitter-tweet p {
   margin: 0 0 8px;
-}
-
-.twitter-tweet-rendered {
-  margin: 0 !important;
 }
 
 @media (max-width: 600px) {
@@ -700,6 +696,5 @@ blockquote.twitter-tweet p {
 </article>
 </main>
 
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>
