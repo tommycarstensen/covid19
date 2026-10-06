@@ -110,21 +110,34 @@ def read_owid_tests(weeks: list[str]) -> dict[str, dict[str, list[float | None]]
     """Per ECDC country code, OWID's tests per thousand people in each ISO week ('tests') and up to its end ('testsTotal').
 
     As in plot_choropleth.py's tests maps, the cumulative count is interpolated linearly between the days it was reported, and stays at its last report after it. A week's tests are the rise of that count from the Sunday before to the week's Sunday, so a week that starts before the first report or ends after the last has none, and neither has a week in which the count fell.
+
+    For 8 places (Cape Verde, Czechia, DR Congo, France, Libya, Oman, Palestine and Sweden), OWID has daily counts but either no running total or one too sparse to give a single week's tests before January 2021. Their week's tests are seven times OWID's 7-day average of daily tests on the week's Sunday. Their 'testsTotal' stays as the running total gives it, or absent: a total summed from the first daily count would leave out the tests before it.
     """
-    df = pd.read_csv(OWID, usecols=['iso_code', 'date', 'total_tests_per_thousand'], parse_dates=['date']).dropna()
+    df = pd.read_csv(OWID, usecols=['iso_code', 'date', 'total_tests_per_thousand', 'new_tests_smoothed_per_thousand'],
+                     parse_dates=['date'])
     sundays = [pd.Timestamp(date.fromisocalendar(int(week[:4]), int(week[5:]), 7)) for week in weeks]
     week = pd.Timedelta(days=7)
     tests = {}
     for code, group in df.groupby('iso_code'):
-        daily = group.set_index('date')['total_tests_per_thousand'].sort_index().resample('1D').mean().interpolate()
-        first, last = daily.index[0], daily.index[-1]
-        totals: list[float | None] = []
-        weekly: list[float | None] = []
-        for sunday in sundays:
-            totals.append(None if sunday < first else significant(float(daily[min(sunday, last)])))
-            rise = float(daily[sunday] - daily[sunday - week]) if first <= sunday - week and sunday <= last else -1.0
-            weekly.append(significant(rise) if rise >= 0 else None)
-        tests[OWID_CODES.get(str(code), str(code))] = {'tests': weekly, 'testsTotal': totals}
+        entry: dict[str, list[float | None]] = {}
+        reported = group.dropna(subset=['total_tests_per_thousand'])
+        if not reported.empty:
+            daily = reported.set_index('date')['total_tests_per_thousand'].sort_index().resample('1D').mean().interpolate()
+            first, last = daily.index[0], daily.index[-1]
+            totals: list[float | None] = []
+            weekly: list[float | None] = []
+            for sunday in sundays:
+                totals.append(None if sunday < first else significant(float(daily[min(sunday, last)])))
+                rise = float(daily[sunday] - daily[sunday - week]) if first <= sunday - week and sunday <= last else -1.0
+                weekly.append(significant(rise) if rise >= 0 else None)
+            entry = {'tests': weekly, 'testsTotal': totals}
+        if all(v is None for v in entry.get('tests', [])):
+            rows = group.dropna(subset=['new_tests_smoothed_per_thousand'])
+            average = dict(zip(rows['date'], rows['new_tests_smoothed_per_thousand'].astype(float)))
+            if any(sunday in average for sunday in sundays):
+                entry['tests'] = [significant(7 * average[sunday]) if sunday in average else None for sunday in sundays]
+        if entry:
+            tests[OWID_CODES.get(str(code), str(code))] = entry
     return tests
 
 

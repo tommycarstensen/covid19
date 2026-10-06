@@ -5,7 +5,7 @@ Several Claude sessions work in this folder at once. Before starting a task, rea
 ## In progress
 
 - The USA's and the EU's 2020 charts (below): covid19-67 (6 Oct 2026, 06:03). B5, C12 and `deploy.py`'s working-tree uploads are done (2942576, 0471a56, eb00ed1); C12 is live.
-- Testing against cases: the tests-cases-deaths small multiples and a tests and share-positive heat map per region, which Tommy liked as drafts; and `build_world_map.read_owid_tests`, which leaves out the 24 places OWID gives daily test counts but no running totals (France, Sweden, Czechia among them). Scripts and images only; nothing goes on the page until Tommy approves its wording: covid19-6d (6 Oct 2026, 06:14). Touches `build_world_map.py`, `site/worldmap/worldmap.json`, `plot_heat.py` and a new `plot_tests.py`.
+- Testing against cases: the tests-cases-deaths small multiples and a tests and share-positive heat map per region, which Tommy liked as drafts; and `build_world_map.read_owid_tests`, which leaves out the 8 places OWID gives daily test counts but no usable running totals (France, Sweden, Czechia among them). Scripts and images only; nothing goes on the page until Tommy approves its wording: covid19-6d (6 Oct 2026, 06:14). Touches `build_world_map.py`, `site/worldmap/worldmap.json`, `plot_heat.py` and a new `plot_tests.py`.
 - C13, the press pages: restyled, broken links repaired and live (covid19-f8, `press_international.html`, 690cfed; covid19-ac, `press_denmark.html`, e89e325). Their title, back link and archive note wait for Tommy to approve the wording covid19-f8 proposed; add none without his yes.
 
 ## Known problems
