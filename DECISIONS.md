@@ -172,3 +172,13 @@ Kept as it was: a first click sorts low to high, as the 2020 script did.
 ## 2026-10-06: the archive note is removed, on Tommy's instruction (C1 and C2 superseded)
 
 C1 (reword the archive note at the top of the page) and C2 (a short "what happened after January 2021" with links to current data) were drafted but held back, because Tommy had not asked for the original note and was to approve any new wording first. Tommy then asked covid19-91 to remove the note altogether. No replacement goes in unless Tommy asks for one. Gone with the note: its sentence about the October 2026 repairs (the 63 redrawn countries) and the planned correction about the weekly world maps' seven-week totals. The page still says when its data end in the table's introduction ("up to 17 January 2021"), in the aligned charts' captions and in the browser title ("archive").
+
+## 2026-10-06: Western Asia except Iran's line charts become small multiples (covid19-cd)
+
+Tommy asked whether the `days100_cases_perCapitaFalse_AsiaWesternExIran.png` figure was any good, and to redo it if not. It was not: 16 countries shared a 10-colour cycle (Turkey and Armenia both blue, Iraq and Kuwait both orange, Saudi Arabia and Qatar both red), the legend sat over the lines, the subtitle said "Weekly cases" over cumulative counts, and the y axis said "Cumulated". The cases and deaths pair is replaced by `plot_days100_world.py`'s small multiples, as the World1/World2 pair was: one panel per country, the country in blue over the other 15 in grey, three rows of six on wide screens and two columns on phones, with every total in the alt text.
+
+- The set is kept as it was (`plot_series.py`'s AsiaWestern without Iran, which World1 shows), so the heading and the figures beside it are unchanged; it matches `regions.py`'s PARTS.
+- "UAE" in the panel titles, where "United Arab Emirates" ran into its total; the alt text keeps the full name.
+- Every aligned figure's y axis now ends at the next 1-2-5 step above its highest line, instead of the next whole decade, which had left the top quarter of each Western Asia panel (10M) and World1 panel (100M) empty. The World1/World2 figures were redrawn with it and nothing else changed.
+
+Considered instead: one figure per continent in place of the 2020 subregion pairs (covid19-b6's suggestion). Not taken here, because it restructures the page beyond what was asked; covid19-b6 is redrawing the other regional pairs one figure per pair.
