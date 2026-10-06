@@ -1,6 +1,6 @@
 """Draw the page's aligned time-series figures, for the World1 and World2 country sets and for every region the 2020 page charted, as small multiples.
 
-The 2020 figures (days100_*_perCapitaFalse_<set>.png, drawn by plot_series.doLinePlots) put 4 to 55 countries on one 480x360 plot with a 10-colour cycle, so countries shared colours and the legend, drawn over the lines, could not tell them apart. These give each country its own panel: the country in blue over the other countries of its set in grey, all on one log scale and aligned on the week the country's cumulative count first passed 1,000 cases (100 deaths), as before. In a set of up to 20 countries, a country that never passed the threshold gets a panel that says so, instead of disappearing. A larger set (the EU, Europe, the Americas, Asia except China, Africa) gets a denser grid, eight columns wide and three on phones, and names its countries that never passed the threshold under the figure, with their totals. The regions are regions.py's, which are plot_series.py's under ECDC's names. The run stops if a panel's name runs into its total or any text runs off a figure.
+The 2020 figures (days100_*_perCapitaFalse_<set>.png, drawn by plot_series.doLinePlots) put 4 to 55 countries on one 480x360 plot with a 10-colour cycle, so countries shared colours and the legend, drawn over the lines, could not tell them apart. These give each country its own panel: the country in red over the other countries of its set in grey, the colours of plot_series.py's own comparison charts, all on one log scale and aligned on the week the country's cumulative count first passed 1,000 cases (100 deaths), as before. In a set of up to 20 countries, a country that never passed the threshold gets a panel that says so, instead of disappearing. A larger set (the EU, Europe, the Americas, Asia except China, Africa) gets a denser grid, eight columns wide and three on phones, and names its countries that never passed the threshold under the figure, with their totals. The regions are regions.py's, which are plot_series.py's under ECDC's names. The run stops if a panel's name runs into its total or any text runs off a figure.
 
 Reads ecdc.csv (ECDC weekly cases and deaths per country to ISO week 2021-01, the same data as the rest of the page) and downloads nothing. The EU is summed from its 27 member states under their ECDC names; the 2020 list said 'Czech Republic', which ECDC calls Czechia, so the old EU total left Czechia out.
 
@@ -149,14 +149,14 @@ LAYOUTS = [
     Layout('_narrow', width=4.15, ncols=2, panel_height=1.55, dpi=300, dense_ncols=3, dense_panel_height=1.3),
 ]
 
-# Ink and marks, from the dataviz reference palette.
+# Ink and marks. The country's red is plot_series.doLinePlots' (#e41a1c, over grey), as Tommy drew it in 2020.
 INK = '#0b0b0b'
 INK_2 = '#52514e'
 MUTED = '#898781'
 GRID = '#e1e0d9'
 AXIS = '#c3c2b7'
 CONTEXT = '#d3d1c9'
-FOCUS = '#2a78d6'
+FOCUS = '#e41a1c'
 
 
 def load() -> pd.DataFrame:
@@ -274,7 +274,7 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
         title = f'Cumulative COVID-19 {noun}\nsince passing {threshold}'
         if region:
             title = f'{region[0].upper()}{region[1:]}\n{title}'
-        subtitle = (f'Weeks since each country passed {threshold} {noun}.\nLog scale. Blue: the country; grey: the\n'
+        subtitle = (f'Weeks since each country passed {threshold} {noun}.\nLog scale. Red: the country; grey: the\n'
                     f'other {others}. Number: total on 10 Jan 2021.')
         source = ('Data: ECDC, weekly, to 10 January 2021.\nEU: the 27 member states. Drawn 2026.' if eu else
                   'Data: ECDC, weekly, to 10 January 2021.\nDrawn October 2026.')
@@ -283,7 +283,7 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
         if region:
             title = f'{region[0].upper()}{region[1:]}: c{title[1:]}'
         subtitle = (f'Weeks since that week on the horizontal axis; cumulative {noun} on a log scale. '
-                    f'Each panel shows one country in blue over the other {others} in grey.')
+                    f'Each panel shows one country in red over the other {others} in grey.')
         source = ('Data: European Centre for Disease Prevention and Control (ECDC), weekly cases and deaths by '
                   'country, to 10 January 2021 (ISO week 2021-01).' + (' EU: the 27 member states.' if eu else '')
                   + ' Drawn October 2026.')
