@@ -8,6 +8,35 @@ On 6 October 2026 Tommy asked for the page's bugs to be fixed and for advisers t
 
 What the audit found sound, on 6 October 2026: no broken images, no horizontal overflow at 1,440 or 390 pixels wide, every file the page uses either in `site/` or on the server, every table row with all 14 cells, and all five map videos playable.
 
+### The list
+
+Bugs:
+
+- B1. The EU table row left out Czechia but divided by the EU-28 population. Done, see below.
+- B2. France, Sweden and Czechia have no table row: the January 2021 run wrote no table file for them, and its data are lost. Open: add rows from `ecdc.csv` marked one week earlier, or say on the page that they are missing.
+- B3. Reference links that land somewhere else or nowhere. Handled under C9.
+- B4. The weekly world maps showed seven-week totals. Covid19-91's interactive world map replaces them (see `todo.md`).
+- B5. `plot_series.py` still holds the causes of the continent bug and B1. Open: fixing it means cleaning the whole script under ruff, pycodestyle and pyright.
+- B6. Whether `sortable.js` sorts numbers as numbers. Open: the file exists only on the server, which stopped answering at about 04:45 on 6 October 2026.
+
+Content, from the three advisers (who suggested it, effort):
+
+- C1. Reword the archive note: when the data end and what that means; move the October 2026 repair note to a footer (all three, small). Drafted; waits for Tommy to approve the wording, because he did not ask for the original note.
+- C2. A short "what happened after January 2021" with links to current data (reader, small). Part of the C1 draft.
+- C3. A "How to read this page" section: sources, what "aligned" means, log scales, case fatality rate, fits are not forecasts, what the EU row covers (all three, medium).
+- C4. The `<title>` and the table's column headers (all three, small).
+- C5. Lead with the aligned small multiples and group the maps by measure (reader, structure; medium).
+- C6. Move the per-country chart pairs to a subpage (structure, large).
+- C7. Replace the table's three thumbnail columns with one link (structure, medium).
+- C8. Trim "Infographics and other news clips" of live embeds and pre-2020 items (all three, small).
+- C9. Cut the References to what still works (all three, small).
+- C10. Captions and alt text for every chart; one heading for the loose bubble, heat and scatter charts (structure, accuracy; medium).
+- C11. Credits for basemaps and data, licences, and how to cite the page (accuracy, reader; small).
+- C12. The population column uses `countryinfo`'s figures of about 2014, which puts per-capita columns 3 to 8% high (accuracy, medium).
+- C13. Give the press pages a title, a back link and an archive note, and check their links (accuracy, medium).
+
+One adviser claim was checked and rejected: the table's totals are higher than `ecdc.csv` (the USA 23,938,288 against 22,423,006) not because they are wrong, but because the table came from a download one week later, to 17 January 2021. The table's "most recent week" for the USA, 1,515,282, is exactly the difference.
+
 ## 2026-10-06: the USA's continent in the table is Americas
 
 `plot_series.py` set the USA's continent to "North America" by hand (`doCountry2Continent`), while `countryinfo` gives "Americas" for every other country of the Americas. Sorting the table by continent therefore put the USA on its own. The page now says Americas. The cause in `plot_series.py` is left for its own commit, because that script carries 80 ruff and 35 pycodestyle findings that have to be cleaned when it is touched (B5).
