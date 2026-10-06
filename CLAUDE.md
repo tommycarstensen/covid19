@@ -25,10 +25,10 @@ Never upload by FTP, or by any route other than the repo's deploy script. Do not
 
 ## Scripts
 
-- `wrapper.sh`: the 2020-2021 daily pipeline. It downloads OWID, runs `plot_series.py` per region and per country in `countries.txt`, then `plot_choropleth_europe.py`, `plot_choropleth.py` and `plot_bubble.py`, and ends with `upload.py`.
+- `wrapper.sh`: the 2020-2021 daily pipeline. It downloads OWID, runs `plot_series.py` per region and per country in `countries.txt`, then `plot_choropleth_europe.py` (inside `regional_maps/europe/`, moving its frames and GIF back to the root), `plot_choropleth.py` and `plot_bubble.py`, and ends with `upload.py`.
 - `plot_series.py`: the time-series charts (`days100_*`, sigmoid fits) and the HTML table rows in `tables/`. Needs `countryinfo==0.1.2`, because 1.0 removed `CountryInfo().all()`.
 - `plot_choropleth.py`: the world choropleth GIFs (`covid19_*_logTrue.gif`) and the OWID tests GIFs. The page no longer shows any of its six maps: `build_world_map.py` and `worldmap.js` redraw all six, in its colour maps and log ranges. Needs `geopandas<1.0` and `pandas<1.5`: on pandas 1.5 `transform(pd.DataFrame.interpolate)` fails, and from 2.0 `groupby().resample()` drops the `alpha3` column.
-- `plot_choropleth_europe.py`, `plot_choropleth_denmark.py`, `plot_choropleth_peru.py`: the NUTS-region map animations (`europe.gif`, `denmark.gif`, `peru.gif`, plus an MP4 of each).
+- `regional_maps/{europe,denmark,peru}/plot_choropleth_<region>.py`: the regional map animations (`europe.gif`, `denmark.gif`, `peru.gif`, plus an MP4 of each). Each folder holds its script, the files it reads (Europe: Eurostat's NUTS boundaries, Scotland's and Wales's health boards and ECDC's subnational data; Denmark: SSI's cases per municipality, Statistics Denmark's FOLK1A and the municipality GeoJSON; Peru: MINSA's positive tests and the HDX boundaries) and its MP4. The scripts open their inputs by bare file name, so run each from inside its folder. They are untracked and not yet clean under pyright, and Peru's uses `DataFrame.append`, which pandas 2 removed.
 - `plot_bubble.py`: the bubble charts as PNGs of one week, which the page now shows only without JavaScript. Its daily copies in `archive/` cannot be strung into an animation: the measure changed at least three times between May 2020 and January 2021, and the axes and colour scale rescale every day. `map/mapcovid19.py`: an earlier world-map animation, used only by `map/index.html`.
 - `build_bubbles.py` (October 2026): writes `site/bubble/bubble_data.js`, each country's weekly cases and deaths from `ecdc.csv` and weekly tests from `owid.csv` for `plot_bubble.py`'s eight regions, and downloads nothing. The data file is committed, because `owid.csv` is not. `site/bubble/bubble.js` draws each `<figure class="bubble" data-region>` from it for every week, with the same player as `scrubber.js`: both axes are fixed log scales from -75% to +700%, and a change needs at least 20 cases or deaths in the earlier two weeks, otherwise the country sits in a strip under the plot (too few deaths) or is listed below it (too few cases).
 - `redraw_charts.py` (October 2026): draws, into `site/`, the two line charts and thumbnails of each table country whose thumbnail `upload.py` never moved into `archive/`: 63 countries, whose thumbnails had never existed and whose full-size charts were from April 2020. It calls `plot_series.doLinePlots` on `ecdc.csv` and downloads nothing. `python3 redraw_charts.py Denmark` is a trial into `tmp/redraw/`.
@@ -48,6 +48,8 @@ Never upload by FTP, or by any route other than the repo's deploy script. Do not
 - `economy/`, `C19DK/`, `fork/covid-19-data/`, `owid/covid-19-data/` and `deepti/pyhdf_github/` are separate git repositories, and are ignored here.
 - `deepti/` is a separate MODIS aerosol-to-PM2.5 task. Its HDF4/pyhdf/Miniconda downloads are ignored.
 - `trash/` holds discarded scripts and images.
+- `notes/` holds the links collected in 2020 for the press pages (`links.txt`, `add.txt`, `regeringen.htm`).
+- `other/` holds files that were in this folder but are not about COVID-19: a yield-curve plot (`3d.py`), a stock-market chart and a zipped spreadsheet of financial statements.
 
 ## Git
 
