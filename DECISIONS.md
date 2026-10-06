@@ -272,3 +272,15 @@ The scatter plots also had a data bug: `plot_series.doScatterPlots` read the EU 
 The USA's figure comes from `plot_days100_world.py`, whose small multiples replaced every other aligned chart: two panels, cases and deaths, the USA in red over every other country and territory that passed the threshold in grey, as the 2020 pair showed it. A one-country set of small multiples would have left most of a four-column row empty, hence the two-panel figure.
 
 The January 2021 files (`scatter_EU_{cases,deaths}.png`, `days100_*_United_States_of_America.png`) stay on the server: `deploy.py` never deletes, and the table's chart links still open the 2020 per-country charts.
+
+## 2026-10-06: the Danish press page's title and back link, and the testing figures, after ten advisers (covid19-67)
+
+Tommy asked for the two decisions left open, the press pages' words and covid19-6d's testing figures, to go to ten advisers (Sonnet sub-agents) and then be decided. By then he had decided the international press page himself (832d99c), and covid19-6d had already put the testing figures to a panel of its own at his request, so these ten took the Danish page in full and gave the testing plan a second look. Their roles: a 2026 visitor from a search, a web archivist, a Danish journalist, an information architect, accessibility, the guardian of Tommy's rules, an epidemiologist, a newspaper graphics editor, a copy editor, and a devil's advocate for doing less.
+
+- The Danish page's tab title becomes "Press clippings, January to October 2020: Danish press", in the international page's pattern: 7 of 10 (1 wanted it in Danish, "Presseklip om covid-19, januar til oktober 2020: dansk presse"; 2 wanted the 2020 "Danish Press on COVID-19" kept, one of them misreading the pattern's dates). January is right: the first clipping is a DR Detektor article of 23 January 2020, although the rest run from March. The title carries lang="en", because the page is lang="da".
+- The same "← COVID-19 tracker" link at the top as on the international page: 10 of 10, with lang="en".
+- No archive note and no visible heading: 10 of 10.
+- The main page's "Their links have not been checked since." is deleted (342d5e3): 4 to delete; 6 to reword it to the Danish page alone, which covid19-ac's repair of that page's dead links (Wayback copies) makes untrue as well.
+- covid19-6d's five page edits for the testing figures (a "Tests, cases and deaths" section between the maps and the table, each region's tests heat map under its cases-and-deaths heat map, the chart-types sentence, a link from "how much a country tested"): no objection from 9 of 10; the devil's advocate objected to the volume of seven more heat maps, and they stay. Asked of the figures first: the United Kingdom panel's title crowding its share label; the Dutch caveat (OWID counts people tested there) in the 16-country figure's source line and the shares' approximate nature in its alt text; a note in the heat maps' source line that a share from very few tests, as in early 2020, is unreliable.
+
+covid19-ac adds the title and link to the Danish page in its link-repair pass; covid19-6d makes the testing edits.
