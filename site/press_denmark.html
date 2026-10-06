@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="twitter:dnt" content="on">
 <title lang="en">Press clippings, March to October 2020: Danish press</title>
 <style>
 body {
@@ -198,8 +197,9 @@ h2 + .clip, section > .clip:first-child {
   color: #111;
 }
 
-/* Until Twitter's script draws them, and without JavaScript, tweets show as quotes. */
+/* Tweets are shown as quotes: Twitter's script, which would draw them as X's cards, is left out, so the page sends nothing to X. */
 blockquote.twitter-tweet {
+  overflow-wrap: anywhere;
   margin: 8px 0 0;
   padding: 12px 16px;
   max-width: 550px;
@@ -210,10 +210,6 @@ blockquote.twitter-tweet {
 
 blockquote.twitter-tweet p {
   margin: 0 0 8px;
-}
-
-.twitter-tweet-rendered {
-  margin: 8px 0 0 !important;
 }
 
 .clip video {
@@ -253,13 +249,6 @@ blockquote.twitter-tweet p {
 </div>
 
 <iframe class="owid" lang="en" src="https://ourworldindata.org/grapher/full-list-cumulative-total-tests-per-thousand?time=2020-03-13..2020-03-26&country=DNK+SWE+NOR+ISL+DEU+AUT+FIN+EST+LVA+LTU+KOR" title="Our World in Data: COVID-19 tests per 1,000 people, 13 to 26 March 2020" loading="lazy"></iframe>
-
-<div class="wide" lang="en">
-<picture>
-<source media="(max-width: 700px)" srcset="aligned_cases_Nordic_narrow.png" width="415" height="755">
-<img src="aligned_cases_Nordic.png" width="1355" height="569" alt="Cumulative COVID-19 cases in the Nordic countries from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: Sweden 502,227; Denmark 182,725; Norway 55,473; Finland 38,590; Iceland 5,898; Faroe Islands 646; Greenland 27.">
-</picture>
-</div>
 
 <p class="sst"><a href="https://web.archive.org/web/20200321081818/https://www.sst.dk/da/corona/tal-og-overvaagning" data-original-href="https://www.sst.dk/da/corona/tal-og-overvaagning">Sundhedsstyrelsen</a> - Tal og overvågning af COVID-19</p>
 
@@ -348,11 +337,6 @@ blockquote.twitter-tweet p {
 <p>Flere partier føler sig voldsomt gået bag ryggen af regeringen under forhandlinger om genåbning af Danmark.</p>
 </article>
 <article class="clip">
-<p class="meta"><time datetime="2020-05-12">2020-05-12</time> <span class="src">Berlingske</span></p>
-<h3><a href="https://www.berlingske.dk/danmark/internt-dokument-allerede-i-februar-blev-danmark-raadet-til-at-bremse">Internt dokument: Allerede i februar blev Danmark rådet til at bremse coronavirus gennem test og isolation</a></h3>
-<p>Coronavirussen kan inddæmmes gennem overvågning og isolation, lød rådet fra EU til blandt andet Danmark helt tilbage i begyndelsen af februar, viser internt notat. Alligevel formåede Danmark ikke i krisens indledende fase at opbygge en testkapacitet, der kunne have gjort en forskel.</p>
-</article>
-<article class="clip">
 <p class="meta"><time datetime="2020-05-12">2020-05-12</time> <span class="src">Politiken</span></p>
 <h3><a href="https://politiken.dk/debat/ledere/art7780373/Det-er-sidste-chance-hvis-regeringen-skal-bevare-trov%C3%A6rdigheden-og-befolkningens-tillid">Slingrende teststrategi: Det er sidste chance, hvis regeringen skal bevare troværdigheden og befolkningens tillid</a></h3>
 </article>
@@ -387,6 +371,7 @@ blockquote.twitter-tweet p {
 <p>Det bør få konsekvenser, at regeringen og sundhedsmyndigheder har holdt både partier og videnskab hen i mørke under coronakrisen.</p>
 </article>
 <article class="clip">
+<p class="meta"><time datetime="2020-05-07">2020-05-07</time> <span class="src">Berlingske</span></p>
 <h3><a href="https://www.berlingske.dk/politisk-morgenpost/regeringen-har-givet-statens-serum-institut-mundkurv-paa-om">Regeringen har givet Statens Serum Institut mundkurv på om antallet af test: »De tal må vi ifølge ministeriet ikke udlevere«</a></h3>
 <p class="byline"><a href="https://twitter.com/Martin_Borre">Martin Borre</a></p>
 </article>
@@ -424,6 +409,7 @@ blockquote.twitter-tweet p {
 <p>Retningslinjerne for værnemidler har skabt stor utryghed og er i stilhed blevet justeret efter lagerbeholdningen. Det får kritik fra sundhedspersonale og partier.</p>
 </article>
 <article class="clip">
+<p class="meta"><time datetime="2020-05-04">2020-05-04</time> <span class="src">Berlingske</span></p>
 <h3><a href="https://www.berlingske.dk/politik/haekkerup-revser-juridiske-mandagstraenere-efter-bekymret-opraab-vi-har">Hækkerup revser juridiske »mandagstrænere« efter bekymret opråb: »Vi har ikke haft den akademiske luksus«</a></h3>
 <p>En række af landets førende jurister udtrykker bekymring for retssikkerheden efter politikernes tiltag i coronakrisen, men justitsminister Nick Hækkerup afviser: Politik handler om at have kontakt til befolkningen.</p>
 </article>
@@ -470,10 +456,6 @@ blockquote.twitter-tweet p {
 </article>
 <article class="clip">
 <p class="meta"><time datetime="2020-04-16">2020-04-16</time> <span class="src">Journalisten</span></p>
-<blockquote class="twitter-tweet"><p lang="da" dir="ltr">Nu er journalisternes utilfredshed med Mette Frederiksen officiel. <a href="https://twitter.com/DJintweets?ref_src=twsrc%5Etfw">@DJintweets</a> og Folketingets Presseloge har klaget over pressemøder til statsministeren <a href="https://twitter.com/hashtag/dkmedier?src=hash&amp;ref_src=twsrc%5Etfw">#dkmedier</a> <a href="https://t.co/HYXq1M93Ym">https://t.co/HYXq1M93Ym</a></p>&mdash; Journalisten (@journalistendk) <a href="https://twitter.com/journalistendk/status/1250676800126095360?ref_src=twsrc%5Etfw">April 16, 2020</a></blockquote>
-</article>
-<article class="clip">
-<p class="meta"><time datetime="2020-04-15">2020-04-15</time> <span class="src">Dansk Journalistforbund</span></p>
 <blockquote class="twitter-tweet"><p lang="da" dir="ltr">Nu er journalisternes utilfredshed med Mette Frederiksen officiel. <a href="https://twitter.com/DJintweets?ref_src=twsrc%5Etfw">@DJintweets</a> og Folketingets Presseloge har klaget over pressemøder til statsministeren <a href="https://twitter.com/hashtag/dkmedier?src=hash&amp;ref_src=twsrc%5Etfw">#dkmedier</a> <a href="https://t.co/HYXq1M93Ym">https://t.co/HYXq1M93Ym</a></p>&mdash; Journalisten (@journalistendk) <a href="https://twitter.com/journalistendk/status/1250676800126095360?ref_src=twsrc%5Etfw">April 16, 2020</a></blockquote>
 </article>
 <article class="clip">
@@ -603,7 +585,7 @@ blockquote.twitter-tweet p {
 <p class="byline">Af <a href="https://twitter.com/Martin_Borre">Martin Borre</a> og <a href="https://twitter.com/schulz_rasmus">Rasmus Bragh Schulz</a></p>
 </article>
 <article class="clip">
-<p class="meta"><time datetime="2020-05-14">2020-05-14</time> <span class="src">DR</span></p>
+<p class="meta"><time datetime="2020-05-14">2020-05-14</time> <span class="src">Berlingske</span></p>
 <h3><a href="https://www.berlingske.dk/politik/partiledere-og-erhvervsliv-kraever-krisemaal-fra-mette-frederiksen-lige-nu">Partiledere og erhvervsliv kræver krisemål fra Mette Frederiksen: Lige nu styrer vi i blinde</a></h3>
 <p>Under coronaudbruddet har både regering og myndigheder sendt skiftende signaler, i forhold til hvad Danmark skal styre og navigere efter i krisen. Flere partiledere, eksperter samt dansk erhvervsliv kræver nu klare kriterier for, hvad der skal til, før det kan blive nødvendigt at lukke ned igen – eller omvendt. Ellers styrer vi landet i blinde med enorm usikkerhed som konsekvens, lyder opråbet. Regeringen afviser.</p>
 </article>
@@ -729,7 +711,7 @@ blockquote.twitter-tweet p {
 </article>
 <article class="clip">
 <p class="meta"><time datetime="2020-03-25">2020-03-25</time> <span class="src">Folketingets Sundheds- og Ældreudvalg</span></p>
-<h3><a href="https://www.ft.dk/samling/20191/almdel/suu/spm/794/svar/1648240/2173131/index.htm">Spørgsmål nr. 796</a></h3>
+<h3><a href="https://www.ft.dk/samling/20191/almdel/suu/spm/794/svar/1648240/2173131/index.htm">Spørgsmål nr. 794</a></h3>
 <p>Ministeren bedes redegøre for, om det var mangel på testudstyr eller frygt for mangel på testudstyr, der gjorde, at sundheds- og ældreministeren/myndighederne ikke sikrede en teststrategi, der i inddæmningsfasen omfattede alle med symptomer og mistanke om corona, herunder folk, der kom hjem fra andre lande end Italien.</p>
 </article>
 <!--https://www.ft.dk/samling/20191/almdel/suu/spm/795/svar/1648241/2173135/index.htm-->
@@ -789,6 +771,5 @@ blockquote.twitter-tweet p {
 </section>
 
 </main>
-<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 </body>
 </html>
