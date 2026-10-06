@@ -4,9 +4,11 @@ The 2020 figures (days100_*_perCapitaFalse_<set>.png, drawn by plot_series.doLin
 
 Reads ecdc.csv (ECDC weekly cases and deaths per country to ISO week 2021-01, the same data as the rest of the page) and downloads nothing. The EU is summed from its 27 member states under their ECDC names; the 2020 list said 'Czech Republic', which ECDC calls Czechia, so the old EU total left Czechia out.
 
-Writes site/aligned_{cases,deaths}_<set>.png (three rows of panels, or eight columns for a large set, for wide screens) and ..._narrow.png (two columns, or three, for phones), at 2x and 3x pixel density, as 8-bit palette PNGs, and their <picture> tags to tmp/plot_days100_world_markup.html.
+A country with a section of its own on the page (COUNTRIES: the United States) gets one figure of both measures instead, in place of the 2020 page's pair of days100_*_<country>.png: its cases and its deaths in two panels, each in red over every other country and territory in grey, as those charts showed it.
 
-Usage: python3 plot_days100_world.py [set ...]   (default: every set)
+Writes site/aligned_{cases,deaths}_<set>.png (three rows of panels, or eight columns for a large set, for wide screens) and ..._narrow.png (two columns, or three, for phones), and site/aligned_<country>.png and ..._narrow.png (two panels side by side, or stacked), at 2x and 3x pixel density, as 8-bit palette PNGs, and their <picture> tags to tmp/plot_days100_world_markup.html.
+
+Usage: python3 plot_days100_world.py [set or country ...]   (default: every set and country)
 """
 
 import io
@@ -67,6 +69,9 @@ SETS = {
     'Oceania': regions.REGIONS['Oceania'],
     'Nordic': regions.REGIONS['Nordic'],
 }
+
+# Countries with a section of their own, drawn by draw_country, and how a sentence names each.
+COUNTRIES = {'United_States_of_America': 'the United States'}
 
 # What a regional figure's title calls its set; the World sets need no name.
 REGIONS = {
@@ -429,6 +434,100 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
     return path
 
 
+def draw_country(df: pd.DataFrame, country: str, layout: Layout) -> Path:
+    """One country's cumulative cases and deaths, each aligned on the week it passed the threshold, in red over every other country and territory that passed it, in grey: side by side on wide screens, stacked on phones."""
+    narrow = layout.narrow
+    name = display_name(country)
+    prose = COUNTRIES[country]
+    places = sorted(set(df['countriesAndTerritories']) - {'EU', country})
+    panels = []
+    for measure in MEASURES:
+        data = {c: series(df, c, measure.column) for c in [country, *places]}
+        drawn = {c: xy for c, s in data.items() if (xy := aligned(s, measure.threshold)) is not None}
+        if country not in drawn:
+            raise SystemExit(f'{name} never passed {measure.threshold:,} {measure.name}')
+        panels.append((measure, data, drawn))
+    others = [len(drawn) - 1 for _, _, drawn in panels]
+
+    if narrow:
+        title = f'{name}: cumulative COVID-19\ncases and deaths since passing\n1,000 cases and 100 deaths'
+        subtitle = (f'Weeks since it passed 1,000 cases (100 deaths).\nLog scales. Red: {prose}; grey: the\n'
+                    f'other {others[0]} places that passed 1,000 cases\nand {others[1]} that passed 100 deaths.')
+        source = 'Data: ECDC, weekly, to 10 January 2021.\nDrawn October 2026.'
+        header, panel_height, footer = 1.75, 2.7, 0.8 + (8 * 1.3 + 2) / 72
+    else:
+        title = f'{name}: cumulative COVID-19 cases and deaths, counted from the week it passed 1,000 cases and 100 deaths'
+        subtitle = (f'Weeks since that week on the horizontal axis; cumulative counts on log scales. {prose[0].upper()}{prose[1:]} in red, '
+                    f'and in grey the other {others[0]} countries and territories that passed 1,000 cases\n'
+                    f'and the {others[1]} that passed 100 deaths.')
+        source = ('Data: European Centre for Disease Prevention and Control (ECDC), weekly cases and deaths by '
+                  'country, to 10 January 2021 (ISO week 2021-01). Drawn October 2026.')
+        header, panel_height, footer = 1.15, 3.6, 0.62 + (8 * 1.3 + 2) / 72
+    nrows, ncols = (2, 1) if narrow else (1, 2)
+    width = layout.width
+    height = header + nrows * panel_height + (0.45 if narrow else 0) + footer
+    fig = plt.figure(figsize=(width, height), dpi=100, facecolor='white')
+    grid = fig.add_gridspec(
+        nrows, ncols,
+        left=0.55 / width, right=1 - 0.12 / width,
+        top=1 - header / height, bottom=footer / height,
+        hspace=0.42, wspace=0.14)
+    for i, (measure, data, drawn) in enumerate(panels):
+        ymax = ceiling(1.15 * max(max(y) for _, y in drawn.values()))
+        decades = [10.0 ** e for e in range(int(math.log10(measure.threshold)), math.floor(math.log10(ymax)) + 1)]
+        xmax = math.ceil(max(max(x) for x, _ in drawn.values()) / 5) * 5 + 1
+        ax = fig.add_subplot(grid[i, 0] if narrow else grid[0, i])
+        style(ax, decades, ymax, xmax)
+        for other, (x, y) in drawn.items():
+            if other != country:
+                ax.plot(x, y, color=CONTEXT, linewidth=0.8, zorder=1, solid_capstyle='round')
+        x, y = drawn[country]
+        ax.plot(x, y, color=FOCUS, linewidth=2, zorder=3, solid_capstyle='round')
+        ax.plot(x[-1], y[-1], 'o', color=FOCUS, markersize=4, zorder=4)
+        ax.set_title(f'{measure.name.capitalize()}, from the week it passed {measure.threshold:,}', loc='left',
+                     fontsize=9 if narrow else 9.5, color=INK, fontweight='bold', pad=4)
+        ax.set_title(short(data[country].cumulative[-1]), loc='right', fontsize=8.5 if narrow else 9, color=INK_2, pad=4)
+        start = week0_end(data[country], measure.threshold)
+        if start is not None:
+            ax.annotate(f'from {start.day} {start:%b %Y}', (0, 0), xycoords='axes fraction',
+                        xytext=(0, -(3 + 2.5 + 3.5 + 8 * 1.2 + 1.5)), textcoords='offset points', ha='left', va='top',
+                        fontsize=8, color=MUTED, gid=WEEK0)
+
+    left = 0.12 / width
+    fig.text(left, 1 - 0.12 / height, title, ha='left', va='top', fontsize=13 if not narrow else 11.5,
+             fontweight='bold', color=INK, linespacing=1.2)
+    fig.text(left, 1 - (0.52 if not narrow else 0.86) / height, subtitle, ha='left', va='top',
+             fontsize=9.5 if not narrow else 8.5, color=INK_2, linespacing=1.35)
+    fig.text(left, 0.1 / height, source, ha='left', va='bottom', fontsize=8 if not narrow else 7.5, color=MUTED,
+             linespacing=1.35)
+
+    path = OUT / f'aligned_{country}{layout.suffix}.png'
+    problems = collisions(fig)
+    if problems:
+        raise SystemExit(f'{path.name}: {problems}')
+    save(fig, path, layout.dpi)
+    plt.close(fig)
+    return path
+
+
+def country_picture(df: pd.DataFrame, country: str, paths: dict[str, Path]) -> str:
+    """A <picture> that serves the stacked figure below 700 CSS pixels."""
+    wide, narrow = LAYOUTS
+    w, h = css_size(paths[wide.suffix], wide.dpi)
+    nw, nh = css_size(paths[narrow.suffix], narrow.dpi)
+    facts = []
+    for measure in MEASURES:
+        s = series(df, country, measure.column)
+        start = week0_end(s, measure.threshold)
+        facts.append(f'{s.cumulative[-1]:,.0f} {measure.name}, counted from the week to {start:%-d %B %Y}' if start else '')
+    alt = (f'Cumulative COVID-19 cases and deaths in {COUNTRIES[country]}, from the week it passed 1,000 cases and 100 deaths, '
+           f'in red over every other country in grey; log scales. Totals on 10 January 2021: {facts[0]}; {facts[1]}.')
+    return (f'<picture>\n'
+            f'<source media="(max-width: 700px)" srcset="{paths[narrow.suffix].name}" width="{nw}" height="{nh}">\n'
+            f'<img src="{paths[wide.suffix].name}" width="{w}" height="{h}" alt="{alt}" loading="lazy">\n'
+            f'</picture>')
+
+
 def save(fig: Figure, path: Path, dpi: int) -> None:
     """Write the figure as an 8-bit palette PNG, about a third of the bytes of matplotlib's RGBA one, with each pixel mapped to its nearest colour in PALETTE, so the white, the greys and the red stay exact.
 
@@ -504,16 +603,25 @@ def picture(df: pd.DataFrame, set_name: str, measure: Measure, paths: dict[str, 
 
 
 def main() -> None:
-    sets = sys.argv[1:] or list(SETS)
-    unknown = [s for s in sets if s not in SETS]
+    sets = sys.argv[1:] or [*SETS, *COUNTRIES]
+    unknown = [s for s in sets if s not in SETS and s not in COUNTRIES]
     if unknown:
-        raise SystemExit(f'Unknown set {unknown}; the sets are {list(SETS)}')
+        raise SystemExit(f'Unknown set {unknown}; the sets are {list(SETS)} and the countries {list(COUNTRIES)}')
     matplotlib.use('Agg')
     df = load()
-    print(f'Drawing {len(sets) * len(MEASURES) * len(LAYOUTS)} figures from ecdc.csv into '
+    figures = sum(len(LAYOUTS) if s in COUNTRIES else len(MEASURES) * len(LAYOUTS) for s in sets)
+    print(f'Drawing {figures} figures from ecdc.csv into '
           f'{OUT.relative_to(ROOT)}/ (last report {df["dateRep"].max():%Y-%m-%d})')
     pictures = []
     for set_name in sets:
+        if set_name in COUNTRIES:
+            paths = {}
+            for layout in LAYOUTS:
+                path = paths[layout.suffix] = draw_country(df, set_name, layout)
+                with Image.open(path) as im:
+                    print(f'  {path.name}: {im.size[0]}x{im.size[1]} px, {path.stat().st_size / 1e3:.0f} kB')
+            pictures.append(country_picture(df, set_name, paths))
+            continue
         for measure in MEASURES:
             paths = {}
             for layout in LAYOUTS:
