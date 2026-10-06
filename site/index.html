@@ -294,7 +294,7 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <li><b>Log scales.</b> The line charts, the scatter plots and several maps use a logarithmic scale, on which each labelled step is ten times the one before. A straight line means steady growth, and equal slopes mean equal rates of growth.</li>
 <li><b>Case fatality rate</b>, in the table, is deaths divided by confirmed cases. It is not the chance of dying from an infection, because many infections were never confirmed.</li>
 <li><b>Per million</b> figures divide by a country's population. The table uses populations from about 2014, which for most countries differ from those of 2020 by a few per cent.</li>
-<li><b>The EU</b> is the 27 member states in the aligned charts and the bubble charts. The table's EU row and the EU's line charts, heat maps and scatter plots from January 2021 leave out Czechia, which the 2020 code missed.</li>
+<li><b>The EU</b> is the 27 member states in the aligned charts and the bubble charts. The table's EU row and the EU's heat maps and scatter plots from January 2021 leave out Czechia, which the 2020 code missed.</li>
 </ul>
 
 
@@ -492,7 +492,7 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <script src="bubble/bubble.js" defer></script>
 <figure class="bubble" data-region="G7"><noscript><img src="plot_bubble_G7.png" width="800" alt="Change in COVID-19 cases and deaths by country, G7, January 2021"></noscript></figure>
 
-<p class="reading">The United States and the regions below have up to four kinds of chart. <b>Aligned charts</b>: cumulative cases and deaths, one line per country, from the week each country first passed 1,000 cases or 100 deaths. <b>Bubble charts</b>: how each country&#39;s cases and deaths in two weeks compared with the two weeks before, week by week, with a play button. <b>Heat maps</b>: weekly cases and deaths per million, one row per country, week by week from the start of 2020 (week 0) to January 2021. The EU also has two <b>scatter plots</b>.</p>
+<p class="reading">The United States and the regions below have up to four kinds of chart. <b>Aligned charts</b>: cumulative cases and deaths from the week each country first passed 1,000 cases or 100 deaths, one panel per country. <b>Bubble charts</b>: how each country&#39;s cases and deaths in two weeks compared with the two weeks before, week by week, with a play button. <b>Heat maps</b>: weekly cases and deaths per million, one row per country, week by week from the start of 2020 (week 0) to January 2021. The EU also has two <b>scatter plots</b>.</p>
 
 <h3 id="united-states"><a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_States"><img src="img/Flag_of_the_United_States.svg.png" height="30" alt="" class="flag"> United States of America (USA)</a>&nbsp;<a class="anchor" href="#united-states" aria-label="Link to this section: United States">#</a></h3>
 
@@ -502,9 +502,16 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 
 <h3 id="eu"><img src="img/Flag_of_Europe.svg.png" height="30" alt="" class="flag"> European Union (EU)&nbsp;<a class="anchor" href="#eu" aria-label="Link to this section: EU">#</a></h3>
 
-<img width="480" height="360" src="days100_cases_perCapitaFalse_EU.png" alt="Cumulative confirmed COVID-19 cases in the EU without Czechia, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_EU.png" alt="Cumulative COVID-19 deaths in the EU without Czechia, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
-<br>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_EU_narrow.png" width="415" height="1415">
+<img src="aligned_cases_EU.png" width="1355" height="737" alt="Cumulative COVID-19 cases in the EU from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: France 2,783,256; Italy 2,276,491; Spain 2,111,782; Germany 1,921,024; Poland 1,390,385; Netherlands 877,219; Czechia 835,454; Romania 673,271; Belgium 665,984; Sweden 502,227; Portugal 489,293; Austria 379,707; Hungary 343,656; Croatia 220,223; Slovakia 209,069; Bulgaria 208,511; Denmark 182,725; Lithuania 160,446; Ireland 147,613; Greece 144,738; Slovenia 139,713; Latvia 49,568; Luxembourg 47,984; Finland 38,590; Estonia 33,805; Cyprus 27,350; Malta 14,529." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_EU_narrow.png" width="415" height="1415">
+<img src="aligned_deaths_EU.png" width="1355" height="737" alt="Cumulative COVID-19 deaths in the EU from the week each country passed 100, one panel per country. Totals on 10 January 2021: Italy 78,755; France 67,750; Spain 52,275; Germany 40,686; Poland 31,264; Belgium 20,142; Romania 16,725; Czechia 13,272; Netherlands 12,397; Hungary 10,725; Sweden 9,666; Bulgaria 8,126; Portugal 7,925; Austria 6,631; Greece 5,263; Croatia 4,403; Slovenia 3,147; Slovakia 3,007; Ireland 2,344; Lithuania 2,232; Denmark 1,597; Latvia 849; Finland 597; Luxembourg 533; Estonia 287; Malta 233; Cyprus 148." loading="lazy">
+</picture>
+</div>
 <img width="480" height="360" src="scatter_EU_cases.png" alt="Each EU country's highest number of COVID-19 cases in a single week, up to January 2021, against its population; log scales" loading="lazy">
 <img width="480" height="360" src="scatter_EU_deaths.png" alt="Each EU country's highest number of COVID-19 deaths in a single week, up to January 2021, against its population; log scales" loading="lazy">
 <p class="reading">Each EU country&#39;s highest number of cases (left) and deaths (right) in a single week, up to January 2021, against its population. The charts&#39; axes say only &ldquo;Cases&rdquo; and &ldquo;Deaths&rdquo;.</p>
@@ -515,50 +522,100 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <img width="480" height="360" src="plot_heat_deaths_EU.png" alt="Heat map of weekly COVID-19 deaths per million in the EU without Czechia, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
 
 <h3 id="europe"><img src="img/Europe_orthographic_Caucasus_Urals_boundary.svg.png" width="45" alt="" class="flag"> Europe&nbsp;<a class="anchor" href="#europe" aria-label="Link to this section: Europe">#</a></h3>
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Europe.png" alt="Cumulative confirmed COVID-19 cases in Europe, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Europe.png" alt="Cumulative COVID-19 deaths in Europe, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
-<br>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_Europe_narrow.png" width="415" height="2497">
+<img src="aligned_cases_Europe.png" width="1355" height="1187" alt="Cumulative COVID-19 cases in Europe from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: Russia 3,425,269; United Kingdom 3,072,349; France 2,783,256; Italy 2,276,491; Spain 2,111,782; Germany 1,921,024; Poland 1,390,385; Ukraine 1,119,314; Netherlands 877,219; Czechia 835,454; Romania 673,271; Belgium 665,984; Sweden 502,227; Portugal 489,293; Switzerland 482,094; Austria 379,707; Serbia 359,689; Hungary 343,656; Georgia 239,780; Azerbaijan 224,827; Croatia 220,223; Belarus 213,993; Slovakia 209,069; Bulgaria 208,511; Denmark 182,725; Armenia 162,288; Lithuania 160,446; Moldova 149,391; Ireland 147,613; Greece 144,738; Slovenia 139,713; Bosnia and Herzegovina 115,758; North Macedonia 86,494; Albania 63,595; Norway 55,473; Kosovo 53,776; Montenegro 52,431; Latvia 49,568; Luxembourg 47,984; Finland 38,590; Estonia 33,805; Cyprus 27,350; Malta 14,529; Andorra 8,682; Iceland 5,898; Gibraltar 3,170; Jersey 2,972; San Marino 2,667; Liechtenstein 2,346; Monaco 1,057; Faroe Islands 646; Isle of Man 396; Guernsey 305; Greenland 27; Holy See 26." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_Europe_narrow.png" width="415" height="2265">
+<img src="aligned_deaths_Europe.png" width="1355" height="1056" alt="Cumulative COVID-19 deaths in Europe from the week each country passed 100, one panel per country. Totals on 10 January 2021: United Kingdom 81,431; Italy 78,755; France 67,750; Russia 62,273; Spain 52,275; Germany 40,686; Poland 31,264; Belgium 20,142; Ukraine 19,835; Romania 16,725; Czechia 13,272; Netherlands 12,397; Hungary 10,725; Sweden 9,666; Bulgaria 8,126; Portugal 7,925; Switzerland 7,655; Austria 6,631; Greece 5,263; Croatia 4,403; Bosnia and Herzegovina 4,358; Serbia 3,582; Slovenia 3,147; Moldova 3,139; Slovakia 3,007; Armenia 2,931; Azerbaijan 2,926; Georgia 2,796; North Macedonia 2,622; Ireland 2,344; Lithuania 2,232; Denmark 1,597; Belarus 1,526; Kosovo 1,377; Albania 1,241; Latvia 849; Montenegro 725; Finland 597; Luxembourg 533; Norway 478; Estonia 287; Malta 233; Cyprus 148; Andorra 86; San Marino 64; Jersey 57; Liechtenstein 49; Iceland 29; Isle of Man 25; Gibraltar 16; Guernsey 13; Monaco 3; Faroe Islands 1; Holy See 0; Greenland 0." loading="lazy">
+</picture>
+</div>
 <figure class="bubble" data-region="Europe"><noscript><img src="plot_bubble_Europe.png" width="800" alt="Change in COVID-19 cases and deaths by country, Europe, January 2021"></noscript></figure>
 <br>
 <img width="480" height="360" src="plot_heat_cases_Europe.png" alt="Heat map of weekly COVID-19 cases per million in Europe, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
 <img width="480" height="360" src="plot_heat_deaths_Europe.png" alt="Heat map of weekly COVID-19 deaths per million in Europe, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
 
 <h3 id="americas"><img src="img/Americas_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Americas&nbsp;<a class="anchor" href="#americas" aria-label="Link to this section: Americas">#</a></h3>
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Americas.png" alt="Cumulative confirmed COVID-19 cases in the Americas, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Americas.png" alt="Cumulative COVID-19 deaths in the Americas, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
-<br>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_Americas_narrow.png" width="415" height="1601">
+<img src="aligned_cases_Americas.png" width="1355" height="752" alt="Cumulative COVID-19 cases in the Americas from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: United States 22,423,006; Brazil 8,131,612; Colombia 1,801,903; Argentina 1,730,908; Mexico 1,541,633; Peru 1,037,350; Canada 668,181; Chile 645,892; Panama 279,196; Ecuador 221,506; Dominican Republic 183,282; Costa Rica 180,061; Bolivia 173,896; Guatemala 143,173; Puerto Rico 142,340; Honduras 127,945; Venezuela 116,983; Paraguay 115,733; El Salvador 48,905; Uruguay 26,901; Cuba 15,007; Jamaica 13,637; Belize 11,303; Haiti 10,272; Bahamas 8,004; Trinidad and Tobago 7,265; Suriname 7,064; Guyana 6,754; Nicaragua 6,097; Barbados 884; Bermuda 656; Saint Lucia 438; Cayman Islands 362; Saint Vincent and the Grenadines 249; Antigua and Barbuda 176." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_Americas_narrow.png" width="415" height="1601">
+<img src="aligned_deaths_Americas.png" width="1355" height="752" alt="Cumulative COVID-19 deaths in the Americas from the week each country passed 100, one panel per country. Totals on 10 January 2021: United States 374,442; Brazil 203,580; Mexico 134,368; Colombia 46,451; Argentina 44,654; Peru 38,335; Chile 17,162; Canada 17,086; Ecuador 14,184; Bolivia 9,376; Guatemala 5,050; Panama 4,455; Honduras 3,273; Dominican Republic 2,427; Paraguay 2,405; Costa Rica 2,353; Puerto Rico 1,642; El Salvador 1,428; Venezuela 1,073; Jamaica 313; Belize 274; Uruguay 262; Haiti 238; Bahamas 175; Guyana 169; Nicaragua 166; Cuba 153; Suriname 138; Trinidad and Tobago 128; Bermuda 12; Barbados 7; Saint Lucia 5; Antigua and Barbuda 5; Cayman Islands 2; Saint Vincent and the Grenadines 0." loading="lazy">
+</picture>
+</div>
 <figure class="bubble" data-region="Americas"><noscript><img src="plot_bubble_Americas.png" width="800" alt="Change in COVID-19 cases and deaths by country, Americas, January 2021"></noscript></figure>
 <br>
 <img width="480" height="360" src="plot_heat_cases_Americas.png" alt="Heat map of weekly COVID-19 cases per million in the Americas, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
 <img width="480" height="360" src="plot_heat_deaths_Americas.png" alt="Heat map of weekly COVID-19 deaths per million in the Americas, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
 <br>
-<img width="480" height="360" src="days100_cases_perCapitaFalse_AmericaNorth.png" alt="Cumulative confirmed COVID-19 cases in North America, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_AmericaNorth.png" alt="Cumulative COVID-19 deaths in North America, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
-<br>
-<img width="480" height="360" src="days100_cases_perCapitaFalse_AmericaSouthExVenezuela.png" alt="Cumulative confirmed COVID-19 cases in South America except Venezuela, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_AmericaSouthExVenezuela.png" alt="Cumulative COVID-19 deaths in South America except Venezuela, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
-<br>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_AmericaNorth_narrow.png" width="415" height="555">
+<img src="aligned_cases_AmericaNorth.png" width="1355" height="537" alt="Cumulative COVID-19 cases in North America from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: United States 22,423,006; Mexico 1,541,633; Canada 668,181; Bermuda 656." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_AmericaNorth_narrow.png" width="415" height="555">
+<img src="aligned_deaths_AmericaNorth.png" width="1355" height="537" alt="Cumulative COVID-19 deaths in North America from the week each country passed 100, one panel per country. Totals on 10 January 2021: United States 374,442; Mexico 134,368; Canada 17,086; Bermuda 12." loading="lazy">
+</picture>
+</div>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_AmericaSouthExVenezuela_narrow.png" width="415" height="1175">
+<img src="aligned_cases_AmericaSouthExVenezuela.png" width="1355" height="727" alt="Cumulative COVID-19 cases in South America except Venezuela from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: Brazil 8,131,612; Colombia 1,801,903; Argentina 1,730,908; Peru 1,037,350; Chile 645,892; Ecuador 221,506; Bolivia 173,896; Paraguay 115,733; Uruguay 26,901; Suriname 7,064; Guyana 6,754." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_AmericaSouthExVenezuela_narrow.png" width="415" height="1175">
+<img src="aligned_deaths_AmericaSouthExVenezuela.png" width="1355" height="727" alt="Cumulative COVID-19 deaths in South America except Venezuela from the week each country passed 100, one panel per country. Totals on 10 January 2021: Brazil 203,580; Colombia 46,451; Argentina 44,654; Peru 38,335; Chile 17,162; Ecuador 14,184; Bolivia 9,376; Paraguay 2,405; Uruguay 262; Guyana 169; Suriname 138." loading="lazy">
+</picture>
+</div>
 
 <img width="480" height="360" src="plot_heat_cases_AmericaSouthExVenezuela.png" alt="Heat map of weekly COVID-19 cases per million in South America except Venezuela, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
 <img width="480" height="360" src="plot_heat_deaths_AmericaSouthExVenezuela.png" alt="Heat map of weekly COVID-19 deaths per million in South America except Venezuela, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
 
 <h3 id="asia"><img src="img/Asia_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Asia ex China&nbsp;<a class="anchor" href="#asia" aria-label="Link to this section: Asia ex China">#</a></h3>
 
-<img width="480" height="360" src="days100_cases_perCapitaFalse_AsiaExChina.png" alt="Cumulative confirmed COVID-19 cases in Asia except China, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_AsiaExChina.png" alt="Cumulative COVID-19 deaths in Asia except China, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_AsiaExChina_narrow.png" width="415" height="1963">
+<img src="aligned_cases_AsiaExChina.png" width="1355" height="896" alt="Cumulative COVID-19 cases in Asia except China from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: India 10,466,595; Turkey 1,511,918; Iran 1,286,406; Indonesia 828,026; Iraq 598,369; Bangladesh 522,453; Pakistan 504,293; Israel 495,063; Philippines 487,690; Saudi Arabia 363,809; Jordan 308,670; Japan 286,752; Nepal 264,780; Georgia 239,780; United Arab Emirates 232,982; Azerbaijan 224,827; Kazakhstan 210,086; Lebanon 189,278; Palestine 165,949; Armenia 162,288; Kuwait 154,314; Egypt 149,792; Qatar 146,068; Malaysia 135,992; Oman 130,780; Myanmar 130,604; Bahrain 95,558; Kyrgyzstan 82,380; Uzbekistan 77,611; South Korea 69,114; Singapore 58,907; Afghanistan 53,584; Sri Lanka 48,380; Maldives 14,109; Thailand 10,547; Vietnam 1,514; Mongolia 1,442; Taiwan 834; Bhutan 813; Cambodia 391; Brunei 173." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_AsiaExChina_narrow.png" width="415" height="1731">
+<img src="aligned_deaths_AsiaExChina.png" width="1355" height="752" alt="Cumulative COVID-19 deaths in Asia except China from the week each country passed 100, one panel per country. Totals on 10 January 2021: India 151,160; Iran 56,171; Indonesia 24,129; Turkey 22,807; Iraq 12,844; Pakistan 10,676; Philippines 9,405; Egypt 8,197; Bangladesh 7,781; Saudi Arabia 6,291; Japan 4,044; Jordan 4,043; Israel 3,689; Armenia 2,931; Azerbaijan 2,926; Kazakhstan 2,875; Myanmar 2,846; Georgia 2,796; Afghanistan 2,301; Nepal 1,917; Palestine 1,747; Oman 1,508; Lebanon 1,499; Kyrgyzstan 1,371; South Korea 1,140; Kuwait 943; United Arab Emirates 711; Uzbekistan 617; Malaysia 551; Bahrain 356; Qatar 246; Sri Lanka 232; Thailand 67; Maldives 49; Vietnam 35; Singapore 29; Taiwan 7; Brunei 3; Bhutan 1; Mongolia 0; Cambodia 0." loading="lazy">
+</picture>
+</div>
 <figure class="bubble" data-region="Asia"><noscript><img src="plot_bubble_Asia.png" width="800" alt="Change in COVID-19 cases and deaths by country, Asia, January 2021"></noscript></figure>
 <br>
 <img src="plot_heat_cases_Asia.png" width="800" alt="Heat map of weekly COVID-19 cases per million in Asia, one row per country, week by week from the start of 2020 to January 2021" height="600" loading="lazy">
 <img src="plot_heat_deaths_Asia.png" width="800" alt="Heat map of weekly COVID-19 deaths per million in Asia, one row per country, week by week from the start of 2020 to January 2021" height="600" loading="lazy">
 <br>
 
-<img width="480" height="360" src="days100_cases_perCapitaFalse_AsiaSouthEast.png" alt="Cumulative confirmed COVID-19 cases in South-East Asia, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_AsiaSouthEast.png" alt="Cumulative COVID-19 deaths in South-East Asia, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
-<br>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_AsiaSouthEast_narrow.png" width="415" height="1020">
+<img src="aligned_cases_AsiaSouthEast.png" width="1355" height="727" alt="Cumulative COVID-19 cases in South-East Asia from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: Indonesia 828,026; Philippines 487,690; Malaysia 135,992; Myanmar 130,604; Singapore 58,907; Thailand 10,547; Vietnam 1,514; Cambodia 391; Brunei 173." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_AsiaSouthEast_narrow.png" width="415" height="1020">
+<img src="aligned_deaths_AsiaSouthEast.png" width="1355" height="727" alt="Cumulative COVID-19 deaths in South-East Asia from the week each country passed 100, one panel per country. Totals on 10 January 2021: Indonesia 24,129; Philippines 9,405; Myanmar 2,846; Malaysia 551; Thailand 67; Vietnam 35; Singapore 29; Brunei 3; Cambodia 0." loading="lazy">
+</picture>
+</div>
 
- <img width="480" height="360" src="days100_cases_perCapitaFalse_AsiaEastExChina.png" alt="Cumulative confirmed COVID-19 cases in East Asia except China, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_AsiaEastExChina.png" alt="Cumulative COVID-19 deaths in East Asia except China, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
-<br>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_AsiaEastExChina_narrow.png" width="415" height="555">
+<img src="aligned_cases_AsiaEastExChina.png" width="1355" height="537" alt="Cumulative COVID-19 cases in East Asia except China from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: Japan 286,752; South Korea 69,114; Mongolia 1,442; Taiwan 834." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_AsiaEastExChina_narrow.png" width="415" height="555">
+<img src="aligned_deaths_AsiaEastExChina.png" width="1355" height="537" alt="Cumulative COVID-19 deaths in East Asia except China from the week each country passed 100, one panel per country. Totals on 10 January 2021: Japan 4,044; South Korea 1,140; Taiwan 7; Mongolia 0." loading="lazy">
+</picture>
+</div>
 
 <div class="aligned">
 <picture>
@@ -573,18 +630,32 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 
 <h3 id="africa"><img src="img/Africa_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Africa&nbsp;<a class="anchor" href="#africa" aria-label="Link to this section: Africa">#</a></h3>
 
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Africa.png" alt="Cumulative confirmed COVID-19 cases in Africa, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Africa.png" alt="Cumulative COVID-19 deaths in Africa, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
-<br>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_Africa_narrow.png" width="415" height="2483">
+<img src="aligned_cases_Africa.png" width="1355" height="1187" alt="Cumulative COVID-19 cases in Africa from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: South Africa 1,231,597; Morocco 452,532; Tunisia 162,350; Egypt 149,792; Ethiopia 128,616; Libya 105,378; Algeria 102,144; Nigeria 100,087; Kenya 98,271; Ghana 56,230; Uganda 37,808; Namibia 28,602; Zambia 28,596; Cameroon 26,848; Côte d'Ivoire 23,750; Sudan 23,316; Mozambique 22,334; Senegal 21,533; Zimbabwe 21,477; DR Congo 19,495; Angola 18,193; Madagascar 18,001; Botswana 16,050; Mauritania 15,512; Guinea 13,989; Cape Verde 12,433; Eswatini 11,711; Gabon 9,740; Rwanda 9,630; Malawi 8,575; Burkina Faso 8,275; Mali 7,600; Congo 7,217; Lesotho 5,937; Djibouti 5,871; Equatorial Guinea 5,296; Central African Republic 4,973; Somalia 4,726; Togo 3,957; Niger 3,877; Gambia 3,876; South Sudan 3,662; Benin 3,304; Sierra Leone 2,846; Chad 2,537; Guinea-Bissau 2,478; Liberia 1,800; Eritrea 1,556; Comoros 1,160; São Tomé and Príncipe 1,066; Burundi 1,019; Mauritius 545; Seychelles 531; Tanzania 509." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_Africa_narrow.png" width="415" height="1773">
+<img src="aligned_deaths_Africa.png" width="1355" height="912" alt="Cumulative COVID-19 deaths in Africa from the week each country passed 100, one panel per country. Totals on 10 January 2021: South Africa 33,163; Egypt 8,197; Morocco 7,743; Tunisia 5,284; Algeria 2,807; Ethiopia 2,003; Kenya 1,713; Libya 1,589; Sudan 1,468; Nigeria 1,358; DR Congo 618; Zimbabwe 507; Zambia 471; Senegal 469; Cameroon 448; Angola 416; Mauritania 384; Ghana 338; Uganda 302; Mali 298; Eswatini 298; Madagascar 267; Namibia 261; Malawi 225; Mozambique 197; Côte d'Ivoire 139; Somalia 130; Niger 126; Gambia 125; Rwanda 120; Cape Verde 115; Congo 108; Chad 107; Burkina Faso 89; Equatorial Guinea 86; Lesotho 85; Liberia 83; Guinea 81; Sierra Leone 77; Togo 72; Gabon 66; South Sudan 63; Central African Republic 63; Djibouti 61; Botswana 48; Guinea-Bissau 45; Benin 44; Tanzania 21; Comoros 18; São Tomé and Príncipe 17; Mauritius 10; Eritrea 6; Seychelles 2; Burundi 2." loading="lazy">
+</picture>
+</div>
 <figure class="bubble" data-region="Africa"><noscript><img src="plot_bubble_Africa.png" width="800" alt="Change in COVID-19 cases and deaths by country, Africa, January 2021"></noscript></figure>
 <img width="480" height="360" src="plot_heat_cases_Africa.png" alt="Heat map of weekly COVID-19 cases per million in Africa, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
 <img width="480" height="360" src="plot_heat_deaths_Africa.png" alt="Heat map of weekly COVID-19 deaths per million in Africa, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
 
 <h3 id="oceania"><img src="img/Oceania_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Oceania&nbsp;<a class="anchor" href="#oceania" aria-label="Link to this section: Oceania">#</a></h3>
 
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Oceania.png" alt="Cumulative confirmed COVID-19 cases in Oceania, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Oceania.png" alt="Cumulative COVID-19 deaths in Oceania, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
-<br>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_Oceania_narrow.png" width="415" height="865">
+<img src="aligned_cases_Oceania.png" width="1355" height="727" alt="Cumulative COVID-19 cases in Oceania from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: Australia 28,614; French Polynesia 17,241; Guam 7,423; New Zealand 2,222; Papua New Guinea 811; Fiji 53; Solomon Islands 17." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_Oceania_narrow.png" width="415" height="865">
+<img src="aligned_deaths_Oceania.png" width="1355" height="727" alt="Cumulative COVID-19 deaths in Oceania from the week each country passed 100, one panel per country. Totals on 10 January 2021: Australia 909; Guam 124; French Polynesia 122; New Zealand 25; Papua New Guinea 9; Fiji 2; Solomon Islands 0." loading="lazy">
+</picture>
+</div>
 <figure class="bubble" data-region="Oceania"><noscript><img src="plot_bubble_Oceania.png" width="800" alt="Change in COVID-19 cases and deaths by country, Oceania, January 2021"></noscript></figure>
 <br>
 <img width="480" height="360" src="plot_heat_cases_Oceania.png" alt="Heat map of weekly COVID-19 cases per million in Oceania, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
@@ -592,9 +663,16 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 
 <h3 id="nordic"><img src="img/Nordic_countries_orthographic.svg.png" width="45" alt="" class="flag">Northern Europe (Nordic countries)&nbsp;<a class="anchor" href="#nordic" aria-label="Link to this section: Nordic countries">#</a></h3>
 
-<img width="480" height="360" src="days100_cases_perCapitaFalse_Nordic.png" alt="Cumulative confirmed COVID-19 cases in the Nordic countries, one line per country, by week since each country first passed 1,000 cases; log scale" loading="lazy">
-<img width="480" height="360" src="days100_deaths_perCapitaFalse_Nordic.png" alt="Cumulative COVID-19 deaths in the Nordic countries, one line per country, by week since each country first passed 100 deaths; log scale" loading="lazy">
-<br>
+<div class="aligned">
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_cases_Nordic_narrow.png" width="415" height="865">
+<img src="aligned_cases_Nordic.png" width="1355" height="727" alt="Cumulative COVID-19 cases in the Nordic countries from the week each country passed 1,000, one panel per country. Totals on 10 January 2021: Sweden 502,227; Denmark 182,725; Norway 55,473; Finland 38,590; Iceland 5,898; Faroe Islands 646; Greenland 27." loading="lazy">
+</picture>
+<picture>
+<source media="(max-width: 700px)" srcset="aligned_deaths_Nordic_narrow.png" width="415" height="865">
+<img src="aligned_deaths_Nordic.png" width="1355" height="727" alt="Cumulative COVID-19 deaths in the Nordic countries from the week each country passed 100, one panel per country. Totals on 10 January 2021: Sweden 9,666; Denmark 1,597; Finland 597; Norway 478; Iceland 29; Faroe Islands 1; Greenland 0." loading="lazy">
+</picture>
+</div>
 <figure class="bubble" data-region="Nordic"><noscript><img src="plot_bubble_Nordic.png" width="800" alt="Change in COVID-19 cases and deaths by country, Nordic, January 2021"></noscript></figure>
 <br>
 <img width="480" height="360" src="plot_heat_cases_Nordic.png" alt="Heat map of weekly COVID-19 cases per million in the Nordic countries, one row per country, week by week from the start of 2020 to January 2021" loading="lazy">
