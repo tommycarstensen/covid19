@@ -1,5 +1,6 @@
-# What plot_series.py, redraw_charts.py and deploy.py import.
+# What plot_series.py, redraw_charts.py, build_bubbles.py and deploy.py import (build_bubbles.py takes its regions from plot_bubble.py, which imports adjustText).
 # countryinfo 1.x removed CountryInfo().all(), which plot_series.py calls.
+adjustText
 countryinfo==0.1.2
 matplotlib
 numpy
