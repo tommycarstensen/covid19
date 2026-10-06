@@ -179,11 +179,11 @@ def download_and_read(url, path, func):
 
     # df_owid = pd.read_html(url)
 
-    if os.path.isfile(path) and time.time() - os.path.getmtime(path) < 2 * 3600:
-        pass
-    else:
+    # Download only when there is no local copy, as in plot_choropleth.py. Before, a copy more than two hours old was fetched again and written unchecked, which would replace the bsg.csv of 26 January 2021 this script drew from with whatever the URL serves now. Delete the file to fetch it again.
+    if not os.path.isfile(path):
         print(url)
-        r = requests.get(url)
+        r = requests.get(url, timeout=60)
+        r.raise_for_status()
         with open(path, 'w') as f:
             f.write(r.text)
 
