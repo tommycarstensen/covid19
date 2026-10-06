@@ -120,3 +120,11 @@ Left out on purpose: sources and licences, which "About this page" has (C11); en
 Three short paragraphs explain the groups: one before the regions (the four kinds of chart), the scatter sentence, and one under "Charts by country". The structure adviser counted 87 countries in that section; it has 23 (46 charts): 15 countries' charts from 27 January 2021 and 8 redrawn by `redraw_charts.py` in October 2026, which the paragraph says. The alt texts were added by a one-off script, not kept, because the page is now edited by hand and its rules are the list above.
 
 Correction to C3, the same day: the "How to read" bullet on the EU said that all the charts under the EU heading leave out Czechia. The interactive bubble chart there, built in October 2026 by `build_bubbles.py`, includes it. The bullet now names what leaves Czechia out: the table's row and the January 2021 line charts, heat maps and scatter plots.
+
+## 2026-10-06: the table's three thumbnail columns become one "Charts" column of links (C7)
+
+The table had three columns of 45-pixel-high thumbnails (total cases, total deaths, weekly bars) for each of its 87 rows: 261 images, about 3 MB, each too small to read, and each only a link to the full-size chart. They also made the table four columns wider than its numbers needed, which on a phone meant more sideways scrolling, and their headers could be clicked to "sort", which did nothing. They are replaced by one last column, "Charts", with three text links per row (cases, deaths, weekly) to the same full-size charts. The numeric columns now sit together, are renumbered for `sortTable`, and were re-tested in both directions; the "Charts" header is not clickable. The cell keeps its three links on one line, so each row is one or two lines high instead of the thumbnails' height: 13 rows fit on a 900-pixel screen instead of 8.
+
+The thumbnail files stay on the server (`deploy.py` never deletes), and `redraw_charts.py` still draws them; nothing on the page uses them any more. Their alt texts from C10 went with them.
+
+Considered and rejected: keeping one thumbnail column as a sparkline. The thumbnails are scaled-down full charts, with the country's red line among 80 grey ones, not sparklines; at 45 pixels the red line is barely visible.
