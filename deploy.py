@@ -1,6 +1,6 @@
 """Deploy the covid19 page to https://tommycarstensen.com/covid19/ over SFTP.
 
-site/ maps to /www/covid19/ on the host, which holds about 4,000 files from 2020 and 2021. Only the files site/index.html uses are considered: each one that exists in site/ is uploaded when it differs from the server's copy, and each one that does not must already be on the server. Nothing is deleted.
+site/ maps to /www/covid19/ on the host, which holds about 4,000 files from 2020 and 2021. Only the files site/index.html uses, and those used by the pages it links to (the press pages), are considered: each one that exists in site/ is uploaded when it differs from the server's copy, and each one that does not must already be on the server. Nothing is deleted.
 
     python3 deploy.py           # upload what differs, check the live page
     python3 deploy.py --dry     # list what would be uploaded
@@ -104,7 +104,8 @@ def used_files(html: str) -> list[str]:
         found += [candidate.split()[0] for candidate in srcset.split(",") if candidate.strip()]
     files = set()
     for value in found:
-        if value.startswith(("http:", "https:", "//", "mailto:", "#")):
+        # A link to a folder, such as a press page's "./" back to the main page, is not a file to send.
+        if value.startswith(("http:", "https:", "//", "mailto:", "#")) or value.endswith("/"):
             continue
         files.add(value.split("#")[0].split("?")[0])
     return sorted(files)
@@ -188,6 +189,9 @@ def plan(
     """What to upload, the server copies it would replace, and the index.html it sends."""
     index = committed_file("index.html")
     files = ["index.html", *used_files(index.decode("utf-8"))]
+    # The pages index.html links to, such as the press pages, load files of their own (videos, posters).
+    for page in [rel for rel in files if rel.endswith(".html") and rel != "index.html" and (SITE / rel).is_file()]:
+        files += [rel for rel in used_files(committed_file(page).decode("utf-8")) if rel not in files]
     local = [rel for rel in files if (SITE / rel).is_file()]
     pages = [f"site/{rel}" for rel in local if rel.endswith(".html")]
     dirty = git("status", "--porcelain", "--", *pages)
