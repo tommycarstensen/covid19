@@ -76,6 +76,14 @@ img.flag {
   overflow-x: auto;
 }
 
+.reading {
+  max-width: 60em;
+}
+
+.reading li {
+  margin-bottom: 6px;
+}
+
 .credits {
   font-size: small;
   color: #555;
@@ -214,6 +222,7 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <nav class="toc" aria-labelledby="contents">
 <h2 id="contents">Contents</h2>
 <ol>
+<li><a href="#reading">How to read this page</a></li>
 <li><a href="#maps">Choropleth maps</a>
 <ul>
 <li><a href="#europe-cases">Europe cases</a></li>
@@ -268,6 +277,17 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <li><a href="#about">About this page</a></li>
 </ol>
 </nav>
+
+<h2 id="reading">How to read this page&nbsp;<a class="anchor" href="#reading" aria-label="Link to this section: How to read this page">#</a></h2>
+
+<ul class="reading">
+<li><b>Cases and deaths</b> are those confirmed and reported to ECDC each week. How many infections were confirmed depended on how much a country tested, so case counts compare poorly between countries, and both cases and deaths undercount the real toll.</li>
+<li><b>Aligned charts</b> start each country's line in the week it first passed 1,000 confirmed cases, or 100 deaths, so that countries hit at different times can be compared from the same starting point.</li>
+<li><b>Log scales.</b> The line charts, the scatter plots and several maps use a logarithmic scale, on which each labelled step is ten times the one before. A straight line means steady growth, and equal slopes mean equal rates of growth.</li>
+<li><b>Case fatality rate</b>, in the table, is deaths divided by confirmed cases. It is not the chance of dying from an infection, because many infections were never confirmed.</li>
+<li><b>Per million</b> figures divide by a country's population. The table uses populations from about 2014, which for most countries differ from those of 2020 by a few per cent.</li>
+<li><b>The EU</b> is the 27 member states in the aligned charts. The table's EU row and the charts under the EU heading leave out Czechia, which the 2020 code missed.</li>
+</ul>
 
 
 

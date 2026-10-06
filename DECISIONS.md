@@ -100,3 +100,9 @@ The existing flag credits moved into the same section, unchanged. The sentence a
 ## 2026-10-06: Taiwan's name in traditional characters
 
 The heading said "Taiwan / 台湾", in the simplified characters of the People's Republic of China. Taiwan writes traditional characters, so it is now "台灣", the common form (the official form is 臺灣). The other headings' local names were not changed.
+
+## 2026-10-06: a "How to read this page" section (C3)
+
+All three advisers asked for it: the page explained none of its terms. It is a short list right after the contents, also listed in them, and covers only what a reader needs to read the charts correctly: what a confirmed case is and why counts compare poorly between countries; what "aligned" means (the week a country passed 1,000 cases or 100 deaths, which the charts' own subtitles confirm); how to read a log scale; that the case fatality rate is not the infection fatality rate; that the table's populations are from about 2014 (`countryinfo` 0.1.2: Germany 80,783,000, Denmark 5,655,750); and which "EU" each chart means.
+
+Left out on purpose: sources and licences, which "About this page" has (C11); end dates and what happened later, which the archive note is to say (C1, C2); and a warning that fitted curves are not forecasts, which one adviser asked for, because no chart on the page shows a fitted curve. Two claims were narrowed after checking: not every chart uses a log scale (the Europe map and the heat maps are linear), and not every country grew after 2014, so the populations are described as a few per cent off rather than too low.
