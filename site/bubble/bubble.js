@@ -29,7 +29,9 @@
     '.bubble .tick,.bubble .quad,.bubble .bandlabel{fill:#76746e}',
     '.bubble .quad{font-size:11px;fill:#a3a19a}',
     '.bubble .title{fill:#52514e;font-size:12px}',
-    '.bubble .head{fill:#0b0b0b;font-size:13px;font-weight:600}',
+    '.bubble .head{margin:0 0 2px;font-size:13px}',
+    '.bubble .head b{display:block;color:#0b0b0b;font-weight:600}',
+    '.bubble .head span{color:#52514e}',
     '.bubble g.b{cursor:pointer;transition:transform .45s ease}',
     '.bubble g.b circle.dot{fill-opacity:' + FILL_OPACITY + ';stroke:rgba(0,0,0,.5);stroke-width:.75;transition:r .45s ease,fill .45s ease}',
     '.bubble g.b.hollow circle.dot{fill:none;stroke:#76746e;stroke-width:1.5}',
@@ -70,6 +72,8 @@
   var PAUSE = '<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1h3v10H2zM7 1h3v10H7z"/></svg>';
   var SVGNS = 'http://www.w3.org/2000/svg';
   var MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  // The region in the chart's title, where data-region is not the name to show.
+  var NAMES = { Nordic: 'Nordic countries' };
 
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var measureCtx = document.createElement('canvas').getContext('2d');
@@ -187,6 +191,10 @@
     var selected = null;
     var layout = null;
 
+    // The title is HTML rather than SVG text, so it can be selected and copied.
+    var head = html('div', 'head', figure);
+    html('b', '', head).textContent = 'Change in COVID-19 cases and deaths by country, ' + (NAMES[region] || region);
+    var when = html('span', '', head);
     var plot = html('div', 'plot', figure);
     var svg = el('svg', { role: 'img' }, plot);
     var tip = html('div', 'tip', plot);
@@ -230,7 +238,7 @@
       var narrow = width < 560;
       var left = narrow ? 58 : 62;
       var right = 14;
-      var top = 30;
+      var top = 14;
       var h = Math.round(Math.max(220, Math.min(440, width * 0.52)));
       var band = 30;
       var w = width - left - right;
@@ -244,8 +252,6 @@
       svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
       svg.setAttribute('width', width);
       svg.setAttribute('height', height);
-
-      layout.head = el('text', { 'class': 'head', x: 0, y: 14 }, svg);
 
       var grid = el('g', {}, svg);
       el('rect', { 'class': 'band', x: left, y: top + h + 8, width: w, height: band, rx: 4 }, grid);
@@ -426,7 +432,7 @@
       figure.classList.toggle('still', !animate || reduceMotion);
       var week = model.weeks[t];
       var from = model.weeks[t - 1] ? shortDate(addDays(model.weeks[t], -13)) : '';
-      layout.head.textContent = layout.narrow ? 'Two weeks to ' + shortDate(week) + ' ' + week.slice(0, 4) + ' vs the two before' : 'Two weeks to ' + longDate(week) + ', against the two weeks before';
+      when.textContent = 'Two weeks to ' + longDate(week) + ', against the two weeks before';
       svg.setAttribute('aria-label', 'Bubble chart, ' + region + ': change in COVID-19 cases and deaths in the two weeks ' + from + ' to ' + longDate(week) + ' against the two weeks before');
       range.value = String(t);
       output.textContent = week;
