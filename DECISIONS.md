@@ -96,3 +96,7 @@ The page credited only its flags and continent icons. It now ends with a section
 - For the European map (`plot_choropleth_europe.py`): Eurostat GISCO's NUTS 2021 boundaries, whose terms require "© EuroGeographics for the administrative boundaries", and the NHS health boards of Scotland (Scottish Government, 2019) and Wales (ONS, December 2016), both under the Open Government Licence v3.0 with Ordnance Survey data.
 
 The existing flag credits moved into the same section, unchanged. The sentence about the October 2026 repairs is to move here from the archive note, in the same commit as the new note (C1), so that it is never on the page twice.
+
+## 2026-10-06: Taiwan's name in traditional characters
+
+The heading said "Taiwan / 台湾", in the simplified characters of the People's Republic of China. Taiwan writes traditional characters, so it is now "台灣", the common form (the official form is 臺灣). The other headings' local names were not changed.
