@@ -225,3 +225,7 @@ Search engines and social sites show a page's meta description and Open Graph ta
 ## 2026-10-06: "About this page" says the source file is withdrawn and its figures revised (from the epidemiologist's advice)
 
 The epidemiologist among the ten advisers wanted the top line to warn that the ECDC data were later withdrawn and may differ from figures published now. That is for someone citing the numbers, not for every visitor, so it went into the data paragraph of "About this page", next to the source and licence: ECDC has withdrawn the weekly file by country that the page used (`ecdc.csv` in this repository is the only copy kept), and its figures have since been revised, so they may differ from what ECDC, the WHO or national agencies publish now.
+
+## 2026-10-06: no repair history on the page
+
+The intro to "Other trackers" (C9) said that in October 2026 two links had been replaced and two removed. Tommy wants no year of the repairs on the page, and all ten advisers on the top line argued against an account of repairs anywhere a reader meets it. The sentence is gone; this file keeps the record. The page now contains no "2026".
