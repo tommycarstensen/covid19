@@ -13,7 +13,7 @@ import math
 import sys
 import textwrap
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timedelta
 from itertools import accumulate
 from pathlib import Path
 
@@ -160,6 +160,9 @@ AXIS = '#c3c2b7'
 CONTEXT = '#d3d1c9'
 FOCUS = '#e41a1c'
 
+# The gid of the week-0 date under each panel, which collisions() checks against every other text in the figure.
+WEEK0 = 'week0'
+
 
 def load() -> pd.DataFrame:
     """ECDC weekly rows, with the EU added as the sum of its members."""
@@ -189,13 +192,24 @@ def series(df: pd.DataFrame, country: str, column: str) -> Series:
     return Series([d for d, _ in pairs], list(accumulate(v for _, v in pairs)))
 
 
+def first_week(s: Series, threshold: int) -> int | None:
+    """The index of the first week whose cumulative count is above the threshold."""
+    return next((i for i, v in enumerate(s.cumulative) if v > threshold), None)
+
+
 def aligned(s: Series, threshold: int) -> tuple[list[float], list[float]] | None:
     """Weeks since the first week above the threshold, and the cumulative counts from then on."""
-    first = next((i for i, v in enumerate(s.cumulative) if v > threshold), None)
+    first = first_week(s, threshold)
     if first is None:
         return None
     start = s.dates[first]
     return [(d - start).days / 7 for d in s.dates[first:]], s.cumulative[first:]
+
+
+def week0_end(s: Series, threshold: int) -> datetime | None:
+    """The last day of week 0: ECDC dates each ISO week by the Monday after it, so the day before its report date."""
+    first = first_week(s, threshold)
+    return None if first is None else s.dates[first] - timedelta(days=1)
 
 
 def short(n: float) -> str:
@@ -249,6 +263,7 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
     totals = {c: s.cumulative[-1] for c, s in data.items()}
     lines = {c: aligned(s, measure.threshold) for c, s in data.items()}
     drawn = {c: xy for c, xy in lines.items() if xy is not None}
+    starts = {c: week0_end(s, measure.threshold) for c, s in data.items()}
     # A regional figure gives panels only to the countries that passed the threshold, and names the others.
     listed = set_name in REGIONS
     order = sorted(drawn if listed else countries, key=lambda c: -totals[c])
@@ -290,8 +305,9 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
         source = ('Data: European Centre for Disease Prevention and Control (ECDC), weekly cases and deaths by '
                   'country, to 10 January 2021 (ISO week 2021-01).' + (' EU: the 27 member states.' if eu else '')
                   + ' Drawn October 2026.')
-    # Room below the bottom panels for their tick labels and the source line, and for the list of countries that never passed.
-    footer = 0.8 if narrow else 0.62
+    # Room below the bottom panels for their tick labels, the date of week 0 under them and the source line, and for the list of countries that never passed.
+    labelsize = 7 if dense else 8
+    footer = (0.8 if narrow else 0.62) + (labelsize * 1.3 + 2) / 72
     if never:
         names = ', '.join(f'{display_name(c)} ({totals[c]:,.0f})' for c in never)
         named = textwrap.fill(f'Never passed {threshold} {noun} (their totals on 10 January 2021): {names}.',
@@ -314,7 +330,7 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
     total_size = (7.5 if narrow else 8) if dense else (8.5 if narrow else 9)
     for i, country in enumerate(order):
         ax = fig.add_subplot(grid[i // ncols, i % ncols])
-        style(ax, decades, ymax, xmax, 7 if dense else 8)
+        style(ax, decades, ymax, xmax, labelsize)
         for other, (x, y) in drawn.items():
             if other != country:
                 ax.plot(x, y, color=CONTEXT, linewidth=0.8 if not dense else 0.6, zorder=1, solid_capstyle='round')
@@ -338,8 +354,15 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
                     bbox={'facecolor': 'white', 'edgecolor': 'none', 'pad': 3})
         if i % ncols:
             ax.tick_params(labelleft=False)
-        if i < len(order) - ncols:
+        ticked = i >= len(order) - ncols
+        if not ticked:
             ax.tick_params(labelbottom=False)
+        # Week 0's calendar date under the panel's origin, below the tick labels where there are any: the alignment otherwise hides whether a country passed the threshold in the spring 2020 wave or the autumn one.
+        start = starts[country]
+        if start is not None:
+            below = 3 + (2.5 + 3.5 + labelsize * 1.2 + 1.5 if ticked else 0)
+            ax.annotate(f'from {start.day} {start:%b %Y}', (0, 0), xycoords='axes fraction', xytext=(0, -below),
+                        textcoords='offset points', ha='left', va='top', fontsize=labelsize, color=MUTED, gid=WEEK0)
 
     # A key in the first empty slot, if there is one.
     if len(order) % ncols:
@@ -377,7 +400,7 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
 
 
 def collisions(fig: Figure) -> list[str]:
-    """Panel titles that run into each other, and any visible text that reaches past an edge of the figure."""
+    """Panel titles that run into each other, a week-0 date that runs into any other text, and any visible text that reaches past an edge of the figure."""
     fig.canvas.draw()
     box = fig.bbox
     found = []
@@ -392,6 +415,11 @@ def collisions(fig: Figure) -> list[str]:
             for b, eb in extents[k + 1:]:
                 if ea.overlaps(eb):
                     found.append(f'{a!r} runs into {b!r}')
+    shown = [t for t in texts if t.get_visible() and t.get_text()]
+    for date in (t for t in shown if t.get_gid() == WEEK0):
+        extent = date.get_window_extent()
+        found += [f'{date.get_text()!r} runs into {t.get_text()!r}' for t in shown
+                  if t is not date and t.get_window_extent().overlaps(extent)]
     for t in texts:
         if not t.get_visible() or not t.get_text():
             continue
