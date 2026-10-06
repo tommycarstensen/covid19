@@ -4,7 +4,7 @@ The page used to show seven animated GIFs (9.6 MB in all). This writes each one 
 
 Sources are the files the live page served, as upload.py left them in archive/: the 43 PNG frames of europe.gif (sharper than the GIF's 256-colour palette), and the six world GIFs, whose frames no longer exist separately. A world GIF that plot_choropleth.py has written to the repo root since takes precedence over the archive/ copy. The weekly cases and deaths GIFs are not encoded: they show seven-week totals (the code was fixed in plot_choropleth.py in 40f795d, the GIFs never regenerated), and the interactive world map from build_world_map.py replaces them.
 
-Usage: python3 build_animations.py. The <video> tags for site/index.html are written to tmp/build_animations_markup.html.
+Usage: python3 scripts/build_animations.py. The <video> tags for site/index.html are written to tmp/build_animations_markup.html.
 """
 
 import shutil
@@ -19,7 +19,7 @@ from pathlib import Path
 
 from PIL import Image, ImageChops
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 ARCHIVE = ROOT / 'archive'
 OUT = ROOT / 'site' / 'anim'
 

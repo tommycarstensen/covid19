@@ -1,0 +1,2 @@
+# The scripts import one another (regions, plot_heat, build_world_map, deploy), so ruff's import sorting has to know that scripts/ holds this project's own modules.
+src = [".", "scripts"]

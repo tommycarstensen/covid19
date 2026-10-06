@@ -6,7 +6,7 @@ Reads ecdc.csv (ECDC weekly cases and deaths to ISO week 2021-01, with ECDC's po
 
 Writes site/scatter_EU.png (wide screens, 2x pixel density, cases and deaths side by side) and site/scatter_EU_narrow.png (phones, 3x, stacked), and their <picture> tag to tmp/plot_scatter_markup.html. Stops if a name cannot be placed clear of the other names and points, or if any text runs off the figure.
 
-Usage: python3 plot_scatter.py
+Usage: python3 scripts/plot_scatter.py
 """
 
 import math
@@ -40,7 +40,7 @@ from plot_heat import (
 )
 from regions import REGIONS
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'site'
 
 BLUE = '#1f77b4'  # matplotlib's first colour, which the 2020 scatter plots' points had

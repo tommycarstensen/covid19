@@ -13,7 +13,7 @@ from pathlib import Path
 import pandas as pd
 import shapefile
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 ECDC = ROOT / 'data' / 'ecdc.csv'
 OWID = ROOT / 'data' / 'owid.csv'
 COUNTRIES = ROOT / 'map' / 'data' / 'countries_110m' / 'ne_110m_admin_0_countries.zip'

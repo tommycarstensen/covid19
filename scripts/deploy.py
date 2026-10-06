@@ -2,8 +2,8 @@
 
 site/ maps to /www/covid19/ on the host, which holds about 4,000 files from 2020 and 2021. Only the files site/index.html uses, and those used by the pages it links to (the press pages), are considered: each one that exists in site/ is uploaded when it differs from the server's copy, and each one that does not must already be on the server. Nothing is deleted.
 
-    python3 deploy.py           # upload what differs, check the live page
-    python3 deploy.py --dry     # list what would be uploaded
+    python3 scripts/deploy.py           # upload what differs, check the live page
+    python3 scripts/deploy.py --dry     # list what would be uploaded
 
 Every file git tracks (the pages, scripts, styles and data) is sent as committed at HEAD, never read from the working tree, so an edit another session has in progress cannot go live unfinished, nor a script that does not match the page. The pages in site/ must also be committed before a deploy starts, and the server's copy of a page must be one this repository has committed: a copy it has never seen means someone changed the page on the server, and is refused. Another tracked file whose working copy differs from HEAD is sent as committed, and the log names it. The charts and images in site/ are ignored by git and rebuilt by redraw_charts.py and fetch_images.py, so they are sent from the working tree; a file in site/ that git neither tracks nor ignores is refused until it is committed. Before a server file is overwritten its copy is saved under tmp/deploy_backup/<time>/. The log is tmp/deploy.log.
 """
@@ -22,7 +22,7 @@ from typing import TextIO
 import paramiko
 import requests
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 REMOTE = "/www/covid19"
 URL = "https://tommycarstensen.com/covid19/"

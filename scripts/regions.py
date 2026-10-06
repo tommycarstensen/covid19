@@ -4,7 +4,7 @@ They are plot_series.py's region lists of 2020, which drew the page's regional l
 
 Added in October 2026, because the 2020 lists missed them although ECDC reports them, so the regional charts left them out without saying so: Western Sahara (North Africa); Syria and Yemen (Western Asia); Tajikistan (Central Asia); Laos and Timor-Leste (South-East Asia); the Falkland Islands (South America); Anguilla, Aruba, Bonaire, Saint Eustatius and Saba, the British Virgin Islands, Curaçao, Dominica, Grenada, Montserrat, Saint Kitts and Nevis, Sint Maarten, the Turks and Caicos Islands and the US Virgin Islands (Caribbean); the Marshall Islands, Micronesia, New Caledonia, the Northern Mariana Islands and Vanuatu (Oceania). Wallis and Futuna stays out: ECDC gives it no population, so no rate per million can be drawn for it.
 
-Run it to check every name against ecdc.csv, and that every place ECDC reports is in a region: python3 regions.py
+Run it to check every name against ecdc.csv, and that every place ECDC reports is in a region: python3 scripts/regions.py
 """
 
 from pathlib import Path
@@ -102,7 +102,7 @@ OUTSIDE = {'Wallis_and_Futuna', 'Cases_on_an_international_conveyance_Japan'}
 def main() -> None:
     import pandas as pd
 
-    ecdc = set(pd.read_csv(Path(__file__).resolve().parent / 'data' / 'ecdc.csv', usecols=['countriesAndTerritories'])
+    ecdc = set(pd.read_csv(Path(__file__).resolve().parents[1] / 'data' / 'ecdc.csv', usecols=['countriesAndTerritories'])
                ['countriesAndTerritories'])
     listed = {country for countries in PARTS.values() for country in countries}
     unknown = sorted(listed - ecdc)

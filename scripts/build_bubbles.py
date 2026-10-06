@@ -4,7 +4,7 @@ The page showed, for each of eight regions, plot_bubble.py's chart of one moment
 
 This writes site/bubble/bubble_data.js: each country's weekly cases and deaths from ecdc.csv (ECDC's weekly file, to the week of 4 to 10 January 2021) and its weekly tests from owid.csv (seven times OWID's new_tests_smoothed on the Sunday that ends the week, which is the week's total). A week a country did not report is null, never zero. The regions are plot_bubble.py's. Nothing is downloaded.
 
-Usage: python3 build_bubbles.py
+Usage: python3 scripts/build_bubbles.py
 """
 
 import json
@@ -18,7 +18,7 @@ import pandas as pd
 
 from plot_bubble import d_regions
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'site' / 'bubble' / 'bubble_data.js'
 
 

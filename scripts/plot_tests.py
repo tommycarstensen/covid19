@@ -8,7 +8,7 @@ Reads ecdc.csv and owid.csv through plot_heat.load (ECDC's weekly cases and deat
 
 Writes site/tests_cases_deaths.png (wide screens, 2x) and site/tests_cases_deaths_narrow.png (phones, 3x), and their <picture> tag to tmp/plot_tests_markup.html. Stops if any text runs into other text or off the figure.
 
-Usage: python3 plot_tests.py
+Usage: python3 scripts/plot_tests.py
 """
 
 import math
@@ -30,7 +30,7 @@ from PIL import Image
 
 from plot_heat import CASES, DEATHS, POSITIVE, TESTS, Country, display_name, load
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'site'
 
 COUNTRIES = [

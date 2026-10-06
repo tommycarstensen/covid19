@@ -4,8 +4,8 @@ Reads each page in site/ as committed at HEAD and collects four kinds of image: 
 
 The images are ignored by git, like every other image here; manifest.json and the tweets' JSON are committed. Nothing is sent to tommycarstensen.com, and requests go one at a time, a second apart. The log is tmp/backup_external_images.log.
 
-    python3 backup_external_images.py
-    python3 backup_external_images.py --refresh
+    python3 scripts/backup_external_images.py
+    python3 scripts/backup_external_images.py --refresh
 """
 
 import argparse
@@ -23,7 +23,7 @@ from urllib.parse import urlparse
 
 import requests
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "external_images"
 MANIFEST = OUT / "manifest.json"
 LOG = ROOT / "tmp" / "backup_external_images.log"

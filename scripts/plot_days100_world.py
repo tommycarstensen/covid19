@@ -8,7 +8,7 @@ A country with a section of its own on the page (COUNTRIES: the United States) g
 
 Writes site/aligned_{cases,deaths}_<set>.png (three rows of panels, or eight columns for a large set, for wide screens) and ..._narrow.png (two columns, or three, for phones), and site/aligned_<country>.png and ..._narrow.png (two panels side by side, or stacked), at 2x and 3x pixel density, as 8-bit palette PNGs, and their <picture> tags to tmp/plot_days100_world_markup.html.
 
-Usage: python3 plot_days100_world.py [set or country ...]   (default: every set and country)
+Usage: python3 scripts/plot_days100_world.py [set or country ...]   (default: every set and country)
 """
 
 import io
@@ -32,7 +32,7 @@ from PIL import Image
 
 import regions
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'site'
 
 EU = [

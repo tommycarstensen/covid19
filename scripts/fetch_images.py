@@ -8,7 +8,7 @@ each file in wikimedia_images.txt at 120 pixels wide (shown at 45) as
 site/img/<file name>.png, and writes its author and licence, read from the
 file's description page, to image_credits.json for the page's credit line.
 
-    python3 fetch_images.py
+    python3 scripts/fetch_images.py
 """
 
 import html
@@ -21,7 +21,7 @@ from pathlib import Path
 
 import requests
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 LIST = ROOT / "wikimedia_images.txt"
 OUT = ROOT / "site" / "img"
 CREDITS = ROOT / "image_credits.json"

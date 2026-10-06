@@ -2,8 +2,8 @@
 
 press_denmark.html shows three clips from the Folketing's sitting of 29 April 2020 as QuickTime files (2020-04-29_*.mov, H.264 and AAC), which only exist on the server. The server sends them as video/quicktime, which Firefox does not play, and each file keeps its index at the end, so a browser has to fetch the end of the file before it can start. For each clip this script fetches the .mov over SFTP into site/ if it is not there, copies its streams unchanged into site/<clip>.mp4 with the index first (ffmpeg -c copy -movflags +faststart, so nothing is re-encoded), checks that the MP4 has the same streams and duration, and saves a poster frame as site/<clip>.jpg. The page offers the MP4 first and the .mov as a fallback.
 
-    python3 build_press_videos.py            # build what is missing
-    python3 build_press_videos.py --force    # build again
+    python3 scripts/build_press_videos.py            # build what is missing
+    python3 scripts/build_press_videos.py --force    # build again
 
 The log is tmp/build_press_videos.log. The password is read as deploy.py reads it.
 """
@@ -19,7 +19,7 @@ import paramiko
 
 from deploy import HOST, PASSWORD_FILE, REMOTE, USER, Tee
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 LOG = ROOT / "tmp" / "build_press_videos.log"
 CLIPS = ["2020-04-29_Jakob", "2020-04-29_Soeren", "2020-04-29_Alex"]

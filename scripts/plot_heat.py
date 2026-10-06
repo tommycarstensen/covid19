@@ -8,7 +8,7 @@ Reads ecdc.csv (ECDC weekly cases and deaths to ISO week 2021-01, with ECDC's po
 
 Writes site/heat_<region>.png and site/heat_tests_<region>.png (wide screens, 2x pixel density), each with a _narrow.png (phones, 3x), and their <picture> tags to tmp/plot_heat_markup.html and tmp/plot_heat_tests_markup.html. Stops if any text runs off a figure or a name runs into its population.
 
-Usage: python3 plot_heat.py
+Usage: python3 scripts/plot_heat.py
 """
 
 import math
@@ -35,7 +35,7 @@ from PIL import Image
 from build_world_map import read_owid_tests
 from regions import REGIONS
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'site'
 
 # plot_series.doHeatMaps' OrRd, and the weekly tests map's Blues, each without its palest fifth, so the lowest value stays apart from the grey for 0.

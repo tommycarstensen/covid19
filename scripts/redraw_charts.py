@@ -16,8 +16,8 @@ January 2021: the file of 27 January that the other charts came from was
 overwritten in November 2021, so these charts end a week earlier than the
 table's counts.
 
-    python3 redraw_charts.py               # the missing countries, into site/
-    python3 redraw_charts.py Denmark       # a trial, into tmp/redraw/ only
+    python3 scripts/redraw_charts.py               # the missing countries, into site/
+    python3 scripts/redraw_charts.py Denmark       # a trial, into tmp/redraw/ only
 
 The log is tmp/redraw_charts.log.
 """
@@ -35,7 +35,7 @@ from typing import TextIO
 import matplotlib
 import pandas as pd
 
-ROOT = Path(__file__).resolve().parent
+ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
 ARCHIVE = ROOT / "archive"
 DATA = ROOT / "data" / "ecdc.csv"
