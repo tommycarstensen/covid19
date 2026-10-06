@@ -1,6 +1,6 @@
 """Draw weekly COVID-19 tests, cases and deaths per million people for 16 countries, one panel each, on one log scale, to show how much of the rise in cases came from more testing.
 
-On a log scale the gap between the tests and cases lines is the share of tests that were positive (one step of the scale is 10%, two steps 1%), and the gap between cases and deaths is the number of cases confirmed for each death. Where cases rise in step with tests, the share positive stays the same; where cases close in on tests, a larger share was positive, which more testing does not explain. Each panel names the share positive in the country's week of most cases with a test count.
+On a log scale the gap between the tests and cases lines is the share of tests that were positive, if both count the same thing (a full step of the scale is 10%, half a step about 30%, two steps 1%), and the gap between cases and deaths is the number of cases confirmed for each death. Where cases rise in step with tests, the share positive stays the same; where cases close in on tests, a larger share was positive. Each panel names the share positive in the week its cases peaked, among the weeks with a test count. The figure's own text explains only how to read it, as ten advisers asked on 6 October 2026: the subtitle's sentence on what more testing does and does not explain was cut as an overclaim, since the share also depends on who was tested.
 
 The colours are ColorBrewer's Dark2, which plot_series.define_colors lists: the hues of Set2, whose teal and orange plot_series.py's 2020 bar charts used for cases and deaths, at a strength that reads as a thin line (Set2's pastels fail as lines, on contrast and on telling teal from lavender).
 
@@ -63,7 +63,7 @@ class Layout:
 
 LAYOUTS = [
     Layout('', width=13.55, ncols=4, panel_height=1.95, dpi=200, font=8),
-    Layout('_narrow', width=4.15, ncols=2, panel_height=1.5, dpi=300, font=6.5),
+    Layout('_narrow', width=4.15, ncols=2, panel_height=1.5, dpi=300, font=7),
 ]
 
 
@@ -83,7 +83,7 @@ def tick(value: float, _pos: float) -> str:
 
 
 def peak_share(c: Country) -> float | None:
-    """The share of tests positive in the country's week of most cases among the weeks with a test count."""
+    """The share of tests positive in the week the country's cases peaked, among the weeks with a test count."""
     weeks = [(cases, share) for cases, share in zip(c.rates[CASES.name], c.rates[POSITIVE.name])
              if cases is not None and share is not None]
     return max(weeks)[1] if weeks else None
@@ -128,29 +128,31 @@ def draw(countries: dict[str, Country], weeks: list[str], layout: Layout) -> Pat
         title = 'Weekly COVID-19 tests, cases\nand deaths per million people'
         subtitle = textwrap.fill(
             f'One panel per country, {first:%-d %b %Y} to {last:%-d %b %Y}, on one log scale. The gap between tests '
-            'and cases is the share of tests positive: one step is 10%, two steps 1%. Where cases close in on tests, '
-            'more tests were positive, which more testing does not explain. The gap between cases and deaths is the '
-            'cases confirmed per death. Under each name: the share positive in the week of most cases.', 54)
+            'and cases is the share of tests positive, if both count the same thing: a full step is 10%, half a step '
+            'about 30%, two steps 1%. Under each name: the share positive when cases peaked.', 54)
         source = textwrap.fill(
-            'Data: ECDC, weekly cases and deaths, per million people of 2019; Our World in Data, tests. Countries count '
-            'tests differently, so the gap compares better within a country than between countries. '
-            'Drawn October 2026.', 62)
+            'Data: ECDC, weekly cases and deaths, per million people of 2019; Our World in Data, tests. The two may not '
+            'count the same things (tests or people, rapid antigen tests from late 2020), so the share positive is '
+            'approximate; the Dutch tests are people tested, so its share is likely too high. A week with none '
+            'reported leaves a gap in a line. Drawn October 2026.', 62)
         title_size, subtitle_size, source_size = 11.5, 8.5, 7.5
-        left, right, col_gap, row_gap, panel_top = 0.42, 0.1, 0.16, 0.62, 0.36
+        left, right, col_gap, row_gap, panel_top = 0.42, 0.1, 0.16, 0.68, 0.42
     else:
         title = 'Weekly COVID-19 tests, cases and deaths per million people'
         subtitle = textwrap.fill(
             f'One panel per country, week by week from {first:%-d %B %Y} to {last:%-d %B %Y}, on one logarithmic '
-            'scale. The gap between tests and cases is the share of tests that were positive: one step of the scale is '
-            '10%, two steps 1%. Where cases rise in step with tests, the share stays the same and the extra cases may '
-            'be the extra testing; where cases close in on tests, more of the tests were positive, which more testing '
-            'does not explain. The gap between cases and deaths is the number of cases confirmed for each death. Top '
-            'right: the share of tests positive in the week of most cases.', 178)
+            'scale. The gap between tests and cases is the share of tests that were positive, if both count the same '
+            'thing: a full step of the scale is 10%, half a step about 30%, two steps 1%. Top right: the share of '
+            'tests positive in the week cases peaked.', 178)
         source = textwrap.fill(
             'Data: European Centre for Disease Prevention and Control (ECDC), weekly cases and deaths, per million '
             'people of 2019; Our World in Data, tests, from running totals, or from daily counts where it has no '
-            'running total. Countries count tests differently (tests performed, people tested, samples), so the gap '
-            'compares better within a country than between countries. Drawn October 2026.', 205)
+            'running total; for the Netherlands it counts people tested, fewer than tests, so the Dutch share is likely '
+            'too high. Cases and tests come from different sources and may not count the same things: countries '
+            'counted tests performed, people tested or samples, some counted rapid antigen tests as cases from late '
+            '2020, and who was tested changed over the year, so the share positive is approximate and compares better '
+            'within a country than between countries. A week with none reported leaves a gap in a line. '
+            'Drawn October 2026.', 205)
         title_size, subtitle_size, source_size = 13, 9.5, 8
         left, right, col_gap, row_gap, panel_top = 0.62, 0.12, 0.3, 0.45, 0.3
     subtitle_top = 0.12 + (title.count('\n') + 1) * title_size * 1.2 / 72 + 0.12
@@ -169,14 +171,14 @@ def draw(countries: dict[str, Country], weeks: list[str], layout: Layout) -> Pat
         c = countries[country]
         panel(ax, c, days, layout, col == 0, k == 0 and not narrow)
         share = peak_share(c)
-        note = f'{share_text(share)} positive at peak' if share is not None else 'no test count'
+        note = f'{share_text(share)} positive when cases peaked' if share is not None else 'no test count'
         if narrow:
-            ax.annotate(display_name(c.name), (0, 1), xycoords='axes fraction', xytext=(0, 13), textcoords='offset points',
+            ax.annotate(display_name(c.name), (0, 1), xycoords='axes fraction', xytext=(0, 16), textcoords='offset points',
                         ha='left', va='bottom', fontsize=8, fontweight='bold', color=INK)
             ax.annotate(note, (0, 1), xycoords='axes fraction', xytext=(0, 4), textcoords='offset points', ha='left',
                         va='bottom', fontsize=layout.font, color=INK_2)
         else:
-            ax.set_title(display_name(c.name), loc='left', fontsize=10, fontweight='bold', color=INK, pad=4)
+            ax.set_title(display_name(c.name), loc='left', fontsize=9.5, fontweight='bold', color=INK, pad=4)
             ax.set_title(note, loc='right', fontsize=7.5, color=INK_2, pad=5)
 
     edge = 0.12 / width
@@ -203,7 +205,7 @@ def draw(countries: dict[str, Country], weeks: list[str], layout: Layout) -> Pat
 
 
 def collisions(fig: Figure) -> list[str]:
-    """Any two visible texts that run into each other, and any that reach past an edge of the figure."""
+    """Any two visible texts closer than 4 pixels at 100 dpi, and any that reach past an edge of the figure. The margin is there because the figure is checked at 100 dpi and saved at 2x or 3x, where hinting draws text a little wider."""
     fig.canvas.draw()
     box = fig.bbox
     texts: list[Text] = list(fig.texts)
@@ -215,7 +217,7 @@ def collisions(fig: Figure) -> list[str]:
     for k, (a, ea) in enumerate(shown):
         if ea.x0 < box.x0 - 0.5 or ea.x1 > box.x1 + 0.5 or ea.y0 < box.y0 - 0.5 or ea.y1 > box.y1 + 0.5:
             found.append(f'{a!r} runs off the figure')
-        found += [f'{a!r} runs into {b!r}' for b, eb in shown[k + 1:] if ea.overlaps(eb)]
+        found += [f'{a!r} runs into {b!r}' for b, eb in shown[k + 1:] if ea.padded(2).overlaps(eb.padded(2))]
     return found
 
 
@@ -236,7 +238,9 @@ def picture(countries: dict[str, Country], paths: dict[str, Path]) -> str:
         shares.append(f'{display_name(country)} {share_text(share) if share is not None else "no test count"}')
     alt = ('Weekly COVID-19 tests, cases and deaths per million people in 16 countries, one panel each, on one log '
            'scale, from 30 December 2019 to 10 January 2021. The gap between tests and cases is the share of tests '
-           'positive. Share positive in each country\'s week of most cases: ' + ', '.join(shares) + '.')
+           'positive, which is approximate, because cases and tests come from different sources, and compares poorly '
+           'between countries; the Dutch share is likely too high, because its tests are people tested. Gaps in a line are '
+           'weeks with none reported. Share positive in the week each country\'s cases peaked: ' + ', '.join(shares) + '.')
     return (f'<picture>\n'
             f'<source media="(max-width: 700px)" srcset="{paths[narrow.suffix].name}" width="{nw}" height="{nh}">\n'
             f'<img src="{paths[wide.suffix].name}" width="{w}" height="{h}" loading="lazy" alt="{alt}">\n'
