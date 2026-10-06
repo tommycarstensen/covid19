@@ -1,10 +1,10 @@
-import pandas as pd
-import matplotlib.pyplot as plt
+#!/usr/bin/env python3
+from datetime import datetime
+
 import matplotlib.patheffects as path_effects
-import math
+import matplotlib.pyplot as plt
+import pandas as pd
 from adjustText import adjust_text
-import numpy as np
-from datetime import date
 
 eu27 = [
     'AUT',
@@ -74,141 +74,141 @@ latin_america = [
     ]
 
 asia = [
-'AFG',
-'ARM',
-'AZE',
-'BHR',
-'BGD',
-'BTN',
-'BRN',
-'KHM',
-'CHN',
-'CXR',
-'CCK',
-'IOT',
-'GEO',
-'HKG',
-'IND',
-'IDN',
-'IRN',
-'IRQ',
-'ISR',
-'JPN',
-'JOR',
-'KAZ',
-'KWT',
-'KGZ',
-'LAO',
-'LBN',
-'MAC',
-'MYS',
-'MDV',
-'MNG',
-'MMR',
-'NPL',
-'PRK',
-'OMN',
-'PAK',
-'PSE',
-'PHL',
-'QAT',
-'SAU',
-'SGP',
-'KOR',
-'LKA',
-'SYR',
-'TWN',
-'TJK',
-'THA',
-'TUR',
-'TKM',
-'ARE',
-'UZB',
-'VNM',
-'YEM',
+    'AFG',
+    'ARM',
+    'AZE',
+    'BHR',
+    'BGD',
+    'BTN',
+    'BRN',
+    'KHM',
+    'CHN',
+    'CXR',
+    'CCK',
+    'IOT',
+    'GEO',
+    'HKG',
+    'IND',
+    'IDN',
+    'IRN',
+    'IRQ',
+    'ISR',
+    'JPN',
+    'JOR',
+    'KAZ',
+    'KWT',
+    'KGZ',
+    'LAO',
+    'LBN',
+    'MAC',
+    'MYS',
+    'MDV',
+    'MNG',
+    'MMR',
+    'NPL',
+    'PRK',
+    'OMN',
+    'PAK',
+    'PSE',
+    'PHL',
+    'QAT',
+    'SAU',
+    'SGP',
+    'KOR',
+    'LKA',
+    'SYR',
+    'TWN',
+    'TJK',
+    'THA',
+    'TUR',
+    'TKM',
+    'ARE',
+    'UZB',
+    'VNM',
+    'YEM',
 ]
 
 americas = latin_america + ['USA', 'CAN']
 
 africa = [
-'MAR',
-'DZA',
-'ZAF',
-'TUN',
-'NGA',
-'ETH',
-'MDG',
-'MUS',
-'LBY',
-'COD',
-'KEN',
-'SYC',
-'UGA',
-'GHA',
-'CPV',
-'SDN',
-'MLI',
-'TZA',
-'SEN',
-'SOM',
-'CIV',
-'ZWE',
-'BFA',
-'CMR',
-'RWA',
-'AGO',
-'REU',
-'MOZ',
-'ERI',
-'NER',
-'TCD',
-'GIN',
-'MRT',
-'NAM',
-'SWZ',
-'TGO',
-'DJI',
-'LBR',
-'SLE',
-'BEN',
-'GAB',
-'GMB',
-'ZMB',
-'MWI',
-'BWA',
-'BDI',
-'LSO',
-'SSD',
-'COG',
-'COM',
-'GNQ',
+    'MAR',
+    'DZA',
+    'ZAF',
+    'TUN',
+    'NGA',
+    'ETH',
+    'MDG',
+    'MUS',
+    'LBY',
+    'COD',
+    'KEN',
+    'SYC',
+    'UGA',
+    'GHA',
+    'CPV',
+    'SDN',
+    'MLI',
+    'TZA',
+    'SEN',
+    'SOM',
+    'CIV',
+    'ZWE',
+    'BFA',
+    'CMR',
+    'RWA',
+    'AGO',
+    'REU',
+    'MOZ',
+    'ERI',
+    'NER',
+    'TCD',
+    'GIN',
+    'MRT',
+    'NAM',
+    'SWZ',
+    'TGO',
+    'DJI',
+    'LBR',
+    'SLE',
+    'BEN',
+    'GAB',
+    'GMB',
+    'ZMB',
+    'MWI',
+    'BWA',
+    'BDI',
+    'LSO',
+    'SSD',
+    'COG',
+    'COM',
+    'GNQ',
 ]
 
 oceania = [
-'AUS',
-'NZL',
-'FJI',
-'GUM',
-'WSM',
-'NCL',
-'ASM',
-'PLW',
-'PNG',
-'PYF',
-'VUT',
-'NRU',
-'TUV',
-'TON',
-'COK',
-'KIR',
-'SLB',
-'MHL',
-'PCN',
-'FSM',
-'NIU',
-'MNP',
-'NFK',
-'WLF',
+    'AUS',
+    'NZL',
+    'FJI',
+    'GUM',
+    'WSM',
+    'NCL',
+    'ASM',
+    'PLW',
+    'PNG',
+    'PYF',
+    'VUT',
+    'NRU',
+    'TUV',
+    'TON',
+    'COK',
+    'KIR',
+    'SLB',
+    'MHL',
+    'PCN',
+    'FSM',
+    'NIU',
+    'MNP',
+    'NFK',
+    'WLF',
 ]
 
 d_regions = {
@@ -222,10 +222,10 @@ d_regions = {
     'Nordic': ['DNK', 'SWE', 'NOR', 'FRO', 'ISL', 'FIN']
 }
 
+
 def main():
 
-    url = 'https://opendata.ecdc.europa.eu/covid19/casedistribution/csv'
-    # df_ecdc = pd.read_html(url)
+    # ECDC's file, downloaded from https://opendata.ecdc.europa.eu/covid19/casedistribution/csv
     df_ecdc = pd.read_csv('csv')
 
     df_owid = pd.read_csv('owid.csv')
@@ -233,23 +233,14 @@ def main():
     days = 14
     weeks = 2
 
-    for region in (
-        'Americas',
-        'Nordic',
-        'Europe',
-        'Asia',
-        'Oceania',
-        'Africa',
-        'G7',
-        'EU',
-        ):
+    for region in ('Americas', 'Nordic', 'Europe', 'Asia', 'Oceania', 'Africa', 'G7', 'EU'):
         countries = d_regions[region]
 
         x = []
         y = []
         colors = []
         l_total_tests_per_thousand = []
-        sizes = deathsCumulative = []
+        sizes = []
         labels = []
         z = []
 
@@ -267,13 +258,13 @@ def main():
             if country not in countries:
                 continue
 
-            casesTotal = df_ecdc[df_ecdc['countryterritoryCode'] == country]['cases_weekly'].sum()
+            casesTotal = df_ecdc.loc[df_ecdc['countryterritoryCode'] == country, 'cases_weekly'].sum()
             if casesTotal < 100:  # Faroe Islands 188, Iceland 1882
                 print('casesTotal', country, casesTotal)
                 continue
 
-            cases = df_ecdc[df_ecdc['countryterritoryCode'] == country]['cases_weekly']
-            deaths = df_ecdc[df_ecdc['countryterritoryCode'] == country]['deaths_weekly']
+            cases = df_ecdc.loc[df_ecdc['countryterritoryCode'] == country, 'cases_weekly']
+            deaths = df_ecdc.loc[df_ecdc['countryterritoryCode'] == country, 'deaths_weekly']
             x2 = cases.head(1 * weeks).sum()
             x1 = cases.head(2 * weeks).tail(1 * weeks).sum()
             # if country == 'LTU':
@@ -287,11 +278,11 @@ def main():
             # if x1 == 0 or y1 == 0:
             #     continue
 
-            total_tests_per_thousand = df_owid[df_owid['iso_code'] == country]['total_tests_per_thousand']
+            total_tests_per_thousand = df_owid.loc[df_owid['iso_code'] == country, 'total_tests_per_thousand']
             if total_tests_per_thousand.max() == 0:
                 continue
 
-            label = df_owid[df_owid['iso_code'] == country]['location'].iloc[0]
+            label = df_owid.loc[df_owid['iso_code'] == country, 'location'].iloc[0]
 
             # changeCasesWeekly = 100 * (x2 - x1) / x1
             # changeDeathsWeekly = 100 * (y2 - y1) / y1
@@ -379,7 +370,7 @@ def main():
             y.append(changeDeathsWeekly)
             labels.append(label)
             # sizes.append(5 * math.sqrt(deaths))
-            deathsTotal = df_ecdc[df_ecdc['countryterritoryCode'] == country]['deaths_weekly'].sum()
+            deathsTotal = df_ecdc.loc[df_ecdc['countryterritoryCode'] == country, 'deaths_weekly'].sum()
             # size = 10 * deathsTotal ** (1/3)
             size = max(20, 10 * deathsTotal ** (1/3))
             sizes.append(size)
@@ -394,7 +385,7 @@ def main():
 
         fig.set_size_inches(16 / 2, 9 / 2)
 
-        for t in reversed(sorted(zip(sizes, x, y, colors, labels))):
+        for t in sorted(zip(sizes, x, y, colors, labels), reverse=True):
             sizes.append(t[0])
             x.append(t[1])
             y.append(t[2])
@@ -408,24 +399,24 @@ def main():
 
         paths = ax.scatter(
             x, y,
-            c = colors,
-            s = sizes,
-            marker = 'o',
-            # label = labels,
-            edgecolor = 'black',
-            linewidth = 0.1,
-            # font = {
-            #     # 'family' : 'normal',
-            #     # 'weight' : 'bold',
-            #     'size'   : 'small',
+            c=colors,
+            s=sizes,
+            marker='o',
+            # label=labels,
+            edgecolor='black',
+            linewidth=0.1,
+            # font={
+            #     # 'family': 'normal',
+            #     # 'weight': 'bold',
+            #     'size': 'small',
             #     },
-            alpha = 0.5,
-            cmap = 'viridis',
-            # vmin = min(l_total_tests_per_thousand),
-            # vmax = max(l_total_tests_per_thousand),
-            vmin = min(0, min(colors)),
-            vmax = max(0, max(colors)),
-            # vmax = 25,
+            alpha=0.5,
+            cmap='viridis',
+            # vmin=min(l_total_tests_per_thousand),
+            # vmax=max(l_total_tests_per_thousand),
+            vmin=min(0, min(colors)),
+            vmax=max(0, max(colors)),
+            # vmax=25,
             )
 
         # ax.axhline(0, color='black', linewidth=0.5, linestyle='--')
@@ -442,7 +433,7 @@ def main():
             texts.append(ax.text(
                 xi, yi, label,
                 size='xx-small',
-        ##        ha='left', va='bottom',
+                # ha='left', va='bottom',
                 ha='center', va='center',
                 color='white',
                 path_effects=[
@@ -500,8 +491,8 @@ def main():
         # ax.set_ylabel('Weekly change in total fatalities (%)')
         # ax.set_xlabel(f'{weeks} week change in weekly cases (%)')
         # ax.set_ylabel(f'{weeks} week change in weekly fatalities (%)')
-        ax.set_xlabel(f'Change in weekly cases (%)')
-        ax.set_ylabel(f'Change in weekly fatalities (%)')
+        ax.set_xlabel('Change in weekly cases (%)')
+        ax.set_ylabel('Change in weekly fatalities (%)')
         ax.set_title(region)
 
         # ax.set_xlim(0, 75)  # El Salvador
@@ -520,12 +511,11 @@ def main():
         ax.axvline(x=0, ls='--', color='.1', lw=0.5)
         ax.axhline(y=0, ls='--', color='.1', lw=0.5)
 
-        path = 'plot_bubble_{}.png'.format(region)
+        path = f'plot_bubble_{region}.png'
         fig.savefig(path, dpi=200)
         print(path)
-        fig.savefig('plot_bubble_{}_{}.png'.format(region, date.today().isoformat()), dpi=200)
+        fig.savefig(f'plot_bubble_{region}_{datetime.now().astimezone().date().isoformat()}.png', dpi=200)
 
-    return
 
 if __name__ == '__main__':
     main()
