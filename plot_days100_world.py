@@ -1,6 +1,6 @@
 """Draw the page's aligned time-series figures, for the World1 and World2 country sets and for every region the 2020 page charted, as small multiples.
 
-The 2020 figures (days100_*_perCapitaFalse_<set>.png, drawn by plot_series.doLinePlots) put 4 to 55 countries on one 480x360 plot with a 10-colour cycle, so countries shared colours and the legend, drawn over the lines, could not tell them apart. These give each country its own panel: the country in red over the other countries of its set in grey, the colours of plot_series.py's own comparison charts, all on one log scale and aligned on the week the country's cumulative count first passed 1,000 cases (100 deaths), as before. In a set of up to 20 countries, a country that never passed the threshold gets a panel that says so, instead of disappearing. A larger set (the EU, Europe, the Americas, Asia except China, Africa) gets a denser grid, eight columns wide and three on phones, and names its countries that never passed the threshold under the figure, with their totals. The regions are regions.py's, which are plot_series.py's under ECDC's names. The run stops if a panel's name runs into its total or any text runs off a figure.
+The 2020 figures (days100_*_perCapitaFalse_<set>.png, drawn by plot_series.doLinePlots) put 4 to 55 countries on one 480x360 plot with a 10-colour cycle, so countries shared colours and the legend, drawn over the lines, could not tell them apart. These give each country its own panel: the country in red over the other countries of its set in grey, the colours of plot_series.py's own comparison charts, all on one log scale and aligned on the week the country's cumulative count first passed 1,000 cases (100 deaths), as before. In the World sets, chosen in 2020 to be compared, a country that never passed the threshold gets a panel that says so, instead of disappearing; a regional figure names such countries under the figure, with their totals, because a region lists every country in it and Oceania's would otherwise be mostly empty panels. A set of more than 20 countries (the EU, Europe, the Americas, Asia except China, Africa) gets a denser grid, eight columns wide and three on phones. A wide figure has at least four columns. The regions are regions.py's, which are plot_series.py's under ECDC's names. The run stops if a panel's name runs into its total or any text runs off a figure.
 
 Reads ecdc.csv (ECDC weekly cases and deaths per country to ISO week 2021-01, the same data as the rest of the page) and downloads nothing. The EU is summed from its 27 member states under their ECDC names; the 2020 list said 'Czech Republic', which ECDC calls Czechia, so the old EU total left Czechia out.
 
@@ -51,13 +51,8 @@ SETS = {
         'South_Korea', 'Malaysia', 'Japan', 'Australia', 'Uruguay', 'Denmark',
         'Sweden', 'Iceland', 'Norway',
     ],
-    # plot_series.py's AsiaWestern without Iran, which World1 already shows.
-    'AsiaWesternExIran': [
-        'Armenia', 'Azerbaijan', 'Bahrain', 'Egypt', 'Qatar', 'Kuwait', 'Oman',
-        'United_Arab_Emirates', 'Saudi_Arabia', 'Israel', 'Iraq', 'Georgia',
-        'Turkey', 'Lebanon', 'Jordan', 'Palestine',
-    ],
-    # The other regional figures of the 2020 page, one per pair of days100_* charts, from regions.py.
+    # The regional figures of the 2020 page, one per pair of days100_* charts, from regions.py. Western Asia leaves out Iran, which World1 already shows.
+    'AsiaWesternExIran': [c for c in regions.PARTS['AsiaWestern'] if c != 'Iran'],
     'EU': regions.REGIONS['EU'],
     'Europe': regions.REGIONS['Europe'],
     'Americas': regions.REGIONS['Americas'],
@@ -98,6 +93,9 @@ NAMES = {
     'Brunei_Darussalam': 'Brunei',
     'United_Republic_of_Tanzania': 'Tanzania',
     'Democratic_Republic_of_the_Congo': 'DR Congo',
+    'Timor_Leste': 'Timor-Leste',
+    'Micronesia_(Federated_States_of)': 'Micronesia',
+    'Turks_and_Caicos_islands': 'Turks and Caicos Islands',
 }
 # On the narrower panels these run into their totals.
 NARROW_NAMES = {
@@ -106,6 +104,9 @@ NARROW_NAMES = {
     'Dominican_Republic': 'Dominican Rep.', 'Central_African_Republic': 'C. African Rep.',
     'Equatorial_Guinea': 'Eq. Guinea', 'North_Macedonia': 'N. Macedonia',
     'Sao_Tome_and_Principe': 'São Tomé & P.', 'Saint_Vincent_and_the_Grenadines': 'St Vincent & G.',
+    'United_States_Virgin_Islands': 'US Virgin Isl.', 'Turks_and_Caicos_islands': 'Turks & Caicos',
+    'Saint_Kitts_and_Nevis': 'St Kitts & Nevis', 'Antigua_and_Barbuda': 'Antigua & Barb.',
+    'Northern_Mariana_Islands': 'N. Mariana Isl.', 'Falkland_Islands_(Malvinas)': 'Falklands',
 }
 
 
@@ -140,7 +141,7 @@ class Layout:
         """The dense grid's column count, the fixed one, or else as many as three rows need with a slot left for the key."""
         if dense:
             return self.dense_ncols
-        return self.ncols or math.ceil((panels + 1) / 3)
+        return self.ncols or max(4, math.ceil((panels + 1) / 3))
 
 
 # Inches at 100 dpi, so one inch is 100 CSS pixels at the size the page shows.
@@ -247,9 +248,10 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
     totals = {c: s.cumulative[-1] for c, s in data.items()}
     lines = {c: aligned(s, measure.threshold) for c, s in data.items()}
     drawn = {c: xy for c, xy in lines.items() if xy is not None}
-    # A dense set gives panels only to the countries that passed the threshold, and names the others.
-    order = sorted(drawn if dense else countries, key=lambda c: -totals[c])
-    never = sorted((c for c in countries if c not in drawn), key=lambda c: -totals[c]) if dense else []
+    # A regional figure gives panels only to the countries that passed the threshold, and names the others.
+    listed = set_name in REGIONS
+    order = sorted(drawn if listed else countries, key=lambda c: -totals[c])
+    never = sorted((c for c in countries if c not in drawn), key=lambda c: -totals[c]) if listed else []
 
     # Room above the highest line for its end marker.
     ymax = ceiling(1.15 * max(max(y) for _, y in drawn.values()))
@@ -267,7 +269,7 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
 
     noun = measure.name
     threshold = f'{measure.threshold:,}'
-    others = len(order) - 1 if dense else len(countries) - 1
+    others = len(order) - 1 if listed else len(countries) - 1
     eu = 'EU' in countries
     source_size = 8 if not narrow else 7.5
     if narrow:
@@ -290,8 +292,8 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
     # Room below the bottom panels for their tick labels and the source line, and for the list of countries that never passed.
     footer = 0.8 if narrow else 0.62
     if never:
-        listed = ', '.join(f'{display_name(c)} ({totals[c]:,.0f})' for c in never)
-        named = textwrap.fill(f'Never passed {threshold} {noun} (their totals on 10 January 2021): {listed}.',
+        names = ', '.join(f'{display_name(c)} ({totals[c]:,.0f})' for c in never)
+        named = textwrap.fill(f'Never passed {threshold} {noun} (their totals on 10 January 2021): {names}.',
                               62 if narrow else 210)
         source = f'{named}\n{source}'
         footer += (named.count('\n') + 1) * source_size * 1.35 / 72
