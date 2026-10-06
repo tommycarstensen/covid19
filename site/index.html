@@ -105,26 +105,190 @@ th, td {
 tr:nth-child(even) {
   background-color: #f2f2f2
 }
+
+th[onclick] {
+  cursor: pointer;
+}
+
+/* The country column stays in view while the table scrolls sideways. */
+.table-wrap th:first-child,
+.table-wrap td:first-child {
+  position: sticky;
+  left: 0;
+  background: #fff;
+  box-shadow: 1px 0 0 #ddd;
+}
+
+.table-wrap tr:nth-child(even) td:first-child {
+  background: #f2f2f2;
+}
+
+.toc {
+  background: #f6f6f6;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 16px 0 24px;
+  max-width: 60em;
+}
+
+.toc h2 {
+  font-size: 1.15em;
+  margin: 0 0 8px;
+}
+
+.toc ol {
+  margin: 0;
+  padding-left: 1.5em;
+}
+
+.toc > ol > li {
+  margin: 6px 0;
+}
+
+.toc ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: 1.9;
+}
+
+.toc ul li {
+  display: inline;
+}
+
+.toc ul li:not(:last-child)::after {
+  content: "\00a0\00b7";
+  color: #888;
+}
+
+.toc ul a {
+  white-space: nowrap;
+}
+
+h2, h3 {
+  scroll-margin-top: 8px;
+}
+
+h2:target, h3:target {
+  background: #fff8e1;
+}
+
+.anchor {
+  color: #aaa;
+  font-weight: normal;
+  text-decoration: none;
+  padding: 0 0.2em;
+}
+
+h2:hover .anchor, h3:hover .anchor, .anchor:focus {
+  color: #0645ad;
+}
+
+.to-contents {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  font-size: 20px;
+  text-decoration: none;
+  color: #fff;
+  background: rgba(60, 60, 60, 0.6);
+  border-radius: 50%;
+  z-index: 2;
+}
+
+@media (max-width: 700px) {
+  th, td {
+    padding: 6px 8px;
+  }
+
+  h1 {
+    font-size: 1.6em;
+  }
+}
 </style>
 
 </head>
 
 <body>
 
+<h1>COVID-19 tracker, 2020&#8288;&ndash;&#8288;2021</h1>
+
 <p class="archive-note">This page is an archive. It tracked COVID-19 from March 2020 to January 2021 with data from the European Centre for Disease Prevention and Control (ECDC) and is no longer updated; the table's counts run to mid-January 2021. In October 2026 the charts of 63 countries in the table, which had gone missing, were redrawn from the last ECDC file kept, which ends on 10 January 2021, and images that no longer loaded were removed.</p>
 
+<nav class="toc" aria-labelledby="contents">
+<h2 id="contents">Contents</h2>
+<ol>
+<li><a href="#maps">Choropleth maps</a>
+<ul>
+<li><a href="#europe-cases">Europe cases</a></li>
+<li><a href="#cumulative">Cumulative</a></li>
+<li><a href="#weekly">Weekly</a></li>
+</ul>
+</li>
+<li><a href="#aligned">Aligned time series</a>
+<ul>
+<li><a href="#world">World</a></li>
+<li><a href="#g7">G7</a></li>
+<li><a href="#united-states">United States</a></li>
+<li><a href="#eu">EU</a></li>
+<li><a href="#europe">Europe</a></li>
+<li><a href="#americas">Americas</a></li>
+<li><a href="#asia">Asia ex China</a></li>
+<li><a href="#africa">Africa</a></li>
+<li><a href="#oceania">Oceania</a></li>
+<li><a href="#nordic">Nordic countries</a></li>
+</ul>
+</li>
+<li><a href="#table">Table by country</a></li>
+<li><a href="#countries">Charts by country</a>
+<ul>
+<li><a href="#australia">Australia</a></li>
+<li><a href="#austria">Austria</a></li>
+<li><a href="#belgium">Belgium</a></li>
+<li><a href="#brazil">Brazil</a></li>
+<li><a href="#canada">Canada</a></li>
+<li><a href="#denmark">Denmark</a></li>
+<li><a href="#france">France</a></li>
+<li><a href="#germany">Germany</a></li>
+<li><a href="#india">India</a></li>
+<li><a href="#indonesia">Indonesia</a></li>
+<li><a href="#italy">Italy</a></li>
+<li><a href="#japan">Japan</a></li>
+<li><a href="#mexico">Mexico</a></li>
+<li><a href="#netherlands">Netherlands</a></li>
+<li><a href="#new-zealand">New Zealand</a></li>
+<li><a href="#norway">Norway</a></li>
+<li><a href="#portugal">Portugal</a></li>
+<li><a href="#south-korea">South Korea</a></li>
+<li><a href="#spain">Spain</a></li>
+<li><a href="#sweden">Sweden</a></li>
+<li><a href="#switzerland">Switzerland</a></li>
+<li><a href="#taiwan">Taiwan</a></li>
+<li><a href="#united-kingdom">United Kingdom</a></li>
+</ul>
+</li>
+<li><a href="#infographics">Infographics and other news clips</a></li>
+<li><a href="#references">References</a></li>
+</ol>
+</nav>
 
 
-<h1>CoViD19 choropleth maps</h1>
 
-<h2>Europe cases</h2>
+<h2 id="maps">Choropleth maps <a class="anchor" href="#maps" aria-label="Link to this section: Choropleth maps">#</a></h2>
+
+<h3 id="europe-cases">Europe cases <a class="anchor" href="#europe-cases" aria-label="Link to this section: Europe cases">#</a></h3>
 <div class="anims">
 <figure>
 <video src="anim/europe.mp4" poster="anim/europe.jpg" width="786" height="572" autoplay muted loop playsinline controls data-fps="4" data-hold="4000" data-labels="2020-W13,2020-W14,2020-W15,2020-W16,2020-W17,2020-W18,2020-W19,2020-W20,2020-W21,2020-W22,2020-W23,2020-W24,2020-W25,2020-W26,2020-W27,2020-W28,2020-W29,2020-W30,2020-W31,2020-W32,2020-W33,2020-W34,2020-W35,2020-W36,2020-W37,2020-W38,2020-W39,2020-W40,2020-W41,2020-W42,2020-W43,2020-W44,2020-W45,2020-W46,2020-W47,2020-W48,2020-W49,2020-W50,2020-W51,2020-W52,2020-W53,2021-W01,2021-W02" aria-label="ECDC 14-day notification rate of new COVID-19 cases per 100,000 inhabitants, by European region, weekly from 2020-W13 to 2021-W02"></video>
 </figure>
 </div>
 
-<h2>Cumulative</h2>
+<h3 id="cumulative">Cumulative <a class="anchor" href="#cumulative" aria-label="Link to this section: Cumulative">#</a></h3>
 <div class="anims">
 <figure>
 <video src="anim/covid19_casescumulated_OrRd_logTrue.mp4" poster="anim/covid19_casescumulated_OrRd_logTrue.jpg" width="420" height="300" autoplay muted loop playsinline controls data-fps="2" data-hold="4000" data-labels="2020-01-06,2020-01-13,2020-01-20,2020-01-27,2020-02-03,2020-02-10,2020-02-17,2020-02-24,2020-03-02,2020-03-09,2020-03-16,2020-03-23,2020-03-30,2020-04-06,2020-04-13,2020-04-20,2020-04-27,2020-05-04,2020-05-11,2020-05-18,2020-05-25,2020-06-01,2020-06-08,2020-06-15,2020-06-22,2020-06-29,2020-07-06,2020-07-13,2020-07-20,2020-07-27,2020-08-03,2020-08-10,2020-08-17,2020-08-24,2020-08-31,2020-09-07,2020-09-14,2020-09-21,2020-09-28,2020-10-05,2020-10-12,2020-10-19,2020-10-26,2020-11-02,2020-11-09,2020-11-16,2020-11-23,2020-11-30,2020-12-07,2020-12-14,2020-12-21,2020-12-28,2021-01-04,2021-01-11" aria-label="Cumulative COVID-19 cases per million, by country, weekly from 2020-01-06 to 2021-01-11"></video>
@@ -137,7 +301,7 @@ tr:nth-child(even) {
 </figure>
 </div>
 
-<h2>Weekly</h2>
+<h3 id="weekly">Weekly <a class="anchor" href="#weekly" aria-label="Link to this section: Weekly">#</a></h3>
 <div class="anims">
 <figure>
 <img src="covid19_casesperweek_YlGnBu_logTrue.gif">
@@ -152,7 +316,9 @@ tr:nth-child(even) {
 
 <script src="anim/scrubber.js" defer></script>
 
-<h1>CoViD19 aligned time series data</h1>
+<h2 id="aligned">Aligned time series <a class="anchor" href="#aligned" aria-label="Link to this section: Aligned time series">#</a></h2>
+
+<h3 id="world">World <a class="anchor" href="#world" aria-label="Link to this section: World">#</a></h3>
 
 <div class="aligned">
 <picture>
@@ -173,20 +339,21 @@ tr:nth-child(even) {
 </picture>
 </div>
 
+<h3 id="g7">G7 <a class="anchor" href="#g7" aria-label="Link to this section: G7">#</a></h3>
+
 <img src="plot_bubble_G7.png" width="800">
 
-<h3>
+<h3 id="united-states">
     <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_States">
         <img src="img/Flag_of_the_United_States.svg.png" height="30" alt="" class="flag"> United States of America (USA)
 
-    </a>
-</h3>
+    </a> <a class="anchor" href="#united-states" aria-label="Link to this section: United States">#</a></h3>
 
  <img src="days100_cases_perCapitaFalse_United_States_of_America.png">
 <img src="days100_deaths_perCapitaFalse_United_States_of_America.png">
 <br>
 
-<h3><img src="img/Flag_of_Europe.svg.png" height="30" alt="" class="flag"> European Union (EU) </h3>
+<h3 id="eu"><img src="img/Flag_of_Europe.svg.png" height="30" alt="" class="flag"> European Union (EU) <a class="anchor" href="#eu" aria-label="Link to this section: EU">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_EU.png">
 <img src="days100_deaths_perCapitaFalse_EU.png">
@@ -199,7 +366,7 @@ tr:nth-child(even) {
 <img src="plot_heat_cases_EU.png">
 <img src="plot_heat_deaths_EU.png">
 
-<h3><img src="img/Europe_orthographic_Caucasus_Urals_boundary.svg.png" width="45" alt="" class="flag"> Europe</h3>
+<h3 id="europe"><img src="img/Europe_orthographic_Caucasus_Urals_boundary.svg.png" width="45" alt="" class="flag"> Europe <a class="anchor" href="#europe" aria-label="Link to this section: Europe">#</a></h3>
 <img src="days100_cases_perCapitaFalse_Europe.png">
 <img src="days100_deaths_perCapitaFalse_Europe.png">
 <br>
@@ -208,7 +375,7 @@ tr:nth-child(even) {
 <img src="plot_heat_cases_Europe.png">
 <img src="plot_heat_deaths_Europe.png">
 
-<h3><img src="img/Americas_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Americas</h3>
+<h3 id="americas"><img src="img/Americas_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Americas <a class="anchor" href="#americas" aria-label="Link to this section: Americas">#</a></h3>
 <img src="days100_cases_perCapitaFalse_Americas.png">
 <img src="days100_deaths_perCapitaFalse_Americas.png">
 <br>
@@ -227,7 +394,7 @@ tr:nth-child(even) {
 <img src="plot_heat_cases_AmericaSouthExVenezuela.png">
 <img src="plot_heat_deaths_AmericaSouthExVenezuela.png">
 
-<h3><img src="img/Asia_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Asia ex China</h3>
+<h3 id="asia"><img src="img/Asia_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Asia ex China <a class="anchor" href="#asia" aria-label="Link to this section: Asia ex China">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_AsiaExChina.png">
 <img src="days100_deaths_perCapitaFalse_AsiaExChina.png">
@@ -249,7 +416,7 @@ tr:nth-child(even) {
 <img src="days100_deaths_perCapitaFalse_AsiaWesternExIran.png">
 <br>
 
-<h3><img src="img/Africa_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Africa</h3>
+<h3 id="africa"><img src="img/Africa_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Africa <a class="anchor" href="#africa" aria-label="Link to this section: Africa">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Africa.png">
 <img src="days100_deaths_perCapitaFalse_Africa.png">
@@ -258,7 +425,7 @@ tr:nth-child(even) {
 <img src="plot_heat_cases_Africa.png">
 <img src="plot_heat_deaths_Africa.png">
 
-<h3><img src="img/Oceania_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Oceania</h3>
+<h3 id="oceania"><img src="img/Oceania_(orthographic_projection).svg.png" width="45" alt="" class="flag"> Oceania <a class="anchor" href="#oceania" aria-label="Link to this section: Oceania">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Oceania.png">
 <img src="days100_deaths_perCapitaFalse_Oceania.png">
@@ -268,7 +435,7 @@ tr:nth-child(even) {
 <img src="plot_heat_cases_Oceania.png">
 <img src="plot_heat_deaths_Oceania.png">
 
-<h3><img src="img/Nordic_countries_orthographic.svg.png" width="45" alt="" class="flag">Northern Europe (Nordic countries)</h3>
+<h3 id="nordic"><img src="img/Nordic_countries_orthographic.svg.png" width="45" alt="" class="flag">Northern Europe (Nordic countries) <a class="anchor" href="#nordic" aria-label="Link to this section: Nordic countries">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Nordic.png">
 <img src="days100_deaths_perCapitaFalse_Nordic.png">
@@ -278,7 +445,7 @@ tr:nth-child(even) {
 <img src="plot_heat_cases_Nordic.png">
 <img src="plot_heat_deaths_Nordic.png">
 
-<h1>Tabulation</h1> 
+<h2 id="table">Table by country <a class="anchor" href="#table" aria-label="Link to this section: Table by country">#</a></h2>
 
 Click a column header to sort by that column header.
 <br>
@@ -395,149 +562,147 @@ Click a column header to sort by that column header.
 
 <hr>
 
-<h3><img src="img/Flag_of_Australia_(converted).svg.png" height="30" alt="" class="flag"> Australia </h3>
+<h2 id="countries">Charts by country <a class="anchor" href="#countries" aria-label="Link to this section: Charts by country">#</a></h2>
+
+<h3 id="australia"><img src="img/Flag_of_Australia_(converted).svg.png" height="30" alt="" class="flag"> Australia <a class="anchor" href="#australia" aria-label="Link to this section: Australia">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Australia.png">
 <img src="days100_deaths_perCapitaFalse_Australia.png">
 <br>
 
-<h3><img src="img/Flag_of_Austria.svg.png" height="30" alt="" class="flag"> Austria </h3>
+<h3 id="austria"><img src="img/Flag_of_Austria.svg.png" height="30" alt="" class="flag"> Austria <a class="anchor" href="#austria" aria-label="Link to this section: Austria">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Austria.png">
 <img src="days100_deaths_perCapitaFalse_Austria.png">
 <br>
 
-<h3><img src="img/Flag_of_Belgium_(civil).svg.png" height="30" alt="" class="flag"> Belgium / Belgique </h3>
+<h3 id="belgium"><img src="img/Flag_of_Belgium_(civil).svg.png" height="30" alt="" class="flag"> Belgium / Belgique <a class="anchor" href="#belgium" aria-label="Link to this section: Belgium">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Belgium.png">
 <img src="days100_deaths_perCapitaFalse_Belgium.png">
 <br>
 
-<h3><img src="img/Flag_of_Brazil.svg.png" height="30" alt="" class="flag"> Brazil / Brasil </h3>
+<h3 id="brazil"><img src="img/Flag_of_Brazil.svg.png" height="30" alt="" class="flag"> Brazil / Brasil <a class="anchor" href="#brazil" aria-label="Link to this section: Brazil">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Brazil.png">
 <img src="days100_deaths_perCapitaFalse_Brazil.png">
 <br>
 
-<h3><img src="img/Flag_of_Canada_(Pantone).svg.png" height="30" alt="" class="flag"> Canada / Canada </h3>
+<h3 id="canada"><img src="img/Flag_of_Canada_(Pantone).svg.png" height="30" alt="" class="flag"> Canada / Canada <a class="anchor" href="#canada" aria-label="Link to this section: Canada">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Canada.png">
 <img src="days100_deaths_perCapitaFalse_Canada.png">
 <br>
 
-<h3><img src="img/Flag_of_Denmark.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Denmark">Denmark</a> / <a href="">Danmark</a> </h3>
+<h3 id="denmark"><img src="img/Flag_of_Denmark.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Denmark">Denmark</a> / Danmark<a class="anchor" href="#denmark" aria-label="Link to this section: Denmark">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Denmark.png">
 <img src="days100_deaths_perCapitaFalse_Denmark.png">
 <br>
 
-<h3><img src="img/Flag_of_France.svg.png" height="30" alt="" class="flag"> France / La France </h3>
+<h3 id="france"><img src="img/Flag_of_France.svg.png" height="30" alt="" class="flag"> France / La France <a class="anchor" href="#france" aria-label="Link to this section: France">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_France.png">
 <img src="days100_deaths_perCapitaFalse_France.png">
 <br>
 
-<h3><img src="img/Flag_of_Germany.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Germany">Germany</a> / <a href="https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland">Deutschland</a> </h3>
+<h3 id="germany"><img src="img/Flag_of_Germany.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Germany">Germany</a> / <a href="https://de.wikipedia.org/wiki/COVID-19-Pandemie_in_Deutschland">Deutschland</a> <a class="anchor" href="#germany" aria-label="Link to this section: Germany">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Germany.png">
 <img src="days100_deaths_perCapitaFalse_Germany.png">
 <br>
 
-<h3><img src="img/Flag_of_India.svg.png" height="30" alt="" class="flag"> India / भारत </h3>
+<h3 id="india"><img src="img/Flag_of_India.svg.png" height="30" alt="" class="flag"> India / भारत <a class="anchor" href="#india" aria-label="Link to this section: India">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_India.png">
 <img src="days100_deaths_perCapitaFalse_India.png">
 <br>
 
-<h3><img src="img/Flag_of_Indonesia.svg.png" height="30" alt="" class="flag"> Indonesia / Republik Indonesia </h3>
+<h3 id="indonesia"><img src="img/Flag_of_Indonesia.svg.png" height="30" alt="" class="flag"> Indonesia / Republik Indonesia <a class="anchor" href="#indonesia" aria-label="Link to this section: Indonesia">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Indonesia.png">
 <img src="days100_deaths_perCapitaFalse_Indonesia.png">
 <br>
 
-<h3><img src="img/Flag_of_Italy.svg.png" height="30" alt="" class="flag"> Italy / Italia </h3>
+<h3 id="italy"><img src="img/Flag_of_Italy.svg.png" height="30" alt="" class="flag"> Italy / Italia <a class="anchor" href="#italy" aria-label="Link to this section: Italy">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Italy.png">
 <img src="days100_deaths_perCapitaFalse_Italy.png">
 <br>
 
-<h3><img src="img/Flag_of_Japan.svg.png" height="30" alt="" class="flag"> Japan / 日本 </h3>
+<h3 id="japan"><img src="img/Flag_of_Japan.svg.png" height="30" alt="" class="flag"> Japan / 日本 <a class="anchor" href="#japan" aria-label="Link to this section: Japan">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Japan.png">
 <img src="days100_deaths_perCapitaFalse_Japan.png">
 <br>
 
-<h3>
+<h3 id="mexico">
     <img src="img/Flag_of_Mexico.svg.png" height="30" alt="" class="flag">
-    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Mexico">Mexico</a> / <a href="https://es.wikipedia.org/wiki/Pandemia_de_enfermedad_por_coronavirus_de_2020_en_M%C3%A9xico">México</a>
-
-</h3>
+    <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Mexico">Mexico</a> / <a href="https://es.wikipedia.org/wiki/Pandemia_de_enfermedad_por_coronavirus_de_2020_en_M%C3%A9xico">México</a> <a class="anchor" href="#mexico" aria-label="Link to this section: Mexico">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Mexico.png">
 <img src="days100_deaths_perCapitaFalse_Mexico.png">
 <br>
 
-<h3><img src="img/Flag_of_the_Netherlands.svg.png" height="30" alt="" class="flag"> Netherlands / Nederland </h3>
+<h3 id="netherlands"><img src="img/Flag_of_the_Netherlands.svg.png" height="30" alt="" class="flag"> Netherlands / Nederland <a class="anchor" href="#netherlands" aria-label="Link to this section: Netherlands">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Netherlands.png">
 <img src="days100_deaths_perCapitaFalse_Netherlands.png">
 <br>
 
-<h3><img src="img/Flag_of_New_Zealand.svg.png" height="30" alt="" class="flag"> New Zealand / New Zealand </h3>
+<h3 id="new-zealand"><img src="img/Flag_of_New_Zealand.svg.png" height="30" alt="" class="flag"> New Zealand / New Zealand <a class="anchor" href="#new-zealand" aria-label="Link to this section: New Zealand">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_New_Zealand.png">
 <img src="days100_deaths_perCapitaFalse_New_Zealand.png">
 <br>
 
-<h3><img src="img/Flag_of_Norway.svg.png" height="30" alt="" class="flag"> Norway / <a href="https://no.wikipedia.org/wiki/Norge_under_koronaviruspandemien_i_2020">Norge</a> </h3>
+<h3 id="norway"><img src="img/Flag_of_Norway.svg.png" height="30" alt="" class="flag"> Norway / <a href="https://no.wikipedia.org/wiki/Norge_under_koronaviruspandemien_i_2020">Norge</a> <a class="anchor" href="#norway" aria-label="Link to this section: Norway">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Norway.png">
 <img src="days100_deaths_perCapitaFalse_Norway.png">
 <br>
 
-<h3>
+<h3 id="portugal">
     <img src="img/Flag_of_Portugal.svg.png" height="30" alt="" class="flag">
     <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Portugal">Portugal</a>
     /
-    <a href="https://pt.wikipedia.org/wiki/Pandemia_de_COVID-19_em_Portugal">Portugal</a>
-    
-</h3>
+    <a href="https://pt.wikipedia.org/wiki/Pandemia_de_COVID-19_em_Portugal">Portugal</a> <a class="anchor" href="#portugal" aria-label="Link to this section: Portugal">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Portugal.png">
 <img src="days100_deaths_perCapitaFalse_Portugal.png">
 <br>
 
-<h3><img src="img/Flag_of_South_Korea.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_South_Korea">South Korea</a> / 한국/韓國 </h3>
+<h3 id="south-korea"><img src="img/Flag_of_South_Korea.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_South_Korea">South Korea</a> / 한국/韓國 <a class="anchor" href="#south-korea" aria-label="Link to this section: South Korea">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_South_Korea.png">
 <img src="days100_deaths_perCapitaFalse_South_Korea.png">
 <br>
 
-<h3><img src="img/Flag_of_Spain.svg.png" height="30" alt="" class="flag"> Spain / España </h3>
+<h3 id="spain"><img src="img/Flag_of_Spain.svg.png" height="30" alt="" class="flag"> Spain / España <a class="anchor" href="#spain" aria-label="Link to this section: Spain">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Spain.png">
 <img src="days100_deaths_perCapitaFalse_Spain.png">
 <br>
 
-<h3><img src="img/Flag_of_Sweden.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Sweden">Sweden</a> / Sverige </h3>
+<h3 id="sweden"><img src="img/Flag_of_Sweden.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Sweden">Sweden</a> / Sverige <a class="anchor" href="#sweden" aria-label="Link to this section: Sweden">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Sweden.png">
 <img src="days100_deaths_perCapitaFalse_Sweden.png">
 <br>
 
-<h3><img src="img/Flag_of_Switzerland.svg.png" height="30" alt="" class="flag"> Switzerland / Schweiz </h3>
+<h3 id="switzerland"><img src="img/Flag_of_Switzerland.svg.png" height="30" alt="" class="flag"> Switzerland / Schweiz <a class="anchor" href="#switzerland" aria-label="Link to this section: Switzerland">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Switzerland.png">
 <img src="days100_deaths_perCapitaFalse_Switzerland.png">
 <br>
 
-<h3><img src="img/Flag_of_the_Republic_of_China.svg.png" height="30" alt="" class="flag"> Taiwan / 台湾 </h3>
+<h3 id="taiwan"><img src="img/Flag_of_the_Republic_of_China.svg.png" height="30" alt="" class="flag"> Taiwan / 台湾 <a class="anchor" href="#taiwan" aria-label="Link to this section: Taiwan">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_Taiwan.png">
 <img src="days100_deaths_perCapitaFalse_Taiwan.png">
 <br>
 
-<h3><img src="img/Flag_of_the_United_Kingdom.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_Kingdom">United Kingdom</a> (Great Britain; <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_England">England</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Scotland">Scotland</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Wales">Wales</a>, Northern Ireland) </h3>
+<h3 id="united-kingdom"><img src="img/Flag_of_the_United_Kingdom.svg.png" height="30" alt="" class="flag"> <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_the_United_Kingdom">United Kingdom</a> (Great Britain; <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_England">England</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Scotland">Scotland</a>, <a href="https://en.wikipedia.org/wiki/2020_coronavirus_pandemic_in_Wales">Wales</a>, Northern Ireland) <a class="anchor" href="#united-kingdom" aria-label="Link to this section: United Kingdom">#</a></h3>
 
 <img src="days100_cases_perCapitaFalse_United_Kingdom.png">
 <img src="days100_deaths_perCapitaFalse_United_Kingdom.png">
@@ -547,7 +712,7 @@ Click a column header to sort by that column header.
 
 <hr>
 
-<h1>Infographics and other news clips</h1>
+<h2 id="infographics">Infographics and other news clips <a class="anchor" href="#infographics" aria-label="Link to this section: Infographics and other news clips">#</a></h2>
 
 Below are a few interesting figures and articles from the press, scientific journals and elsewhere.
 
@@ -587,7 +752,7 @@ South America
 <br><br>
 <a href="https://www.visualcapitalist.com/history-of-pandemics-deadliest/">Visual Capitalist - The History of Pandemics, by Death Toll</a>
 
-<h1>References</h1>
+<h2 id="references">References <a class="anchor" href="#references" aria-label="Link to this section: References">#</a></h2>
 
 Here are other good pages (please send additional suggestions to <a href="mailto:covid19@tommycarstensen.com">covid19@tommycarstensen.com</a>):
 <br><a href="https://www.bloomberg.com/graphics/2020-wuhan-novel-coronavirus-outbreak/">Bloomberg</a>
@@ -610,6 +775,19 @@ Here are other good pages (please send additional suggestions to <a href="mailto
 <br><a href="https://www.cdc.gov/nchs/nvss/vsrr/covid19/excess_deaths.htm">CDC excess deaths</a>
 
 <p class="credits">Flags and continent maps from Wikimedia Commons and Wikipedia, in the public domain except: <a href="https://commons.wikimedia.org/wiki/File:Asia_(orthographic_projection).svg">Asia (orthographic projection).svg</a> by Koyos + Ssolbergj, <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Africa_(orthographic_projection).svg">Africa (orthographic projection).svg</a> by Martin23230, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Oceania_(orthographic_projection).svg">Oceania (orthographic projection).svg</a> by Ch1902, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Americas_(orthographic_projection).svg">Americas (orthographic projection).svg</a> by Martin23230, <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a>.</p>
+
+<a class="to-contents" href="#contents" aria-label="Back to contents">&uarr;</a>
+<script>
+// Hide the back-to-contents button while the contents list is on screen.
+(function () {
+  var toc = document.querySelector('.toc');
+  var button = document.querySelector('.to-contents');
+  if (!toc || !button || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(function (entries) {
+    button.hidden = entries[0].isIntersecting;
+  }).observe(toc);
+})();
+</script>
 
 </body>
 </html>
