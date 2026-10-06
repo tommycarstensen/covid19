@@ -10,6 +10,11 @@ Several Claude sessions work in this folder at once. Before starting a task, rea
   - Done and committed: the EU row (a8a284e), `site/sortable.js` (d8c6782), the title and table headers (fdb860c), "Press clippings, 2020" (5248c51), "Other trackers" (2a2c475), "About this page" (dce1096), Taiwan's name (cff859e). Live from 04:56 up to fdb860c; covid19-82 deploys the rest.
   - Waiting for Tommy to approve its wording: the archive note (C1, C2), including covid19-91's seven-week sentence. Nobody else edits the note meanwhile.
   - Next: a "How to read this page" section (C3), chart captions and alt text (C10), then the restructure (C5, C6, C7).
+- Design review of the whole page (Tommy asked covid19-b6 on 6 Oct 2026, 05:00, to work through it), split by agreement between three sessions:
+  1. The region sections' 2020 line charts (30-50 lines sharing 10 colours, unreadable legends) redrawn as small multiples like the World figures: covid19-cd, extending `plot_days100_world.py`.
+  2. "Charts by country" dropped, its ids moved to the table rows; 3. the table moved up after the maps; 4. the table's numbers formatted, right-aligned, sorted by total cases, with a sort indicator and tighter rows: covid19-4f.
+  5. Inconsistent country headings: moot once 2 lands.
+  6. One colour language: the heat maps (`plot_heat_*`, 2020 orange-red, illegible country labels) redrawn in the interactive world map's colour scale and bins, by a new script, then swapped into the page after 4f's restructure lands: covid19-b6 (6 Oct 2026, 05:15). Not started, and needing a decision: the two test maps still say "CoViD19" in their frames and use their own green and blue scales.
 
 ## Decided, still to do
 
