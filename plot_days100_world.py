@@ -104,7 +104,7 @@ NARROW_NAMES = {
     'United_Kingdom': 'UK', 'United_Arab_Emirates': 'UAE',
     'Bosnia_and_Herzegovina': 'Bosnia & Herz.', 'Trinidad_and_Tobago': 'Trinidad & T.',
     'Dominican_Republic': 'Dominican Rep.', 'Central_African_Republic': 'C. African Rep.',
-    'Equatorial_Guinea': 'Eq. Guinea', 'Papua_New_Guinea': 'Papua N. G.', 'North_Macedonia': 'N. Macedonia',
+    'Equatorial_Guinea': 'Eq. Guinea', 'North_Macedonia': 'N. Macedonia',
     'Sao_Tome_and_Principe': 'São Tomé & P.', 'Saint_Vincent_and_the_Grenadines': 'St Vincent & G.',
 }
 
