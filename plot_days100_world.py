@@ -4,11 +4,12 @@ The 2020 figures (days100_*_perCapitaFalse_<set>.png, drawn by plot_series.doLin
 
 Reads ecdc.csv (ECDC weekly cases and deaths per country to ISO week 2021-01, the same data as the rest of the page) and downloads nothing. The EU is summed from its 27 member states under their ECDC names; the 2020 list said 'Czech Republic', which ECDC calls Czechia, so the old EU total left Czechia out.
 
-Writes site/aligned_{cases,deaths}_<set>.png (three rows of panels, or eight columns for a large set, for wide screens) and ..._narrow.png (two columns, or three, for phones), at 2x and 3x pixel density, and their <picture> tags to tmp/plot_days100_world_markup.html.
+Writes site/aligned_{cases,deaths}_<set>.png (three rows of panels, or eight columns for a large set, for wide screens) and ..._narrow.png (two columns, or three, for phones), at 2x and 3x pixel density, as 8-bit palette PNGs, and their <picture> tags to tmp/plot_days100_world_markup.html.
 
 Usage: python3 plot_days100_world.py [set ...]   (default: every set)
 """
 
+import io
 import math
 import sys
 import textwrap
@@ -19,6 +20,7 @@ from pathlib import Path
 
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
@@ -162,6 +164,34 @@ FOCUS = '#e41a1c'
 
 # The gid of the week-0 date under each panel, which collisions() checks against every other text in the figure.
 WEEK0 = 'week0'
+
+
+def rgb(colour: str) -> tuple[int, int, int]:
+    return int(colour[1:3], 16), int(colour[3:5], 16), int(colour[5:7], 16)
+
+
+def palette() -> np.ndarray:
+    """The figures' colours, each blended into the white ground in steps, and the red over each grey: what antialiasing draws, in 218 of a PNG palette's 256 entries."""
+    white = (255, 255, 255)
+    colours: list[tuple[int, int, int]] = []
+
+    def blend(a: tuple[int, int, int], b: tuple[int, int, int], steps: int) -> None:
+        for k in range(steps + 1):
+            c = (round(a[0] + (b[0] - a[0]) * k / steps), round(a[1] + (b[1] - a[1]) * k / steps),
+                 round(a[2] + (b[2] - a[2]) * k / steps))
+            if c not in colours:
+                colours.append(c)
+
+    for colour, steps in ((INK, 32), (INK_2, 24), (MUTED, 24), (FOCUS, 32), (CONTEXT, 10), (GRID, 6), (AXIS, 10)):
+        blend(white, rgb(colour), steps)
+    for grey in (CONTEXT, GRID, AXIS):
+        blend(rgb(grey), rgb(FOCUS), 20)
+    for a, b, steps in ((GRID, CONTEXT, 4), (AXIS, CONTEXT, 4), (GRID, AXIS, 4), (GRID, MUTED, 8), (CONTEXT, INK_2, 8)):
+        blend(rgb(a), rgb(b), steps)
+    return np.array(colours, dtype=np.int32)
+
+
+PALETTE = palette()
 
 
 def load() -> pd.DataFrame:
@@ -394,9 +424,31 @@ def draw(df: pd.DataFrame, set_name: str, measure: Measure, layout: Layout) -> P
     problems = collisions(fig)
     if problems:
         raise SystemExit(f'{path.name}: {problems}')
-    fig.savefig(path, dpi=layout.dpi, facecolor='white')
+    save(fig, path, layout.dpi)
     plt.close(fig)
     return path
+
+
+def save(fig: Figure, path: Path, dpi: int) -> None:
+    """Write the figure as an 8-bit palette PNG, about a third of the bytes of matplotlib's RGBA one, with each pixel mapped to its nearest colour in PALETTE, so the white, the greys and the red stay exact.
+
+    Pillow's own quantize(palette=...) looks colours up at reduced precision and turns the white ground light grey, hence the exact nearest-colour search here. A colour the palette lacks (a new mark drawn in another colour) stops the run, rather than being silently replaced."""
+    buffer = io.BytesIO()
+    fig.savefig(buffer, format='png', dpi=dpi, facecolor='white')
+    with Image.open(buffer) as im:
+        pixels = np.asarray(im.convert('RGB'), dtype=np.int32)
+    keys = (pixels[..., 0] << 16) | (pixels[..., 1] << 8) | pixels[..., 2]
+    unique, inverse = np.unique(keys.ravel(), return_inverse=True)
+    colours = np.stack([(unique >> 16) & 255, (unique >> 8) & 255, unique & 255], axis=1)
+    distance = ((colours[:, None, :] - PALETTE[None, :, :]) ** 2).sum(axis=2)
+    nearest = distance.argmin(axis=1)
+    error = np.abs(colours - PALETTE[nearest]).max(axis=1)
+    if error.max() > 24:
+        worst = colours[error.argmax()]
+        raise SystemExit(f'{path.name}: #{worst[0]:02x}{worst[1]:02x}{worst[2]:02x} is not near any colour in PALETTE')
+    out = Image.fromarray(nearest[inverse].reshape(keys.shape).astype(np.uint8), 'P')
+    out.putpalette(PALETTE.astype(np.uint8).ravel().tolist())
+    out.save(path, optimize=True, dpi=(dpi, dpi))
 
 
 def collisions(fig: Figure) -> list[str]:
