@@ -62,3 +62,14 @@ The table's headers said "most recent week", which in 2026 reads as now. The wee
 `sortable.js` existed only on the server, adapted in 2020 from the w3schools example credited in the page's `<head>`. It compared every cell as `Number(innerHTML)`, so numeric columns sorted, but the Country and Continent columns became `NaN` on both sides, every comparison was false, and clicking those headers did nothing. The server's copy of 6 October 2026 is kept, unversioned, in `tmp/bugfix/sortable_server_2026-10-06.js`.
 
 The new `site/sortable.js` keeps the page's interface (`sortTable(n)` on each header) and its behaviour: a click sorts ascending, and a click on a column already in ascending order sorts it descending. It compares numbers as numbers and text alphabetically, sorts once instead of the example's repeated swapping, and keeps ties in their previous order. Tested in headless Chrome on all four kinds of column (country, continent, totals, per million), both directions. The three chart columns still have headers that can be clicked and do nothing useful; that is left to C7, which would replace them.
+
+## 2026-10-06: "Infographics and other news clips" becomes "Press clippings, 2020" (C8)
+
+All three advisers proposed trimming this section, for different reasons: it was the only part of the page that kept changing after January 2021, it loaded third-party scripts, and half of it predated the pandemic. Removed:
+
+- The two Our World in Data iframes (tests per 1,000 people, world and South America). They are live charts that now run to June 2022, so they contradicted the page's January 2021 end date. The world chart's URL also redirected, so both iframes showed the same chart. The charts are now plain links in the trackers list (C9).
+- The Datawrapper map "COVID-19 confirmed and recovered cases". It is a live map fed by Johns Hopkins, not a 2020 snapshot; Datawrapper's collection of such charts stays linked in the trackers list.
+- The embedded tweet by Kan Nishida (14 April 2020) on Apple mobility data, and with it `platform.twitter.com/widgets.js`, the page's last third-party script apart from analytics. Apple withdrew the data in April 2022.
+- The 2018 Washington Post article on the White House pandemic office, the 2015 Vox and TED videos of Bill Gates, and Visual Capitalist's history of pandemics. They were background reading from the first weeks of 2020, not about the data on this page, and the two YouTube embeds were the page's heaviest third-party content.
+
+Kept: the links to the two pages of press clippings Tommy collected in 2020 (`press_international.html`, `press_denmark.html`), with one sentence saying what they are. The section's anchor is now `#press` (`#infographics` was hours old and had never been linked to). One of the two `<hr>` before the section went, as did the two CSS rules for iframes, which nothing used any more. Everything removed is in the git history of `site/index.html` before this commit.
