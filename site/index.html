@@ -301,7 +301,7 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <li><b>Log scales.</b> The line charts, the scatter plots, the heat maps' colours and several maps use a logarithmic scale, on which each labelled step is ten times the one before. A straight line means steady growth, and equal slopes mean equal rates of growth.</li>
 <li><b>Case fatality rate</b>, in the table, is deaths divided by confirmed cases. It is not the chance of dying from an infection, because many infections were never confirmed.</li>
 <li><b>Per million</b> figures divide by a country's population in 2019, as ECDC published it.</li>
-<li><b>The EU</b> is the 27 member states in the aligned charts, the bubble charts and the heat maps. The table's EU row and the EU's scatter plots from January 2021 leave out Czechia, which the 2020 code missed.</li>
+<li><b>The EU</b> is the 27 member states in the aligned charts, the bubble charts, the heat maps and the scatter plots. The table's EU row from January 2021 leaves out Czechia, which the 2020 code missed.</li>
 </ul>
 
 
@@ -512,9 +512,11 @@ h2:hover .anchor, h3:hover .anchor, .anchor:focus {
 <img src="aligned_deaths_EU.png" width="1355" height="752" alt="Cumulative COVID-19 deaths in the EU from the week each country passed 100, one panel per country. Totals on 10 January 2021: Italy 78,755; France 67,750; Spain 52,275; Germany 40,686; Poland 31,264; Belgium 20,142; Romania 16,725; Czechia 13,272; Netherlands 12,397; Hungary 10,725; Sweden 9,666; Bulgaria 8,126; Portugal 7,925; Austria 6,631; Greece 5,263; Croatia 4,403; Slovenia 3,147; Slovakia 3,007; Ireland 2,344; Lithuania 2,232; Denmark 1,597; Latvia 849; Finland 597; Luxembourg 533; Estonia 287; Malta 233; Cyprus 148." loading="lazy">
 </picture>
 </div>
-<img width="480" height="360" src="scatter_EU_cases.png" alt="Each EU country's highest number of COVID-19 cases in a single week, up to January 2021, against its population; log scales" loading="lazy">
-<img width="480" height="360" src="scatter_EU_deaths.png" alt="Each EU country's highest number of COVID-19 deaths in a single week, up to January 2021, against its population; log scales" loading="lazy">
-<p class="reading">Each EU country&#39;s highest number of cases (left) and deaths (right) in a single week, up to January 2021, against its population. The charts&#39; axes say only &ldquo;Cases&rdquo; and &ldquo;Deaths&rdquo;.</p>
+<picture>
+<source media="(max-width: 700px)" srcset="scatter_EU_narrow.png" width="415" height="1302">
+<img src="scatter_EU.png" width="1355" height="768" loading="lazy" alt="Scatter plots on log scales of each EU country's highest weekly COVID-19 cases and deaths, from 30 December 2019 to 10 January 2021, against its population of 2019, with dashed lines at 1,000 and 10,000 cases and at 10 and 100 deaths per million people per week. Highest weekly cases per million: Ireland, 9,324 per million in the week of 4 January 2021; lowest peak: Finland, 576 per million in the week of 7 December 2020. Highest weekly deaths per million: Slovenia, 458 per million in the week of 7 December 2020; lowest peak: Finland, 17 per million in the week of 20 April 2020. Countries, largest population first: Germany, France, Italy, Spain, Poland, Romania, Netherlands, Belgium, Greece, Czechia, Portugal, Sweden, Hungary, Austria, Bulgaria, Denmark, Finland, Slovakia, Ireland, Croatia, Lithuania, Slovenia, Latvia, Estonia, Cyprus, Luxembourg, Malta.">
+</picture>
+<p class="reading">Each EU country&#39;s highest number of cases and deaths in a single week, up to January 2021, against its population.</p>
 <br>
 <figure class="bubble" data-region="EU"><noscript><img src="plot_bubble_EU.png" width="800" alt="Change in COVID-19 cases and deaths by country, EU, January 2021"></noscript></figure>
 <div class="aligned">
